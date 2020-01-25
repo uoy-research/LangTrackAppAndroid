@@ -30,10 +30,10 @@ class FooterFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.footerNextButton.setOnClickListener {
-            listener?.footerGoToNextItem(currentQuestion = question)
+            listener?.footerSendInSurvey(currentQuestion = question)
         }
         v.footerBackButton.setOnClickListener {
-            listener?.footerSendInSurvey(currentQuestion = question)
+            listener?.footerGoToPreviousItem(currentQuestion = question)
         }
         return v
     }
@@ -53,7 +53,7 @@ class FooterFragment : Fragment(){
 
     fun setQuestion(){
         if (::binding.isInitialized) {
-            binding.footerTextView.text = "Här kommer texten:\n\n${question.title}\n${question.text}"
+            binding.footerTextView.text = "${question.title}\n\n${question.text}"
         }
     }
 

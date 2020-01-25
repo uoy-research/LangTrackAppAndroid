@@ -58,8 +58,8 @@ class HeaderFragment : Fragment(){
 
     fun setQuestion(){
         if (::binding.isInitialized) {
-            binding.headerTextView.text =
-                "Här kommer texten:\n\n${question.title}\n${question.text}"
+            binding.headerTitleTextView.text = question.title
+            binding.headerTextTextView.text = question.text
         }
     }
 

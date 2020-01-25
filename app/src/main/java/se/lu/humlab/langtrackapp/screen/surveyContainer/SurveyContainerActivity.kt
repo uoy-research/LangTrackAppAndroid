@@ -69,8 +69,8 @@ class SurveyContainerActivity : AppCompatActivity(),
             previous = 0,
             index = 0,
             next = 1,
-            title = "Header titel",
-            text = "Här är texten i header",
+            title = "THE LANG-TRACK-APP\nHumanistlaboratoriet",
+            text = "Hej (användarnamn)\n\nNu är det dags att svara på frågor om din språkinlärning!",
             description = ""
             )
         questionList.add(q0)
@@ -135,8 +135,8 @@ class SurveyContainerActivity : AppCompatActivity(),
             previous = 5,
             index = 6,
             next = 0,
-            title = "Footer titel",
-            text = "Här är texten i Footer",
+            title = "Tack för dina svar.",
+            text = "Om du är nöjd med dina svar välj 'Skicka in'\nannars kan du stega bak för att redigera.",
             description = ""
         )
         questionList.add(q6)
@@ -259,13 +259,13 @@ class SurveyContainerActivity : AppCompatActivity(),
         showQuestion(index = currentQuestion.previous)
     }
 
-    override fun footerGoToNextItem(currentQuestion: Question) {
+    override fun footerGoToPreviousItem(currentQuestion: Question) {
         println("SurveyContainerActivity footerGoToNextItem")
         showQuestion(index = currentQuestion.next)
     }
 
     override fun footerSendInSurvey(currentQuestion: Question) {
         println("SurveyContainerActivity footerGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
+        onBackPressed()
     }
 }

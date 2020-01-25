@@ -7,27 +7,37 @@
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#FFFFFF"
         tools:context=".screen.surveyContainer.header.HeaderFragment">
 
         <!-- TODO: Update blank fragment layout -->
         <TextView
-            android:id="@+id/headerTextView"
+            android:id="@+id/headerTitleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
             android:maxLines="10"
             android:text="hej"
-            app:layout_constraintBottom_toBottomOf="parent"
+            android:textAlignment="center"
+            android:textColor="@color/lta_blue"
+            android:textSize="12sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
         <Button
             android:id="@+id/headerStartButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/rounded_button_blue_gold"
             android:padding="10dp"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
             android:text="Starta"
             android:textAllCaps="false"
             android:textSize="18sp"
@@ -38,17 +48,50 @@
 
         <Button
             android:id="@+id/headerCancelButton"
-            android:layout_width="wrap_content"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
+            android:layout_marginStart="10dp"
+            android:layout_marginBottom="25dp"
+            android:background="@drawable/rounded_button_blue_gold"
             android:padding="10dp"
-            android:text="Avbryt"
+            android:paddingStart="15dp"
+            android:paddingEnd="15dp"
+            android:text="Stäng"
             android:textAllCaps="false"
             android:textSize="18sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toStartOf="@+id/headerStartButton"
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent" />
+
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:layout_marginTop="40dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:srcCompat="@drawable/lunds_universitet_small" />
+
+        <TextView
+            android:id="@+id/headerTextTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="40dp"
+            android:layout_marginEnd="40dp"
+            android:layout_marginBottom="50dp"
+            android:padding="10dp"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@color/lta_blue"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toTopOf="@+id/headerCancelButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/headerTitleTextView" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

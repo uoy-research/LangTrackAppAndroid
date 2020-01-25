@@ -56,7 +56,7 @@ class SingleMultipleAnswersFragment : Fragment(){
     fun setQuestion(){
         if (::binding.isInitialized) {
             binding.singleMultipleAnswerTextView.text =
-                "Här kommer texten:\n\n${question.title}\n${question.text}"
+                "${question.title}\n\n${question.text}"
         }
     }
 

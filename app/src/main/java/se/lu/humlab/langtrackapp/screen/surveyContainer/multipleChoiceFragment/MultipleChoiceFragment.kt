@@ -55,7 +55,7 @@ class MultipleChoiceFragment : Fragment(){
     fun setQuestion(){
         if (::binding.isInitialized) {
             binding.multipleChoiseFragmentTextView.text =
-                "Här kommer texten:\n\n${question.title}\n${question.text}"
+                "${question.title}\n\n${question.text}"
         }
     }
 
