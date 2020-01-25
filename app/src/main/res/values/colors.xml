@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#008577</color>
+    <color name="colorPrimaryDark">#516496</color><!-- 00574B -->
+    <color name="colorAccent">#D81B60</color>#
+    <color name="lta_gold">#BAA081</color>#
+    <color name="lta_blue">#516496</color>#
+    <color name="lta_red">#96516F</color>#
+    <color name="lta_green">#6E9651</color>#
+    <color name="lta_grey">#6C6E6E</color>#
+</resources>
