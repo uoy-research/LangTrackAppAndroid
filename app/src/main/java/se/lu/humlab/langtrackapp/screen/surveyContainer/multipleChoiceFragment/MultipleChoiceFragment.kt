@@ -1,4 +1,4 @@
-package se.lu.humlab.langtrackapp.screen.surveyContainer.header
+package se.lu.humlab.langtrackapp.screen.surveyContainer.multipleChoiceFragment
 
 import android.content.Context
 import android.os.Bundle
@@ -7,22 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.header_fragment.view.*
+import kotlinx.android.synthetic.main.multiple_choice_fragment.view.*
+import kotlinx.android.synthetic.main.multiple_choice_item.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
-import se.lu.humlab.langtrackapp.databinding.HeaderFragmentBinding
-import se.lu.humlab.langtrackapp.interfaces.OnHeaderInteractionListener
+import se.lu.humlab.langtrackapp.databinding.MultipleChoiceFragmentBinding
+import se.lu.humlab.langtrackapp.interfaces.OnMultipleChoiceInteractionListener
 
-class HeaderFragment : Fragment(){
+class MultipleChoiceFragment : Fragment(){
 
-    private var listener: OnHeaderInteractionListener? = null
-    lateinit var binding: HeaderFragmentBinding
+    private var listener: OnMultipleChoiceInteractionListener? = null
+    lateinit var binding: MultipleChoiceFragmentBinding
     lateinit var question: Question
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,35 +26,35 @@ class HeaderFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         //return super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.header_fragment, container,false)
-        binding.setLifecycleOwner(this)
+        binding = DataBindingUtil.inflate(inflater, R.layout.multiple_choice_fragment, container,false)
+        binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
-        v.headerCancelButton.setOnClickListener {
-            listener?.headerCancelPressed(currentQuestion = question)
+        v.multipleChoiseFragmentNextButton.setOnClickListener {
+            listener?.multipleChoiceGoToNextItem(currentQuestion = question)
         }
-        v.headerStartButton.setOnClickListener {
-            listener?.headerGoToNextItem(currentQuestion = question)
+        v.multipleChoiseFragmentBackButton.setOnClickListener {
+            listener?.multipleChoiceGoToPrevoiusItem(currentQuestion = question)
         }
         return v
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnHeaderInteractionListener) {
+        if (context is OnMultipleChoiceInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
                 //load survey
                 setQuestion()
             }
         }else {
-            throw RuntimeException(context.toString() + " must implement OnHeaderInteractionListener")
+            throw RuntimeException(context.toString() + " must implement OnLikertScaleInteraktionListener")
         }
     }
 
     fun setQuestion(){
         if (::binding.isInitialized) {
-            binding.headerTextView.text =
+            binding.multipleChoiseFragmentTextView.text =
                 "Här kommer texten:\n\n${question.title}\n${question.text}"
         }
     }
@@ -77,7 +73,7 @@ class HeaderFragment : Fragment(){
     companion object {
         @JvmStatic
         fun newInstance() =
-            HeaderFragment().apply {
+            MultipleChoiceFragment().apply {
 
             }
     }

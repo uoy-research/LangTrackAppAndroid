@@ -1,4 +1,4 @@
-package se.lu.humlab.langtrackapp.screen.surveyContainer.header
+package se.lu.humlab.langtrackapp.screen.surveyContainer.openEndedTextResponsesFragment
 
 import android.content.Context
 import android.os.Bundle
@@ -7,22 +7,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.header_fragment.view.*
+import kotlinx.android.synthetic.main.open_ended_text_responses_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
-import se.lu.humlab.langtrackapp.databinding.HeaderFragmentBinding
-import se.lu.humlab.langtrackapp.interfaces.OnHeaderInteractionListener
+import se.lu.humlab.langtrackapp.databinding.OpenEndedTextResponsesFragmentBinding
+import se.lu.humlab.langtrackapp.interfaces.OnOpenEndedInteractionListener
 
-class HeaderFragment : Fragment(){
+class OpenEndedTextResponsesFragment : Fragment(){
 
-    private var listener: OnHeaderInteractionListener? = null
-    lateinit var binding: HeaderFragmentBinding
+    private var listener: OnOpenEndedInteractionListener? = null
+    lateinit var binding: OpenEndedTextResponsesFragmentBinding
     lateinit var question: Question
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,35 +25,35 @@ class HeaderFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         //return super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.header_fragment, container,false)
-        binding.setLifecycleOwner(this)
+        binding = DataBindingUtil.inflate(inflater, R.layout.open_ended_text_responses_fragment, container,false)
+        binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
-        v.headerCancelButton.setOnClickListener {
-            listener?.headerCancelPressed(currentQuestion = question)
+        v.openEndedTextNextButton.setOnClickListener {
+            listener?.openEndedGoToNextItem(currentQuestion = question)
         }
-        v.headerStartButton.setOnClickListener {
-            listener?.headerGoToNextItem(currentQuestion = question)
+        v.openEndedTextBackButton.setOnClickListener {
+            listener?.openEndedGoToPrevoiusItem(currentQuestion = question)
         }
         return v
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnHeaderInteractionListener) {
+        if (context is OnOpenEndedInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
                 //load survey
                 setQuestion()
             }
         }else {
-            throw RuntimeException(context.toString() + " must implement OnHeaderInteractionListener")
+            throw RuntimeException(context.toString() + " must implement OnLikertScaleInteraktionListener")
         }
     }
 
     fun setQuestion(){
         if (::binding.isInitialized) {
-            binding.headerTextView.text =
+            binding.openEndedTextTextView.text =
                 "Här kommer texten:\n\n${question.title}\n${question.text}"
         }
     }
@@ -77,7 +72,7 @@ class HeaderFragment : Fragment(){
     companion object {
         @JvmStatic
         fun newInstance() =
-            HeaderFragment().apply {
+            OpenEndedTextResponsesFragment().apply {
 
             }
     }

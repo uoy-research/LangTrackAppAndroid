@@ -7,7 +7,7 @@
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".screen.surveyContainer.likertScale.LikertScaleFragment">
+        tools:context=".screen.surveyContainer.likertScaleFragment.LikertScaleFragment">
 
         <Button
             android:id="@+id/likertScaleNextButton"
@@ -38,7 +38,7 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/textView9"
+            android:id="@+id/likertScaleTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:maxLines="10"

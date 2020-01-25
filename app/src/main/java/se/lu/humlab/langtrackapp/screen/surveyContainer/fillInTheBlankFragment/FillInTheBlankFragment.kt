@@ -1,4 +1,4 @@
-package se.lu.humlab.langtrackapp.screen.surveyContainer.header
+package se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment
 
 import android.content.Context
 import android.os.Bundle
@@ -7,22 +7,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.header_fragment.view.*
+import kotlinx.android.synthetic.main.fill_blanks_item.view.*
+import kotlinx.android.synthetic.main.fill_in_the_blanks_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
-import se.lu.humlab.langtrackapp.databinding.HeaderFragmentBinding
-import se.lu.humlab.langtrackapp.interfaces.OnHeaderInteractionListener
+import se.lu.humlab.langtrackapp.databinding.FillInTheBlanksFragmentBinding
+import se.lu.humlab.langtrackapp.interfaces.OnFillInBlankInteractionListener
 
-class HeaderFragment : Fragment(){
+class FillInTheBlankFragment : Fragment(){
 
-    private var listener: OnHeaderInteractionListener? = null
-    lateinit var binding: HeaderFragmentBinding
+    private var listener: OnFillInBlankInteractionListener? = null
+    lateinit var binding: FillInTheBlanksFragmentBinding
     lateinit var question: Question
-
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,35 +26,35 @@ class HeaderFragment : Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         //return super.onCreateView(inflater, container, savedInstanceState)
-        binding = DataBindingUtil.inflate(inflater, R.layout.header_fragment, container,false)
-        binding.setLifecycleOwner(this)
+        binding = DataBindingUtil.inflate(inflater, R.layout.fill_in_the_blanks_fragment, container,false)
+        binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
-        v.headerCancelButton.setOnClickListener {
-            listener?.headerCancelPressed(currentQuestion = question)
+        v.fillInTheBlankNextButton.setOnClickListener {
+            listener?.fillInBlankGoToNextItem(currentQuestion = question)
         }
-        v.headerStartButton.setOnClickListener {
-            listener?.headerGoToNextItem(currentQuestion = question)
+        v.fillInTheBlankBackButton.setOnClickListener {
+            listener?.fillInBlankGoToPrevoiusItem(currentQuestion = question)
         }
         return v
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnHeaderInteractionListener) {
+        if (context is OnFillInBlankInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
                 //load survey
                 setQuestion()
             }
         }else {
-            throw RuntimeException(context.toString() + " must implement OnHeaderInteractionListener")
+            throw RuntimeException(context.toString() + " must implement OnLikertScaleInteraktionListener")
         }
     }
 
     fun setQuestion(){
         if (::binding.isInitialized) {
-            binding.headerTextView.text =
+            binding.fillInTheBlankTextView.text =
                 "Här kommer texten:\n\n${question.title}\n${question.text}"
         }
     }
@@ -77,7 +73,7 @@ class HeaderFragment : Fragment(){
     companion object {
         @JvmStatic
         fun newInstance() =
-            HeaderFragment().apply {
+            FillInTheBlankFragment().apply {
 
             }
     }
