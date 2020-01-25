@@ -7,6 +7,7 @@
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="#A1516496"
         tools:context=".screen.surveyContainer.likertScaleFragment.LikertScaleFragment">
 
         <Button
@@ -43,6 +44,7 @@
             android:layout_height="wrap_content"
             android:maxLines="10"
             android:text="TextView"
+            android:textColor="@android:color/white"
             app:layout_constraintBottom_toTopOf="@+id/likertScaleNextButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
