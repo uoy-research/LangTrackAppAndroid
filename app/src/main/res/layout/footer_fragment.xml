@@ -66,6 +66,7 @@
             android:layout_height="wrap_content"
             android:text="😀"
             android:textAlignment="center"
+            android:textColor="@android:color/primary_text_dark"
             android:textSize="50sp"
             app:layout_constraintBottom_toTopOf="@+id/footerTextView"
             app:layout_constraintEnd_toEndOf="parent"

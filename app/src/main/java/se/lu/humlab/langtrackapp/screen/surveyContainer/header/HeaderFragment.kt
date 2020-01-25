@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.header_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
@@ -58,8 +59,11 @@ class HeaderFragment : Fragment(){
 
     fun setQuestion(){
         if (::binding.isInitialized) {
+            val mAuth = FirebaseAuth.getInstance()
             binding.headerTitleTextView.text = question.title
-            binding.headerTextTextView.text = question.text
+            binding.headerTextTextView.setText(getString(R.string.headerGreetingText,
+                mAuth.currentUser?.email ?: "noName"))
+            //binding.headerTextTextView.text = question.text
         }
     }
 

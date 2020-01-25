@@ -260,12 +260,12 @@ class SurveyContainerActivity : AppCompatActivity(),
     }
 
     override fun footerGoToPreviousItem(currentQuestion: Question) {
-        println("SurveyContainerActivity footerGoToNextItem")
-        showQuestion(index = currentQuestion.next)
+        println("SurveyContainerActivity footerGoToPreviousItem")
+        showQuestion(index = currentQuestion.previous)
     }
 
     override fun footerSendInSurvey(currentQuestion: Question) {
-        println("SurveyContainerActivity footerGoToPrevoiusItem")
+        println("SurveyContainerActivity footerSendInSurvey")
         onBackPressed()
     }
 }
