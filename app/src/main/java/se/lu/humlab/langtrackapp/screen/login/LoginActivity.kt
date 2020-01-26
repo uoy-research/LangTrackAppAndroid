@@ -10,8 +10,10 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import kotlinx.android.synthetic.main.login_activity.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.databinding.LoginActivityBinding
+import se.lu.humlab.langtrackapp.popup.PopupAlert
 import java.util.regex.Pattern
 
 class LoginActivity : AppCompatActivity() {
@@ -27,7 +29,15 @@ class LoginActivity : AppCompatActivity() {
             checkTextAndLogIn()
         }
         mBind.loginHelpButton.setOnClickListener {
-            println("loginHelpButton")
+            val alertFm = supportFragmentManager.beginTransaction()
+            val width = (loginLayout.measuredWidth * 0.75).toInt()
+            val alertPopup = PopupAlert.show(
+                width = width,
+                title = "THE LANG-TRACK-APP",
+                textViewText = "Studera exponering för och användning av ett nytt språk med smartphone-teknik.\n\n",
+                placecenter = true
+            )
+            alertPopup.show(alertFm, "alertPopup")
         }
         mBind.loginProgressbar.visibility = View.GONE
         mBind.logInEmailEditText.requestFocus()
