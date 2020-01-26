@@ -26,6 +26,9 @@ class LoginActivity : AppCompatActivity() {
         mBind.logInButton.setOnClickListener {
             checkTextAndLogIn()
         }
+        mBind.loginHelpButton.setOnClickListener {
+            println("loginHelpButton")
+        }
         mBind.loginProgressbar.visibility = View.GONE
         mBind.logInEmailEditText.requestFocus()
     }

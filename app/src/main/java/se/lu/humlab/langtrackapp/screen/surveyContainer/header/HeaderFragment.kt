@@ -58,12 +58,17 @@ class HeaderFragment : Fragment(){
     }
 
     fun setQuestion(){
-        if (::binding.isInitialized) {
-            val mAuth = FirebaseAuth.getInstance()
-            binding.headerTitleTextView.text = question.title
-            binding.headerTextTextView.setText(getString(R.string.headerGreetingText,
-                mAuth.currentUser?.email ?: "noName"))
-            //binding.headerTextTextView.text = question.text
+        if (context is OnHeaderInteractionListener) {
+            if (::binding.isInitialized) {
+                val mAuth = FirebaseAuth.getInstance()
+                binding.headerTitleTextView.text = question.title
+                binding.headerTextTextView.setText(
+                    getString(
+                        R.string.headerGreetingText,
+                        mAuth.currentUser?.email ?: "noName"
+                    )
+                )
+            }
         }
     }
 
