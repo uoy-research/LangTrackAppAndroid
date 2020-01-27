@@ -5,7 +5,28 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#8B96516F">
+        android:background="@color/lta_question_background">
+
+        <TextView
+            android:id="@+id/multipleChoiseTitleTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/lta_blue"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="3dp"
+            android:text="Multiple choice titel"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="18sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
         <Button
             android:id="@+id/multipleChoiseFragmentNextButton"
@@ -14,7 +35,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="25dp"
-            android:background="@drawable/rounded_button_white_red"
+            android:background="@drawable/rounded_button_white_blue"
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
@@ -33,7 +54,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="25dp"
-            android:background="@drawable/rounded_button_white_red"
+            android:background="@drawable/rounded_button_white_blue"
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
