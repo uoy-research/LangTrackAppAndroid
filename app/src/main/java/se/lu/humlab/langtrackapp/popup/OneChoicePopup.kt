@@ -11,35 +11,42 @@ import androidx.fragment.app.DialogFragment
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.interfaces.OnBoolPopupReturnListener
 
-class PopupAlert: DialogFragment() {
 
-    lateinit var onAlertPopupReturnListener: OnBoolPopupReturnListener
+class OneChoicePopup: DialogFragment() {
+
+    lateinit var onBoolPopupReturnListener: OnBoolPopupReturnListener
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        val rootView = inflater.inflate(R.layout.popup_alert, container)
-        val titleView = rootView.findViewById<TextView>(R.id.popupAlertTitleTextView)
-        val infoView = rootView.findViewById<TextView>(R.id.popupAlertInfoTextView)
-        val okButton = rootView.findViewById<Button>(R.id.popupAlertOkButton)
+        val rootView = inflater.inflate(R.layout.popup_one_choice, container)
+        val titleView = rootView.findViewById<TextView>(R.id.popupOneChoiceTitleTextView)
+        val infoView = rootView.findViewById<TextView>(R.id.popupOneChoiceInfoTextView)
+        val okButton = rootView.findViewById<Button>(R.id.popupOneChoiceOkButton)
+        val cancelButton = rootView.findViewById<Button>(R.id.popupOneChoiceCancelButton)
 
         popupWidth = arguments?.getInt(WIDTH)
         val title = arguments?.getString(TITLE)
-        val infoText = arguments?.getString(TEXT_VIEW_TEXT)
+        val infoText = arguments?.getString(INFO_TEXT)
+        val okButtonText = arguments?.getString(OK_BUTTON_TEXT)
         val placeCenter = arguments?.getBoolean(PLACE_CENTER) ?: false
-
-        okButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         titleView.text = title
         infoView.text = infoText
+        okButton.setText(okButtonText)
+        okButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        cancelButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         okButton.setOnClickListener {
             dialog?.dismiss()
-            if (::onAlertPopupReturnListener.isInitialized) {
-                onAlertPopupReturnListener.popupReturn(false)
+            if (::onBoolPopupReturnListener.isInitialized) {
+                onBoolPopupReturnListener.popupReturn(true)
             }
+        }
+        cancelButton.setOnClickListener {
+            dialog?.dismiss()
         }
 
         if (dialog != null) {
@@ -60,7 +67,7 @@ class PopupAlert: DialogFragment() {
     }
 
     fun setCompleteListener(listener: OnBoolPopupReturnListener){
-        this.onAlertPopupReturnListener = listener
+        this.onBoolPopupReturnListener = listener
     }
 
     override fun onStart()
@@ -77,22 +84,25 @@ class PopupAlert: DialogFragment() {
     companion object {
         val WIDTH = "width"
         val TITLE = "title"
-        val TEXT_VIEW_TEXT = "textViewText"
+        val INFO_TEXT = "infoText"
         val PLACE_CENTER = "placecenter"
+        val OK_BUTTON_TEXT = "okButtonText"
         var popupWidth: Int? = 100
 
         fun show(width: Int,
                  title: String,
-                 textViewText: String,
+                 infoText: String,
+                 okButtonText: String,
                  placecenter: Boolean,
-                 cancelable: Boolean = true): PopupAlert {
-            return PopupAlert().apply {
+                 cancelable: Boolean = true): OneChoicePopup {
+            return OneChoicePopup().apply {
                 this.isCancelable = cancelable
                 arguments = Bundle().apply {
                     putInt(WIDTH, width)
                     putString(TITLE, title)
-                    putString(TEXT_VIEW_TEXT, textViewText)
+                    putString(INFO_TEXT, infoText)
                     putBoolean(PLACE_CENTER, placecenter)
+                    putString(OK_BUTTON_TEXT, okButtonText)
                 }
             }
         }
