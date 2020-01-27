@@ -12,9 +12,12 @@ import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.activity_main.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.ActivityMainBinding
+import se.lu.humlab.langtrackapp.interfaces.OnBoolPopupReturnListener
+import se.lu.humlab.langtrackapp.popup.OneChoicePopup
 import se.lu.humlab.langtrackapp.screen.login.LoginActivity
 import se.lu.humlab.langtrackapp.screen.survey.SurveyActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
@@ -44,8 +47,7 @@ class MainActivity : AppCompatActivity() {
             SurveyContainerActivity.start(this)
         }
         mBind.mainLogOutButton.setOnClickListener {
-            mAuth.signOut()
-            LoginActivity.start(this)
+            showLogOutPopup()
         }
     }
 
@@ -57,6 +59,28 @@ class MainActivity : AppCompatActivity() {
         }else{
             //Set listeners
         }
+    }
+
+    private fun showLogOutPopup(){
+        val alertFm = supportFragmentManager.beginTransaction()
+        val width = (main_layout.measuredWidth * 0.75).toInt()
+        val oneChoicePopup = OneChoicePopup.show(
+            width = width,
+            title = "Logga ut",
+            infoText = "Vill du logga ut?\n${mAuth.currentUser?.email}",
+            okButtonText = "Logga ut",
+            placecenter = true,
+            cancelable = true
+        )
+        oneChoicePopup.setCompleteListener(object : OnBoolPopupReturnListener {
+            override fun popupReturn(value: Boolean) {
+                if (value){
+                    mAuth.signOut()
+                    LoginActivity.start(this@MainActivity)
+                }
+            }
+        })
+        oneChoicePopup.show(alertFm, "oneChoicePopup")
     }
 
     companion object {

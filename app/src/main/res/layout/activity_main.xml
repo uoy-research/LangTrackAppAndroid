@@ -13,7 +13,8 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="#FFFFFF"
-        tools:context=".screen.main.MainActivity">
+        tools:context=".screen.main.MainActivity"
+        android:id="@+id/main_layout">
 
         <TextView
             android:id="@+id/textView2"
