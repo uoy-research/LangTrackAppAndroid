@@ -1,5 +1,8 @@
 package se.lu.humlab.langtrackapp.data.model
 
+import android.os.Parcel
+import android.os.Parcelable
+
 data class Question (
     var type: Int = 99,
     var id: String = "",
@@ -13,4 +16,49 @@ data class Question (
     var fillBlanksChoises: List<String>? = null,
     var miltipleChoisesAnswers: List<String>? = null,
     var singleMultipleAnswers: List<String>? = null
-)
+) : Parcelable {
+    constructor(parcel: Parcel) : this(
+        parcel.readInt(),
+        parcel.readString() ?: "",
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.readInt(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
+        parcel.createStringArrayList(),
+        parcel.createStringArrayList(),
+        parcel.createStringArrayList(),
+        parcel.createStringArrayList()
+    ) {
+    }
+
+    override fun writeToParcel(parcel: Parcel, flags: Int) {
+        parcel.writeInt(type)
+        parcel.writeString(id)
+        parcel.writeInt(previous)
+        parcel.writeInt(index)
+        parcel.writeInt(next)
+        parcel.writeString(title)
+        parcel.writeString(text)
+        parcel.writeString(description)
+        parcel.writeStringList(likertScale)
+        parcel.writeStringList(fillBlanksChoises)
+        parcel.writeStringList(miltipleChoisesAnswers)
+        parcel.writeStringList(singleMultipleAnswers)
+    }
+
+    override fun describeContents(): Int {
+        return 0
+    }
+
+    companion object CREATOR : Parcelable.Creator<Question> {
+        override fun createFromParcel(parcel: Parcel): Question {
+            return Question(parcel)
+        }
+
+        override fun newArray(size: Int): Array<Question?> {
+            return arrayOfNulls(size)
+        }
+    }
+}

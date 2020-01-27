@@ -6,7 +6,7 @@ import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.interfaces.*
 import se.lu.humlab.langtrackapp.screen.survey.viewholders.*
 
-class SurveyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class SurveyAdapter2 : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private lateinit var onRowClickedListener: OnLikertScalesItemClickedListener
     private lateinit var onFillBlanksItemClickedListener: OnFillBlanksItemClickedListener

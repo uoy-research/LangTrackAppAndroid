@@ -112,12 +112,14 @@
                 android:id="@+id/likertScaleRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="20dp"
                 android:layout_marginTop="15dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginEnd="30dp"
                 android:layout_marginBottom="50dp"
                 android:checkedButton="@id/likertScaleRadioButton3"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingStart="20dp"
+                android:paddingEnd="10dp">
 
                 <RadioButton
                     android:id="@+id/likertScaleRadioButton1"
@@ -131,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="2" />
+                    android:text="2"/>
 
                 <RadioButton
                     android:id="@+id/likertScaleRadioButton3"

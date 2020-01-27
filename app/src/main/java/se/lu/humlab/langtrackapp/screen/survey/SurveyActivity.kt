@@ -5,17 +5,15 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
-import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.open_ended_text_responses_item.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
+import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.SurveyActivityBinding
 import se.lu.humlab.langtrackapp.helpers.StartSnapHelper
 import se.lu.humlab.langtrackapp.interfaces.*
@@ -24,7 +22,7 @@ class SurveyActivity : AppCompatActivity() {
 
     private lateinit var mBind : SurveyActivityBinding
     private lateinit var viewModel : SurveyViewModel
-    private lateinit var adapter: SurveyAdapter
+    private lateinit var adapter: SurveyAdapter2
     private lateinit var recycler : RecyclerView
     private lateinit var linearLayoutManager: LinearLayoutManager
 
@@ -47,7 +45,7 @@ class SurveyActivity : AppCompatActivity() {
         val startSnapHelper = StartSnapHelper()
         startSnapHelper.attachToRecyclerView(recycler)
 
-        adapter = SurveyAdapter()
+        adapter = SurveyAdapter2()
 
         setQuestionsClickListeners()
 
@@ -58,7 +56,7 @@ class SurveyActivity : AppCompatActivity() {
         setTestQuestions()
 
         recycler.setOnScrollChangeListener { v, scrollX, scrollY, oldScrollX, oldScrollY ->
-            if (adapter.getItemAt(linearLayoutManager.findFirstVisibleItemPosition()).type == SurveyAdapter.OPEN_ENDED_TEXT_RESPONSES) {
+            if (adapter.getItemAt(linearLayoutManager.findFirstVisibleItemPosition()).type == SurveyAdapter2.OPEN_ENDED_TEXT_RESPONSES) {
                 val text = findViewById<EditText>(R.id.openEndedTextResponsesEditText)
                 if (text != null) {
                     hideKeyboard(text)
@@ -142,19 +140,19 @@ class SurveyActivity : AppCompatActivity() {
     fun setTestQuestions(){
         var questions = mutableListOf<Question>()
         val temp1 = Question()
-        temp1.type = SurveyAdapter.LIKERT_SCALES
+        temp1.type = SurveyAdapter2.LIKERT_SCALES
         questions.add(temp1)
         val temp2 = Question()
-        temp2.type = SurveyAdapter.FILL_IN_THE_BLANK
+        temp2.type = SurveyAdapter2.FILL_IN_THE_BLANK
         questions.add(temp2)
         val temp3 = Question()
-        temp3.type = SurveyAdapter.MULTIPLE_CHOICE
+        temp3.type = SurveyAdapter2.MULTIPLE_CHOICE
         questions.add(temp3)
         val temp4 = Question()
-        temp4.type = SurveyAdapter.SINGLE_MULTIPLE_ANSWERS
+        temp4.type = SurveyAdapter2.SINGLE_MULTIPLE_ANSWERS
         questions.add(temp4)
         val temp5 = Question()
-        temp5.type = SurveyAdapter.OPEN_ENDED_TEXT_RESPONSES
+        temp5.type = SurveyAdapter2.OPEN_ENDED_TEXT_RESPONSES
         questions.add(temp5)
         adapter.setQuestions(questions)
 
