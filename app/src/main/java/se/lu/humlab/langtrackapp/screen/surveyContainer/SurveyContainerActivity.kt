@@ -6,10 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import kotlinx.android.synthetic.main.survey_container_activity.*
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.TempSurvey
 import se.lu.humlab.langtrackapp.data.model.Question
+import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.SurveyContainerActivityBinding
 import se.lu.humlab.langtrackapp.interfaces.*
+import se.lu.humlab.langtrackapp.popup.PopupAlert
 import se.lu.humlab.langtrackapp.screen.survey.SurveyAdapter
 import se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment.FillInTheBlankFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.footerFragment.FooterFragment
@@ -62,88 +66,36 @@ class SurveyContainerActivity : AppCompatActivity(),
         openEndedTextResponsesFragment = OpenEndedTextResponsesFragment.newInstance()
         footerFragment = FooterFragment.newInstance()
 
-        //TODO: här kommer json och görs om till survey
-        val q0 = Question(
-            type = SurveyAdapter.HEADER_VIEW,
-            id = "id",
-            previous = 0,
-            index = 0,
-            next = 1,
-            title = "THE LANG-TRACK-APP\nHumanistlaboratoriet",
-            text = "Hej (användarnamn)\n\nNu är det dags att svara på frågor om din språkinlärning!",
-            description = ""
-            )
-        questionList.add(q0)
-        val q1 = Question(
-            type = SurveyAdapter.LIKERT_SCALES,
-            id = "id",
-            previous = 0,
-            index = 1,
-            next = 2,
-            title = "LikertScale titel",
-            text = "Här skrivs ett påstående som deltagaren graderar hur mycket det stämmer",
-            description = "Hur mycket stämmer följande påstående?\n1: stämmer inte alls\n5: stämmer helt"
-        )
-        questionList.add(q1)
-        val q2 = Question(
-            type = SurveyAdapter.FILL_IN_THE_BLANK,
-            id = "id",
-            previous = 1,
-            index = 2,
-            next = 3,
-            title = "FillInTheBlank titel",
-            text = "Här är texten i FillInTheBlank",
-            description = ""
-        )
-        questionList.add(q2)
-        val q3 = Question(
-            type = SurveyAdapter.MULTIPLE_CHOICE,
-            id = "id",
-            previous = 2,
-            index = 3,
-            next = 4,
-            title = "MultipleChoise titel",
-            text = "Här är texten i MultipleChoise",
-            description = ""
-        )
-        questionList.add(q3)
-        val q4 = Question(
-            type = SurveyAdapter.SINGLE_MULTIPLE_ANSWERS,
-            id = "id",
-            previous = 3,
-            index = 4,
-            next = 5,
-            title = "SingleMultipleAnswer titel",
-            text = "Här är texten i SingleMultipleAnswer",
-            description = ""
-        )
-        questionList.add(q4)
-        val q5 = Question(
-            type = SurveyAdapter.OPEN_ENDED_TEXT_RESPONSES,
-            id = "id",
-            previous = 4,
-            index = 5,
-            next = 6,
-            title = "OpenEndedTextResponses titel",
-            text = "Här är texten i OpenEndedTextResponses",
-            description = ""
-        )
-        questionList.add(q5)
-        val q6 = Question(
-            type = SurveyAdapter.FOOTER_VIEW,
-            id = "id",
-            previous = 5,
-            index = 6,
-            next = 0,
-            title = "Tack för dina svar.",
-            text = "Om du är nöjd med dina svar välj 'Skicka in'\nannars kan du stega bak för att redigera.",
-            description = ""
-        )
-        questionList.add(q6)
+        //temp
+        setSurvey(TempSurvey.getTempSurvey())
+    }
 
-        questionList.sortByDescending { it.index }
+    fun setSurvey(survey: Survey){
+        val temp = survey.questions?.toMutableList()
+        if (!temp.isNullOrEmpty()) {
+            questionList = temp
+            showQuestion(questionList.first().index)
+        }else{
+            //no questions - close Survey
+            showErrorPopup()
+        }
+    }
 
-        showQuestion(0)
+    fun showErrorPopup(){
+        val alertFm = supportFragmentManager.beginTransaction()
+        val width = (surveyContainer_layout.measuredWidth * 0.75).toInt()
+        val alertPopup = PopupAlert.show(
+            width = width,
+            title = "Något gick fel!",
+            textViewText = "Det går tyvärr inte att visa detta formulär.\nMeddelande skickat till humanist lab...",
+            placecenter = true
+        )
+        alertPopup.setCompleteListener(object : OnBoolPopupReturnListener{
+            override fun popupReturn(value: Boolean) {
+                onBackPressed()
+            }
+        })
+        alertPopup.show(alertFm, "alertPopup")
     }
 
     fun showQuestion(index: Int){
