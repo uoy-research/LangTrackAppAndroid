@@ -53,7 +53,9 @@ class LikertScaleFragment : Fragment(){
 
     fun setQuestion(){
         if (::binding.isInitialized) {
-            binding.likertScaleTextView.text = "${question.title}\n\n${question.text}"
+            binding.likertScaleTitleTextView.text = question.title
+            binding.likertScaleDescriptionTextView.text = question.description
+            binding.likertScaleTextTextView.text = question.text
         }
     }
 

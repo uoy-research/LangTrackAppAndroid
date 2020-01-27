@@ -81,8 +81,8 @@ class SurveyContainerActivity : AppCompatActivity(),
             index = 1,
             next = 2,
             title = "LikertScale titel",
-            text = "Här är texten i LikertScale",
-            description = ""
+            text = "Här skrivs ett påstående som deltagaren graderar hur mycket det stämmer",
+            description = "Hur mycket stämmer följande påstående?\n1: stämmer inte alls\n5: stämmer helt"
         )
         questionList.add(q1)
         val q2 = Question(
@@ -91,8 +91,8 @@ class SurveyContainerActivity : AppCompatActivity(),
             previous = 1,
             index = 2,
             next = 3,
-            title = "FillInTheBlanks titel",
-            text = "Här är texten i FillInTheBlanks",
+            title = "FillInTheBlank titel",
+            text = "Här är texten i FillInTheBlank",
             description = ""
         )
         questionList.add(q2)

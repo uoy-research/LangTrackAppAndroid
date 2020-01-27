@@ -7,7 +7,7 @@
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#A1516496"
+        android:background="@color/lta_question_background"
         tools:context=".screen.surveyContainer.likertScaleFragment.LikertScaleFragment">
 
 
@@ -51,18 +51,109 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <TextView
-            android:id="@+id/likertScaleTextView"
-            android:layout_width="wrap_content"
+            android:id="@+id/likertScaleTitleTextView"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:maxLines="10"
-            android:text="TextView"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/lta_blue"
+            android:paddingStart="5dp"
+            android:paddingTop="5dp"
+            android:paddingEnd="5dp"
+            android:paddingBottom="3dp"
+            android:text="Likert scales"
             android:textAlignment="center"
             android:textColor="@android:color/white"
-            app:layout_constraintBottom_toTopOf="@+id/likertScaleNextButton"
+            android:textSize="18sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/likertScaleDescriptionTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="15dp"
+            android:maxLines="3"
+            android:text="Hur mycket stämmer följande påstående?\n1: stämmer inte alls\n5: stämmer helt"
+            android:textSize="15sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/likertScaleTitleTextView" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toTopOf="@+id/likertScaleNextButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/likertScaleDescriptionTextView"
+            app:layout_constraintVertical_bias="0.32">
+
+            <TextView
+                android:id="@+id/likertScaleTextTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:layout_marginEnd="20dp"
+                android:maxLines="20"
+                android:minLines="1"
+                android:padding="5dp"
+                android:text="Jag är idag säkrare på att delta i samtal än igår"
+                android:textSize="18sp" />
+
+            <RadioGroup
+                android:id="@+id/likertScaleRadioGroup"
+                android:layout_width="match_parent"
+                android:layout_height="32dp"
+                android:layout_marginStart="30dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="50dp"
+                android:checkedButton="@id/likertScaleRadioButton3"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/likertScaleRadioButton1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="1" />
+
+                <RadioButton
+                    android:id="@+id/likertScaleRadioButton2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="2" />
+
+                <RadioButton
+                    android:id="@+id/likertScaleRadioButton3"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="3" />
+
+                <RadioButton
+                    android:id="@+id/likertScaleRadioButton4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="4" />
+
+                <RadioButton
+                    android:id="@+id/likertScaleRadioButton5"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="5" />
+            </RadioGroup>
+        </LinearLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
