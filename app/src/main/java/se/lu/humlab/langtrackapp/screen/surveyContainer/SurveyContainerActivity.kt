@@ -14,7 +14,7 @@ import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.SurveyContainerActivityBinding
 import se.lu.humlab.langtrackapp.interfaces.*
 import se.lu.humlab.langtrackapp.popup.PopupAlert
-import se.lu.humlab.langtrackapp.screen.survey.SurveyAdapter
+import se.lu.humlab.langtrackapp.screen.survey.SurveyAdapter2
 import se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment.FillInTheBlankFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.footerFragment.FooterFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.header.HeaderFragment
@@ -48,6 +48,8 @@ class SurveyContainerActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        val theSurvey = intent.getParcelableExtra<Survey>(SURVEY)
+
         mBind = DataBindingUtil.setContentView(this, R.layout.survey_container_activity)
         mBind.lifecycleOwner = this
         mBind.executePendingBindings()
@@ -66,8 +68,11 @@ class SurveyContainerActivity : AppCompatActivity(),
         openEndedTextResponsesFragment = OpenEndedTextResponsesFragment.newInstance()
         footerFragment = FooterFragment.newInstance()
 
-        //temp
-        setSurvey(TempSurvey.getTempSurvey())
+        if (theSurvey != null){
+            setSurvey(theSurvey)
+        }else{
+            showErrorPopup()
+        }
     }
 
     fun setSurvey(survey: Survey){
@@ -105,34 +110,34 @@ class SurveyContainerActivity : AppCompatActivity(),
                 if (question.index == index) {
                     when (question.type) {
 
-                        SurveyAdapter.HEADER_VIEW -> {
+                        SurveyAdapter2.HEADER_VIEW -> {
                             headerFragment.question = question
                             loadFragment(headerFragment)
                             headerFragment.setQuestion()
                         }
-                        SurveyAdapter.LIKERT_SCALES -> {
+                        SurveyAdapter2.LIKERT_SCALES -> {
                             likertScaleFragment.question = question
                             loadFragment(likertScaleFragment)
                             likertScaleFragment.setQuestion()
                         }
-                        SurveyAdapter.FILL_IN_THE_BLANK -> {
+                        SurveyAdapter2.FILL_IN_THE_BLANK -> {
                             fillInTheBlankFragment.question = question
                             loadFragment(fillInTheBlankFragment)
                             fillInTheBlankFragment.setQuestion()
                         }
-                        SurveyAdapter.MULTIPLE_CHOICE -> {
+                        SurveyAdapter2.MULTIPLE_CHOICE -> {
                             multipleChoiceFragment.question = question
                             loadFragment(multipleChoiceFragment)
                         }
-                        SurveyAdapter.SINGLE_MULTIPLE_ANSWERS -> {
+                        SurveyAdapter2.SINGLE_MULTIPLE_ANSWERS -> {
                             singleMultipleAnswersFragment.question = question
                             loadFragment(singleMultipleAnswersFragment)
                         }
-                        SurveyAdapter.OPEN_ENDED_TEXT_RESPONSES -> {
+                        SurveyAdapter2.OPEN_ENDED_TEXT_RESPONSES -> {
                             openEndedTextResponsesFragment.question = question
                             loadFragment(openEndedTextResponsesFragment)
                         }
-                        SurveyAdapter.FOOTER_VIEW -> {
+                        SurveyAdapter2.FOOTER_VIEW -> {
                             footerFragment.question = question
                             loadFragment(footerFragment)
                         }
@@ -144,8 +149,12 @@ class SurveyContainerActivity : AppCompatActivity(),
     }
 
     companion object {
-        fun start(context: Context){
-            context.startActivity(Intent(context, SurveyContainerActivity::class.java))
+        val SURVEY = "survey"
+
+        fun start(context: Context, survey: Survey){
+            context.startActivity(Intent(context, SurveyContainerActivity::class.java).apply {
+                this.putExtra(SURVEY,survey)
+            })
         }
     }
 

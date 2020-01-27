@@ -2,15 +2,15 @@ package se.lu.humlab.langtrackapp
 
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.data.model.Survey
-import se.lu.humlab.langtrackapp.screen.survey.SurveyAdapter
+import se.lu.humlab.langtrackapp.screen.survey.SurveyAdapter2
 import java.util.*
 
 object TempSurvey {
 
-    fun getTempSurvey(): Survey{
+    fun getTempSurvey(number: String): Survey{
         val tempQuestionList = mutableListOf<Question>()
         val q0 = Question(
-            type = SurveyAdapter.HEADER_VIEW,
+            type = SurveyAdapter2.HEADER_VIEW,
             id = "id",
             previous = 0,
             index = 0,
@@ -21,7 +21,7 @@ object TempSurvey {
         )
         tempQuestionList.add(q0)
         val q1 = Question(
-            type = SurveyAdapter.LIKERT_SCALES,
+            type = SurveyAdapter2.LIKERT_SCALES,
             id = "id",
             previous = 0,
             index = 1,
@@ -32,7 +32,7 @@ object TempSurvey {
         )
         tempQuestionList.add(q1)
         val q2 = Question(
-            type = SurveyAdapter.FILL_IN_THE_BLANK,
+            type = SurveyAdapter2.FILL_IN_THE_BLANK,
             id = "id",
             previous = 1,
             index = 2,
@@ -43,7 +43,7 @@ object TempSurvey {
         )
         tempQuestionList.add(q2)
         val q3 = Question(
-            type = SurveyAdapter.MULTIPLE_CHOICE,
+            type = SurveyAdapter2.MULTIPLE_CHOICE,
             id = "id",
             previous = 2,
             index = 3,
@@ -54,7 +54,7 @@ object TempSurvey {
         )
         tempQuestionList.add(q3)
         val q4 = Question(
-            type = SurveyAdapter.SINGLE_MULTIPLE_ANSWERS,
+            type = SurveyAdapter2.SINGLE_MULTIPLE_ANSWERS,
             id = "id",
             previous = 3,
             index = 4,
@@ -65,7 +65,7 @@ object TempSurvey {
         )
         tempQuestionList.add(q4)
         val q5 = Question(
-            type = SurveyAdapter.OPEN_ENDED_TEXT_RESPONSES,
+            type = SurveyAdapter2.OPEN_ENDED_TEXT_RESPONSES,
             id = "id",
             previous = 4,
             index = 5,
@@ -76,7 +76,7 @@ object TempSurvey {
         )
         tempQuestionList.add(q5)
         val q6 = Question(
-            type = SurveyAdapter.FOOTER_VIEW,
+            type = SurveyAdapter2.FOOTER_VIEW,
             id = "id",
             previous = 5,
             index = 6,
@@ -93,7 +93,7 @@ object TempSurvey {
         tempSurvey.date = Date().time
         tempSurvey.footerText = ""
         tempSurvey.headerText = ""
-        tempSurvey.title = ""
+        tempSurvey.title = "Testsurvey $number"
 
         return tempSurvey
     }
