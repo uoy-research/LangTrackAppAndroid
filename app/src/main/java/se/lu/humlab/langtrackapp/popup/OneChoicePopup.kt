@@ -1,5 +1,12 @@
 package se.lu.humlab.langtrackapp.popup
 
+/*
+* Stephan Björck
+* Humanistlaboratoriet
+* Lunds Universitet
+* stephan.bjorck@humlab.lu.se
+* */
+
 import android.graphics.Color
 import android.graphics.Paint
 import android.graphics.drawable.ColorDrawable

@@ -1,5 +1,12 @@
 package se.lu.humlab.langtrackapp.helpers
 
+/*
+* Stephan Björck
+* Humanistlaboratoriet
+* Lunds Universitet
+* stephan.bjorck@humlab.lu.se
+* */
+
 import android.view.View
 import androidx.annotation.Nullable
 import androidx.recyclerview.widget.LinearLayoutManager

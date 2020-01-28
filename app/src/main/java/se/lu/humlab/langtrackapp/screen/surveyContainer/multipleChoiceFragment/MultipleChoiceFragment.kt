@@ -1,5 +1,12 @@
 package se.lu.humlab.langtrackapp.screen.surveyContainer.multipleChoiceFragment
 
+/*
+* Stephan Björck
+* Humanistlaboratoriet
+* Lunds Universitet
+* stephan.bjorck@humlab.lu.se
+* */
+
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -1,5 +1,13 @@
 package se.lu.humlab.langtrackapp.screen.main
 /*
+
+Stephan Björck
+Humanistlaboratoriet
+Lunds Universitet
+stephan.bjorck@humlab.lu.se
+
+
+
 * tempinloggning
 * email: stephan.bjorck@humlab.lu.se
 * lösenord: 123456

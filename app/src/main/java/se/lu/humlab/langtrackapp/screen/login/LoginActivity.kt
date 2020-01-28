@@ -1,5 +1,12 @@
 package se.lu.humlab.langtrackapp.screen.login
 
+/*
+* Stephan Björck
+* Humanistlaboratoriet
+* Lunds Universitet
+* stephan.bjorck@humlab.lu.se
+* */
+
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
