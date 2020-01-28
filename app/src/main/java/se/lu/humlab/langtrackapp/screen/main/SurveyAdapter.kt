@@ -1,5 +1,12 @@
 package se.lu.humlab.langtrackapp.screen.main
 
+/*
+* Stephan Björck
+* Humanistlaboratoriet
+* Lunds Universitet
+* stephan.bjorck@humlab.lu.se
+* */
+
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import se.lu.humlab.langtrackapp.data.model.Survey

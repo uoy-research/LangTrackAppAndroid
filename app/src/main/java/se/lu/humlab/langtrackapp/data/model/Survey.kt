@@ -1,5 +1,12 @@
 package se.lu.humlab.langtrackapp.data.model
 
+/*
+* Stephan Björck
+* Humanistlaboratoriet
+* Lunds Universitet
+* stephan.bjorck@humlab.lu.se
+* */
+
 import android.os.Parcel
 import android.os.Parcelable
 
