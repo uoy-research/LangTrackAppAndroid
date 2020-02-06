@@ -15,8 +15,10 @@ stephan.bjorck@humlab.lu.se
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
@@ -65,12 +67,12 @@ class MainActivity : AppCompatActivity() {
         recycler.layoutManager = linearLayoutManager
         adapter = SurveyAdapter()
         recycler.adapter = adapter
-        val itemDecorator = DividerItemDecoration(
+        /*val itemDecorator = DividerItemDecoration(
             this,
             DividerItemDecoration.VERTICAL
         )
-        itemDecorator.setDrawable(ContextCompat.getDrawable(this, R.drawable.recycler_divider)!!)
-        mBind.surveyRecycler.addItemDecoration(itemDecorator)
+        itemDecorator.setDrawable(ContextCompat.getDrawable(this, R.drawable.recycler_divider)!!)*/
+        mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Survey) {
                 SurveyContainerActivity.start(this@MainActivity, item)
@@ -102,6 +104,7 @@ class MainActivity : AppCompatActivity() {
             LoginActivity.start(this)
         }else{
             //Set listeners
+            mBind.mainEmailTextView.text = "deltagare12345"//mAuth.currentUser?.email ?: ""
         }
     }
 
@@ -132,4 +135,22 @@ class MainActivity : AppCompatActivity() {
             context.startActivity(Intent(context, MainActivity::class.java))
         }
     }
+}
+class MyItemDecorator(private val horizontal: Int, private val vertical: Int): RecyclerView.ItemDecoration(){
+
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        super.getItemOffsets(outRect, view, parent, state)
+        outRect.right = horizontal
+        outRect.left = horizontal
+        if (parent.getChildLayoutPosition(view) == 0){
+            outRect.top = vertical
+        }
+        outRect.bottom = vertical
+    }
+
 }
