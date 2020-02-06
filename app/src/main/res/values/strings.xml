@@ -3,7 +3,7 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="headerGreetingText">Inloggning: \n%1$s\n\nNu är det dags att svara på frågor om din språkinlärning!</string>
+    <string name="headerGreetingText">Inloggad som \n%1$s\n\nNu är det dags att svara på frågor om din språkinlärning!</string>
     <string name="logged_in_as">Inloggad som %1$s</string>
     <string name="loading">Laddar värde</string>
 </resources>
