@@ -9,7 +9,13 @@ stephan.bjorck@humlab.lu.se
 
 
 * tempinloggning
-* email: stephan.bjorck@humlab.lu.se
+
+* email: deltagare1a2b3c@humlablu.com
+* användarnamn: deltagare1a2b3c
+* lösenord: 123456
+
+* email: test1@humlablu.com
+* användarnamn: test1
 * lösenord: 123456
 * */
 
@@ -45,7 +51,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var recycler: RecyclerView
     lateinit var adapter: SurveyAdapter
-    var surveyList = mutableListOf<Survey>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,19 +89,17 @@ class MainActivity : AppCompatActivity() {
             showLogOutPopup()
         }
 
-        //temp
-        surveyList.add(TempSurvey.getTempSurvey("1"))
-        surveyList.add(TempSurvey.getTempSurvey("2"))
-        surveyList.add(TempSurvey.getTempSurvey("3"))
-        surveyList.add(TempSurvey.getTempSurvey("4"))
-        surveyList.add(TempSurvey.getTempSurvey("5"))
-        surveyList.add(TempSurvey.getTempSurvey("6"))
-        surveyList.add(TempSurvey.getTempSurvey("7"))
-        adapter.setTasks(surveyList)
-
         viewModel.getUserLiveData().observeForever {
             mBind.currentUser = it
         }
+
+        adapter.setTasks(viewModel.surveyList)
+
+        viewModel.surveyListLiveData.observeForever {
+            adapter.setTasks(it)
+        }
+        //test
+        viewModel.getSurveys()
     }
 
     override fun onStart() {
@@ -118,7 +121,7 @@ class MainActivity : AppCompatActivity() {
         val oneChoicePopup = OneChoicePopup.show(
             width = width,
             title = "Logga ut",
-            infoText = "Vill du logga ut?\n${mAuth.currentUser?.email}",
+            infoText = "Vill du logga ut?\n${viewModel.getCurrentUser().userName}",
             okButtonText = "Logga ut",
             placecenter = true,
             cancelable = true
