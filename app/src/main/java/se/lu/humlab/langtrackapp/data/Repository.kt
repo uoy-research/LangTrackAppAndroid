@@ -8,6 +8,17 @@ package se.lu.humlab.langtrackapp.data
 * */
 
 import android.content.Context
+import androidx.lifecycle.MutableLiveData
+import se.lu.humlab.langtrackapp.data.model.User
 
 class Repository(val context: Context) {
+
+    private var currentUser = User()
+    var currentUserLiveData = MutableLiveData<User>()
+
+
+    fun setCurrentUser(user: User){
+        currentUser = user
+        currentUserLiveData.postValue(currentUser)
+    }
 }

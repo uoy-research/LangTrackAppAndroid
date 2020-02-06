@@ -19,18 +19,16 @@ import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.core.content.ContextCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.TempSurvey
-import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.data.model.Survey
+import se.lu.humlab.langtrackapp.data.model.User
 import se.lu.humlab.langtrackapp.databinding.ActivityMainBinding
 import se.lu.humlab.langtrackapp.interfaces.OnBoolPopupReturnListener
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
@@ -95,6 +93,10 @@ class MainActivity : AppCompatActivity() {
         surveyList.add(TempSurvey.getTempSurvey("6"))
         surveyList.add(TempSurvey.getTempSurvey("7"))
         adapter.setTasks(surveyList)
+
+        viewModel.getUserLiveData().observeForever {
+            mBind.mainEmailTextView.text = "Inloggad som ${it.userName}"
+        }
     }
 
     override fun onStart() {
@@ -104,7 +106,9 @@ class MainActivity : AppCompatActivity() {
             LoginActivity.start(this)
         }else{
             //Set listeners
-            mBind.mainEmailTextView.text = "deltagare12345"//mAuth.currentUser?.email ?: ""
+            val userEmail = mAuth.currentUser!!.email
+            val userName = userEmail?.substringBefore('@')
+            viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))
         }
     }
 
