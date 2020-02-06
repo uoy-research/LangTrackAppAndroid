@@ -95,7 +95,7 @@ class MainActivity : AppCompatActivity() {
         adapter.setTasks(surveyList)
 
         viewModel.getUserLiveData().observeForever {
-            mBind.mainEmailTextView.text = "Inloggad som ${it.userName}"
+            mBind.currentUser = it
         }
     }
 
