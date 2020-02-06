@@ -1,5 +1,5 @@
 package se.lu.humlab.langtrackapp
-
+/*
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.screen.survey.SurveyAdapter2
@@ -97,4 +97,4 @@ object TempSurvey {
 
         return tempSurvey
     }
-}
+}*/

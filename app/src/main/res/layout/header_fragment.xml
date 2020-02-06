@@ -92,7 +92,7 @@
             app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/headerTitleTextView"
-            app:layout_constraintVertical_bias="0.45" />
+            app:layout_constraintVertical_bias="0.35000002" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -15,13 +15,11 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.survey_container_activity.*
 import se.lu.humlab.langtrackapp.R
-import se.lu.humlab.langtrackapp.TempSurvey
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.SurveyContainerActivityBinding
 import se.lu.humlab.langtrackapp.interfaces.*
 import se.lu.humlab.langtrackapp.popup.PopupAlert
-import se.lu.humlab.langtrackapp.screen.survey.SurveyAdapter2
 import se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment.FillInTheBlankFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.footerFragment.FooterFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.header.HeaderFragment
@@ -117,34 +115,34 @@ class SurveyContainerActivity : AppCompatActivity(),
                 if (question.index == index) {
                     when (question.type) {
 
-                        SurveyAdapter2.HEADER_VIEW -> {
+                        HEADER_VIEW -> {
                             headerFragment.question = question
                             loadFragment(headerFragment)
                             headerFragment.setQuestion()
                         }
-                        SurveyAdapter2.LIKERT_SCALES -> {
+                        LIKERT_SCALES -> {
                             likertScaleFragment.question = question
                             loadFragment(likertScaleFragment)
                             likertScaleFragment.setQuestion()
                         }
-                        SurveyAdapter2.FILL_IN_THE_BLANK -> {
+                        FILL_IN_THE_BLANK -> {
                             fillInTheBlankFragment.question = question
                             loadFragment(fillInTheBlankFragment)
                             fillInTheBlankFragment.setQuestion()
                         }
-                        SurveyAdapter2.MULTIPLE_CHOICE -> {
+                        MULTIPLE_CHOICE -> {
                             multipleChoiceFragment.question = question
                             loadFragment(multipleChoiceFragment)
                         }
-                        SurveyAdapter2.SINGLE_MULTIPLE_ANSWERS -> {
+                        SINGLE_MULTIPLE_ANSWERS -> {
                             singleMultipleAnswersFragment.question = question
                             loadFragment(singleMultipleAnswersFragment)
                         }
-                        SurveyAdapter2.OPEN_ENDED_TEXT_RESPONSES -> {
+                        OPEN_ENDED_TEXT_RESPONSES -> {
                             openEndedTextResponsesFragment.question = question
                             loadFragment(openEndedTextResponsesFragment)
                         }
-                        SurveyAdapter2.FOOTER_VIEW -> {
+                        FOOTER_VIEW -> {
                             footerFragment.question = question
                             loadFragment(footerFragment)
                         }
@@ -157,6 +155,14 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     companion object {
         val SURVEY = "survey"
+
+        const val HEADER_VIEW = "header"
+        const val LIKERT_SCALES = "likert"
+        const val FILL_IN_THE_BLANK = "blanks"
+        const val MULTIPLE_CHOICE = "multiple"
+        const val SINGLE_MULTIPLE_ANSWERS = "single"
+        const val OPEN_ENDED_TEXT_RESPONSES = "open"
+        const val FOOTER_VIEW = "footer"
 
         fun start(context: Context, survey: Survey){
             context.startActivity(Intent(context, SurveyContainerActivity::class.java).apply {
@@ -236,4 +242,5 @@ class SurveyContainerActivity : AppCompatActivity(),
         println("SurveyContainerActivity footerSendInSurvey")
         onBackPressed()
     }
+
 }

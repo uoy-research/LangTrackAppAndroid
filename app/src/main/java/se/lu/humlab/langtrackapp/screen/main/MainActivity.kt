@@ -9,7 +9,13 @@ stephan.bjorck@humlab.lu.se
 
 
 * tempinloggning
-* email: stephan.bjorck@humlab.lu.se
+
+* email: deltagare1a2b3c@humlablu.com
+* användarnamn: deltagare1a2b3c
+* lösenord: 123456
+
+* email: test1@humlablu.com
+* användarnamn: test1
 * lösenord: 123456
 * */
 
@@ -26,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import se.lu.humlab.langtrackapp.R
-import se.lu.humlab.langtrackapp.TempSurvey
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.data.model.User
 import se.lu.humlab.langtrackapp.databinding.ActivityMainBinding
@@ -34,7 +39,6 @@ import se.lu.humlab.langtrackapp.interfaces.OnBoolPopupReturnListener
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
 import se.lu.humlab.langtrackapp.popup.OneChoicePopup
 import se.lu.humlab.langtrackapp.screen.login.LoginActivity
-import se.lu.humlab.langtrackapp.screen.survey.SurveyActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
 
 class MainActivity : AppCompatActivity() {
@@ -45,7 +49,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     lateinit var recycler: RecyclerView
     lateinit var adapter: SurveyAdapter
-    var surveyList = mutableListOf<Survey>()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,11 +68,7 @@ class MainActivity : AppCompatActivity() {
         recycler.layoutManager = linearLayoutManager
         adapter = SurveyAdapter()
         recycler.adapter = adapter
-        /*val itemDecorator = DividerItemDecoration(
-            this,
-            DividerItemDecoration.VERTICAL
-        )
-        itemDecorator.setDrawable(ContextCompat.getDrawable(this, R.drawable.recycler_divider)!!)*/
+
         mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Survey) {
@@ -77,26 +76,21 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        mBind.testButton.setOnClickListener {
-            SurveyActivity.start(this)
-        }
         mBind.mainLogOutButton.setOnClickListener {
             showLogOutPopup()
         }
 
-        //temp
-        surveyList.add(TempSurvey.getTempSurvey("1"))
-        surveyList.add(TempSurvey.getTempSurvey("2"))
-        surveyList.add(TempSurvey.getTempSurvey("3"))
-        surveyList.add(TempSurvey.getTempSurvey("4"))
-        surveyList.add(TempSurvey.getTempSurvey("5"))
-        surveyList.add(TempSurvey.getTempSurvey("6"))
-        surveyList.add(TempSurvey.getTempSurvey("7"))
-        adapter.setTasks(surveyList)
-
         viewModel.getUserLiveData().observeForever {
             mBind.currentUser = it
         }
+
+        adapter.setTasks(viewModel.surveyList)
+
+        viewModel.surveyListLiveData.observeForever {
+            adapter.setTasks(it)
+        }
+        //test
+        viewModel.getSurveys()
     }
 
     override fun onStart() {
@@ -118,7 +112,7 @@ class MainActivity : AppCompatActivity() {
         val oneChoicePopup = OneChoicePopup.show(
             width = width,
             title = "Logga ut",
-            infoText = "Vill du logga ut?\n${mAuth.currentUser?.email}",
+            infoText = "Vill du logga ut?\n${viewModel.getCurrentUser().userName}",
             okButtonText = "Logga ut",
             placecenter = true,
             cancelable = true

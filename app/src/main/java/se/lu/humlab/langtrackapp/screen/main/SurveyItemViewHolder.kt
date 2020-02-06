@@ -46,7 +46,7 @@ class SurveyItemViewHolder(theItemView: View,
         val formatter = SimpleDateFormat("dd MMMM yyyy    HH:mm",
             Locale("sv", "SE"))
         val calendar = Calendar.getInstance();
-        calendar.timeInMillis = milli
+        calendar.timeInMillis = milli * 1000//TODO: temp, should be in milli
         return formatter.format(calendar.time)
     }
 
