@@ -10,7 +10,8 @@ package se.lu.humlab.langtrackapp.data
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
-import se.lu.humlab.langtrackapp.TempSurvey
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.data.model.User
 
@@ -41,14 +42,17 @@ class Repository(val context: Context) {
                 if (error == null) {
                     if (bytes != null) {
                         println("[response bytes] ${String(bytes)}")
-                        val templist = mutableListOf<Survey>()
-                        templist.add(TempSurvey.getTempSurvey("1"))
-                        templist.add(TempSurvey.getTempSurvey("2"))
-                        surveyListLiveData.value = templist
+                        surveyListLiveData.value = convertJsonToSurveyList(String(bytes)).toMutableList()
                     }
                 }else{
                     println("Repository getSurveysFromDropbox ERROR: ${error.localizedMessage}")
                 }
             }
+    }
+
+    private fun convertJsonToSurveyList(jsonString: String): List<Survey>{
+        val gson = Gson()
+        val listType = object : TypeToken<List<Survey>>() { }.type
+        return gson.fromJson(jsonString, listType)
     }
 }

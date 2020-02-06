@@ -11,7 +11,7 @@ import android.os.Parcel
 import android.os.Parcelable
 
 data class Question (
-    var type: Int = 99,
+    var type: String = "",
     var id: String = "",
     var previous: Int = 0,
     var index: Int = 0,
@@ -25,7 +25,7 @@ data class Question (
     var singleMultipleAnswers: List<String>? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readInt(),
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readInt(),
         parcel.readInt(),
@@ -41,7 +41,7 @@ data class Question (
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeInt(type)
+        parcel.writeString(type)
         parcel.writeString(id)
         parcel.writeInt(previous)
         parcel.writeInt(index)

@@ -32,7 +32,6 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import se.lu.humlab.langtrackapp.R
-import se.lu.humlab.langtrackapp.TempSurvey
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.data.model.User
 import se.lu.humlab.langtrackapp.databinding.ActivityMainBinding
@@ -40,7 +39,6 @@ import se.lu.humlab.langtrackapp.interfaces.OnBoolPopupReturnListener
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
 import se.lu.humlab.langtrackapp.popup.OneChoicePopup
 import se.lu.humlab.langtrackapp.screen.login.LoginActivity
-import se.lu.humlab.langtrackapp.screen.survey.SurveyActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
 
 class MainActivity : AppCompatActivity() {
@@ -70,11 +68,7 @@ class MainActivity : AppCompatActivity() {
         recycler.layoutManager = linearLayoutManager
         adapter = SurveyAdapter()
         recycler.adapter = adapter
-        /*val itemDecorator = DividerItemDecoration(
-            this,
-            DividerItemDecoration.VERTICAL
-        )
-        itemDecorator.setDrawable(ContextCompat.getDrawable(this, R.drawable.recycler_divider)!!)*/
+
         mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Survey) {
@@ -82,9 +76,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        mBind.testButton.setOnClickListener {
-            SurveyActivity.start(this)
-        }
         mBind.mainLogOutButton.setOnClickListener {
             showLogOutPopup()
         }
