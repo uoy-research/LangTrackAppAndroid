@@ -15,10 +15,11 @@ import android.util.Patterns
 import android.view.View
 import android.widget.Toast
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
 import kotlinx.android.synthetic.main.login_activity.*
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.data.model.User
 import se.lu.humlab.langtrackapp.databinding.LoginActivityBinding
 import se.lu.humlab.langtrackapp.popup.PopupAlert
 import java.util.regex.Pattern
@@ -26,11 +27,16 @@ import java.util.regex.Pattern
 class LoginActivity : AppCompatActivity() {
 
     lateinit var mBind: LoginActivityBinding
+    private lateinit var viewModel : LoginViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        //setContentView(R.layout.login_activity)
+
         mBind = DataBindingUtil.setContentView(this,R.layout.login_activity)
+
+        viewModel = ViewModelProviders.of(this,
+            LoginViewModelFactory(this)
+        ).get(LoginViewModel::class.java)
 
         mBind.logInButton.setOnClickListener {
             checkTextAndLogIn()
@@ -51,26 +57,27 @@ class LoginActivity : AppCompatActivity() {
     }
 
     private fun checkTextAndLogIn(){
-        val email = mBind.logInEmailEditText.text.toString().trim()
+        val username = mBind.logInEmailEditText.text.toString().trim()
         val password = mBind.logInPasswordEditText.text.toString().trim()
 
-        if (email.isEmpty()){
-            mBind.logInEmailEditText.error = "Ange e-post"
+        if (username.isEmpty()){
+            mBind.logInEmailEditText.error = "Ange användarnamn"
             mBind.logInEmailEditText.requestFocus()
             return
         }
-        if (!isValidEmail(email)){
-            mBind.logInEmailEditText.error = "E-postadressen ser inte ut att stämma"
-            mBind.logInEmailEditText.requestFocus()
-            return
-        }
+
         if (password.isEmpty()){
             mBind.logInPasswordEditText.error = "Ange lösenord"
             mBind.logInPasswordEditText.requestFocus()
             return
         }
         mBind.loginProgressbar.visibility = View.VISIBLE
-        logIn(email,password)
+
+        val userEmail = "${username}@humlablu.com"
+        if (!isValidEmail(userEmail)){
+            return
+        }
+        logIn(userEmail,password)
     }
 
     private fun isValidEmail(email: String): Boolean{
@@ -84,8 +91,9 @@ class LoginActivity : AppCompatActivity() {
             .addOnCompleteListener {
                 mBind.loginProgressbar.visibility = View.GONE
                 if (it.isSuccessful){
-                    //val user: FirebaseUser? = mAuth.currentUser
-                    //saveInstanceId(user)
+                    val userEmail = mAuth.currentUser!!.email
+                    val userName = userEmail?.substringBefore('@')
+                    viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))
                     onBackPressed()
                 }else{
                     Toast.makeText(this@LoginActivity,

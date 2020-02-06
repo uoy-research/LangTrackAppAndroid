@@ -15,20 +15,20 @@ stephan.bjorck@humlab.lu.se
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import androidx.core.content.ContextCompat
+import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.TempSurvey
-import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.data.model.Survey
+import se.lu.humlab.langtrackapp.data.model.User
 import se.lu.humlab.langtrackapp.databinding.ActivityMainBinding
 import se.lu.humlab.langtrackapp.interfaces.OnBoolPopupReturnListener
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
@@ -65,12 +65,12 @@ class MainActivity : AppCompatActivity() {
         recycler.layoutManager = linearLayoutManager
         adapter = SurveyAdapter()
         recycler.adapter = adapter
-        val itemDecorator = DividerItemDecoration(
+        /*val itemDecorator = DividerItemDecoration(
             this,
             DividerItemDecoration.VERTICAL
         )
-        itemDecorator.setDrawable(ContextCompat.getDrawable(this, R.drawable.recycler_divider)!!)
-        mBind.surveyRecycler.addItemDecoration(itemDecorator)
+        itemDecorator.setDrawable(ContextCompat.getDrawable(this, R.drawable.recycler_divider)!!)*/
+        mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Survey) {
                 SurveyContainerActivity.start(this@MainActivity, item)
@@ -93,6 +93,10 @@ class MainActivity : AppCompatActivity() {
         surveyList.add(TempSurvey.getTempSurvey("6"))
         surveyList.add(TempSurvey.getTempSurvey("7"))
         adapter.setTasks(surveyList)
+
+        viewModel.getUserLiveData().observeForever {
+            mBind.currentUser = it
+        }
     }
 
     override fun onStart() {
@@ -102,6 +106,9 @@ class MainActivity : AppCompatActivity() {
             LoginActivity.start(this)
         }else{
             //Set listeners
+            val userEmail = mAuth.currentUser!!.email
+            val userName = userEmail?.substringBefore('@')
+            viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))
         }
     }
 
@@ -132,4 +139,22 @@ class MainActivity : AppCompatActivity() {
             context.startActivity(Intent(context, MainActivity::class.java))
         }
     }
+}
+class MyItemDecorator(private val horizontal: Int, private val vertical: Int): RecyclerView.ItemDecoration(){
+
+    override fun getItemOffsets(
+        outRect: Rect,
+        view: View,
+        parent: RecyclerView,
+        state: RecyclerView.State
+    ) {
+        super.getItemOffsets(outRect, view, parent, state)
+        outRect.right = horizontal
+        outRect.left = horizontal
+        if (parent.getChildLayoutPosition(view) == 0){
+            outRect.top = vertical
+        }
+        outRect.bottom = vertical
+    }
+
 }

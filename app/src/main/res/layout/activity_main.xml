@@ -7,6 +7,9 @@
         <variable
             name="viewModel"
             type="se.lu.humlab.langtrackapp.screen.main.MainViewModel"/>
+        <variable
+            name="currentUser"
+            type="se.lu.humlab.langtrackapp.data.model.User" />
     </data>
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -20,10 +23,10 @@
             android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="15dp"
             android:text="Lang-Track-App"
             android:textColor="@color/lta_blue"
-            android:textSize="24sp"
+            android:textSize="22sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/imageView"
             app:layout_constraintHorizontal_bias="0.5"
@@ -35,9 +38,9 @@
 
         <ImageView
             android:id="@+id/imageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="10dp"
+            android:layout_width="110dp"
+            android:layout_height="110dp"
+            android:layout_marginTop="15dp"
             android:src="@drawable/lunds_universitet_small"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -52,23 +55,102 @@
             app:layout_constraintStart_toStartOf="@+id/textView2"
             app:layout_constraintTop_toBottomOf="@+id/textView2" />
 
+        <View
+            android:id="@+id/mainTopDivider"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="40dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="40dp"
+            android:background="@color/lta_blue"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/topLayout"
             android:layout_width="0dp"
-            android:layout_height="150dp"
+            android:layout_height="wrap_content"
             android:layout_marginStart="1dp"
+            android:layout_marginTop="10dp"
             android:layout_marginEnd="1dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView">
+            app:layout_constraintTop_toBottomOf="@+id/mainTopDivider">
+
 
             <Button
                 android:id="@+id/mainLogOutButton"
+                style="@style/Widget.AppCompat.Button.Small"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="30dp"
+                android:layout_marginTop="10dp"
+                android:background="@drawable/rounded_button_blue_lightgrey"
                 android:text="Logga ut"
-                app:layout_constraintEnd_toEndOf="parent"
+                android:textAllCaps="false"
+                android:textColor="@color/lta_grey"
+                android:textSize="13sp"
+                app:layout_constraintEnd_toEndOf="@+id/mainContactButton"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <TextView
+                android:id="@+id/mainEmailTextView"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="5dp"
+                android:text= "@{currentUser == null ? @string/loading : @string/logged_in_as(currentUser.userName)}"
+                android:textColor="@color/lta_grey"
+                android:textSize="15sp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="@+id/mainLogOutButton"
+                app:layout_constraintEnd_toStartOf="@+id/mainLogOutButton"
+                app:layout_constraintStart_toStartOf="@+id/mainAboutButton"
+                app:layout_constraintTop_toTopOf="@+id/mainLogOutButton" />
+
+            <Button
+                android:id="@+id/mainAboutButton"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/rounded_button_white_blue"
+                android:text="Om"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/mainInfoButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent" />
+
+            <Button
+                android:id="@+id/mainInfoButton"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/rounded_button_white_blue"
+                android:text="Instruktioner"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/mainContactButton"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/mainAboutButton" />
+
+            <Button
+                android:id="@+id/mainContactButton"
+                android:layout_width="100dp"
+                android:layout_height="45dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginBottom="15dp"
+                android:background="@drawable/rounded_button_white_blue"
+                android:text="Kontakt"
+                android:textAllCaps="false"
+                android:textColor="@android:color/white"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/mainInfoButton"
+                app:layout_constraintTop_toBottomOf="@id/mainLogOutButton"
+                app:layout_constraintVertical_bias="0.0" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -79,6 +161,8 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="10dp"
+            android:paddingStart="5dp"
+            android:paddingEnd="5dp"
             app:layout_constraintBottom_toTopOf="@+id/test_button"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
