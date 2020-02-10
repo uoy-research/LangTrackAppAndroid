@@ -21,7 +21,7 @@ data class Question (
     var description: String = "",
     var likertScale: List<String>? = null,
     var fillBlanksChoises: List<String>? = null,
-    var miltipleChoisesAnswers: List<String>? = null,
+    var multipleChoisesAnswers: List<String>? = null,
     var singleMultipleAnswers: List<String>? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
@@ -51,7 +51,7 @@ data class Question (
         parcel.writeString(description)
         parcel.writeStringList(likertScale)
         parcel.writeStringList(fillBlanksChoises)
-        parcel.writeStringList(miltipleChoisesAnswers)
+        parcel.writeStringList(multipleChoisesAnswers)
         parcel.writeStringList(singleMultipleAnswers)
     }
 

@@ -7,7 +7,6 @@
         android:id="@+id/headerLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/lta_question_background"
         tools:context=".screen.surveyContainer.likertScaleFragment.LikertScaleFragment">
 
 
@@ -76,7 +75,7 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="30dp"
             android:layout_marginEnd="15dp"
             android:maxLines="3"
             android:text="Hur mycket stämmer följande påstående?\n1: stämmer inte alls\n5: stämmer helt"
@@ -84,9 +83,10 @@
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/likertScaleTitleTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
         <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
@@ -133,7 +133,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="2"/>
+                    android:text="2" />
 
                 <RadioButton
                     android:id="@+id/likertScaleRadioButton3"
@@ -157,5 +157,16 @@
                     android:text="5" />
             </RadioGroup>
         </LinearLayout>
+
+        <TextView
+            android:id="@+id/textView10"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="70dp"
+            android:text="⚖️"
+            android:textSize="50sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/likertScaleTitleTextView" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>
