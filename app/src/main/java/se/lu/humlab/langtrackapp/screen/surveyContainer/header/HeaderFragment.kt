@@ -81,7 +81,8 @@ class HeaderFragment : Fragment(){
                 binding.headerTextTextView.setText(
                     getString(
                         R.string.headerGreetingText,
-                        viewModel.getCurrentUser().userName
+                        viewModel.getCurrentUser().userName,
+                        question.text
                     )
                 )
             }

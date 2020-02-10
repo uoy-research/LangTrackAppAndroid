@@ -21,7 +21,7 @@ class Repository(val context: Context) {
     var currentUserLiveData = MutableLiveData<User>()
     var surveyList = mutableListOf<Survey>()
     var surveyListLiveData = MutableLiveData<MutableList<Survey>>()
-    private val theUrl = "https://www.dropbox.com/s/0iubma625aax6vg/survey_json.txt?dl=1"
+    private val theUrl = "https://www.dropbox.com/s/vnafnbgw8uoykxj/survey_json.txt?dl=1"
 
 
     fun setCurrentUser(user: User){
@@ -42,7 +42,8 @@ class Repository(val context: Context) {
                 if (error == null) {
                     if (bytes != null) {
                         println("[response bytes] ${String(bytes)}")
-                        surveyListLiveData.value = convertJsonToSurveyList(String(bytes)).toMutableList()
+                        surveyList = convertJsonToSurveyList(String(bytes)).toMutableList()
+                        surveyListLiveData.value = surveyList
                     }
                 }else{
                     println("Repository getSurveysFromDropbox ERROR: ${error.localizedMessage}")
