@@ -12,7 +12,9 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ArrayAdapter
 import android.widget.Button
+import android.widget.Spinner
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fill_in_the_blanks_fragment.view.*
@@ -25,6 +27,7 @@ class FillInTheBlankFragment : Fragment(){
 
     private var listener: OnFillInBlankInteractionListener? = null
     lateinit var binding: FillInTheBlanksFragmentBinding
+    lateinit var spinner: Spinner
     lateinit var question: Question
     var theSentence: FillInWordSentence? = null
     var theChosenWordIndex : Int? = null
@@ -39,6 +42,10 @@ class FillInTheBlankFragment : Fragment(){
         binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
+        spinner = binding.choiceSpinner
+        val adapter =
+            ArrayAdapter(spinner.context, R.layout.choice_spinner_item, question.fillBlanksChoises!!)
+        adapter.setDropDownViewResource(R.layout.choice_spinner_dropdown_item)
         v.fillInTheBlankNextButton.setOnClickListener {
             listener?.fillInBlankGoToNextItem(currentQuestion = question)
         }
@@ -66,12 +73,12 @@ class FillInTheBlankFragment : Fragment(){
             getTextAsList(question.text)
             if (theSentence != null){
                 setSentence(null)
-                setButtons()
+                //setButtons()
             }
         }
     }
 
-    fun setButtons(){
+    /*fun setButtons(){
         if (::binding.isInitialized) {
             if (question.fillBlanksChoises != null) {
                 for ((i, choice) in question.fillBlanksChoises!!.withIndex()) {
@@ -93,7 +100,7 @@ class FillInTheBlankFragment : Fragment(){
                 binding.buttonContainer.addView(button)
             }
         }
-    }
+    }*/
 
 
     fun setSentence(indexOfWord: Int?){
