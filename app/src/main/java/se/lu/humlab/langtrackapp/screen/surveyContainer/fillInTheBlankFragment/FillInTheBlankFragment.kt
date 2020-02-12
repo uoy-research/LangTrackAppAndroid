@@ -97,12 +97,12 @@ class FillInTheBlankFragment : Fragment(){
 
 
     fun setSentence(indexOfWord: Int?){
-        if (theChosenWordIndex != null){
+        if (indexOfWord == null){
+            binding.fillInTheBlankTextView.text = theSentence!!.listWithWords.joinToString(separator = " ")
+        }else if (theChosenWordIndex != null){
             val tempListWithWords = theSentence!!.listWithWords.toMutableList()
             tempListWithWords[theSentence!!.indexForMissingWord] = question.fillBlanksChoises?.get(theChosenWordIndex!!) ?: ""
             binding.fillInTheBlankTextView.text = tempListWithWords.joinToString(separator = " ")
-        }else if (indexOfWord == null){
-            binding.fillInTheBlankTextView.text = theSentence!!.listWithWords.joinToString(separator = " ")
         }else{
             val tempListWithWords = theSentence!!.listWithWords.toMutableList()
             tempListWithWords[theSentence!!.indexForMissingWord] = question.fillBlanksChoises?.get(indexOfWord) ?: ""
