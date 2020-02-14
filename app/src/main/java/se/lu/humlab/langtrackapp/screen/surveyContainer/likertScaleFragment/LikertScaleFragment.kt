@@ -39,7 +39,11 @@ class LikertScaleFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.likertScaleNextButton.setOnClickListener {
-            listener?.goToNextItem(currentQuestion = checkOrderOfNextQuestion())
+            if (question.skip != null){
+                if (question.skip?.ifChosen == selectedRadioButton){
+                    listener?.goToNextItemWithSkipLogic(question,question.skip!!.goto)
+                }else listener?.goToNextItem(currentQuestion = question)
+            }else listener?.goToNextItem(currentQuestion = question)
         }
         v.likertScaleBackButton.setOnClickListener {
             listener?.goToPrevoiusItem(currentQuestion = question)
@@ -62,17 +66,6 @@ class LikertScaleFragment : Fragment(){
         }else {
             throw RuntimeException(context.toString() + " must implement OnLikertScaleInteraktionListener")
         }
-    }
-
-    fun checkOrderOfNextQuestion(): Question{
-        if (question.skip != null){
-            if (question.skip?.ifChosen == selectedRadioButton){
-                question.next = question.skip?.goto ?: question.next
-            }else{
-                question.next = question.index + 1
-            }
-        }
-        return question
     }
 
     fun setQuestion(){

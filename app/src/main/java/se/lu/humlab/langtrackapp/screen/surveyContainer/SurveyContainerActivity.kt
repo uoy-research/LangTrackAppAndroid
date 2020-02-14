@@ -35,15 +35,15 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     private lateinit var mBind : SurveyContainerActivityBinding
     private lateinit var viewModel : SurveyContainerViewModel
-    var questionList = mutableListOf<Question>()
-    lateinit var selectedQuestion: Question
-    lateinit var headerFragment: HeaderFragment
-    lateinit var likertScaleFragment: LikertScaleFragment
-    lateinit var fillInTheBlankFragment: FillInTheBlankFragment
-    lateinit var multipleChoiceFragment: MultipleChoiceFragment
-    lateinit var singleMultipleAnswersFragment: SingleMultipleAnswersFragment
-    lateinit var openEndedTextResponsesFragment: OpenEndedTextResponsesFragment
-    lateinit var footerFragment: FooterFragment
+    private var questionList = mutableListOf<Question>()
+    private lateinit var selectedQuestion: Question
+    private lateinit var headerFragment: HeaderFragment
+    private lateinit var likertScaleFragment: LikertScaleFragment
+    private lateinit var fillInTheBlankFragment: FillInTheBlankFragment
+    private lateinit var multipleChoiceFragment: MultipleChoiceFragment
+    private lateinit var singleMultipleAnswersFragment: SingleMultipleAnswersFragment
+    private lateinit var openEndedTextResponsesFragment: OpenEndedTextResponsesFragment
+    private lateinit var footerFragment: FooterFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,13 +69,13 @@ class SurveyContainerActivity : AppCompatActivity(),
         footerFragment = FooterFragment.newInstance()
 
         if (theSurvey != null){
-            setSurvey(theSurvey)
+            setSurvey(theSurvey!!)
         }else{
             showErrorPopup()
         }
     }
 
-    fun setSurvey(survey: Survey){
+    private fun setSurvey(survey: Survey){
         val temp = survey.questions?.toMutableList()
         if (!temp.isNullOrEmpty()) {
             questionList = temp
@@ -86,7 +86,7 @@ class SurveyContainerActivity : AppCompatActivity(),
         }
     }
 
-    fun showErrorPopup(){
+    private fun showErrorPopup(){
         val alertFm = supportFragmentManager.beginTransaction()
         val width = (surveyContainer_layout.measuredWidth * 0.75).toInt()
         val alertPopup = PopupAlert.show(
@@ -98,12 +98,13 @@ class SurveyContainerActivity : AppCompatActivity(),
         alertPopup.setCompleteListener(object : OnBoolPopupReturnListener{
             override fun popupReturn(value: Boolean) {
                 onBackPressed()
+                //TODO: send info to backend
             }
         })
         alertPopup.show(alertFm, "alertPopup")
     }
 
-    fun showQuestion(index: Int){
+    private fun showQuestion(index: Int){
         if (questionList.size > index) {
 
             for (question in questionList) {
@@ -150,8 +151,7 @@ class SurveyContainerActivity : AppCompatActivity(),
     }
 
     companion object {
-        val SURVEY = "survey"
-
+        const val SURVEY = "survey"
         const val HEADER_VIEW = "header"
         const val LIKERT_SCALES = "likert"
         const val FILL_IN_THE_BLANK = "blanks"
@@ -167,6 +167,14 @@ class SurveyContainerActivity : AppCompatActivity(),
         }
     }
 
+    private fun resetPreviousOfQuestions(){
+        for ((index, question) in questionList.withIndex()){
+            if (index == 0){
+                question.previous = index
+            }else question.previous = index - 1
+        }
+    }
+
     // OnQuestionInteractionListener
 
     override fun goToNextItem(currentQuestion: Question) {
@@ -175,6 +183,9 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun goToPrevoiusItem(currentQuestion: Question) {
         showQuestion(index = currentQuestion.previous)
+        if (currentQuestion.previous < currentQuestion.index - 1) {
+            resetPreviousOfQuestions()
+        }
     }
 
     override fun cancelSurvey() {
@@ -182,7 +193,12 @@ class SurveyContainerActivity : AppCompatActivity(),
     }
 
     override fun goToNextItemWithSkipLogic(currentQuestion: Question, nextIndex: Int) {
-        //TODO: set next and previous in the questions related
+        for (question in questionList){
+            if (question.index == nextIndex){
+                question.previous = currentQuestion.index
+            }
+        }
+        showQuestion(index = currentQuestion.skip!!.goto)
     }
 
     override fun sendInSurvey(currentQuestion: Question) {
