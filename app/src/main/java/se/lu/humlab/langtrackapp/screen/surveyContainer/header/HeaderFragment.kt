@@ -20,13 +20,13 @@ import kotlinx.android.synthetic.main.header_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.HeaderFragmentBinding
-import se.lu.humlab.langtrackapp.interfaces.OnHeaderInteractionListener
+import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerViewModel
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerViewModelFactory
 
 class HeaderFragment : Fragment(){
 
-    private var listener: OnHeaderInteractionListener? = null
+    private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: HeaderFragmentBinding
     lateinit var question: Question
     private lateinit var viewModel : SurveyContainerViewModel
@@ -52,17 +52,17 @@ class HeaderFragment : Fragment(){
         ).get(SurveyContainerViewModel::class.java)
         val v = binding.root
         v.headerCancelButton.setOnClickListener {
-            listener?.headerCancelPressed(currentQuestion = question)
+            listener?.cancelSurvey()
         }
         v.headerStartButton.setOnClickListener {
-            listener?.headerGoToNextItem(currentQuestion = question)
+            listener?.goToNextItem(currentQuestion = question)
         }
         return v
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnHeaderInteractionListener) {
+        if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
                 //load survey
@@ -74,7 +74,7 @@ class HeaderFragment : Fragment(){
     }
 
     fun setQuestion(){
-        if (context is OnHeaderInteractionListener) {
+        if (context is OnQuestionInteractionListener) {
             if (::binding.isInitialized) {
                 binding.headerTitleTextView.text = question.title
                 binding.headerTextTextView.setText(

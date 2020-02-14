@@ -30,13 +30,7 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.singleMultipleAnswersFra
 import se.lu.humlab.langtrackapp.util.loadFragment
 
 class SurveyContainerActivity : AppCompatActivity(),
-    OnHeaderInteractionListener,
-    OnLikertScaleInteraktionListener,
-    OnFillInBlankInteractionListener,
-    OnMultipleChoiceInteractionListener,
-    OnSingleMultipleInteractionListener,
-    OnOpenEndedInteractionListener,
-    OnFooterInteractionListener{
+    OnQuestionInteractionListener{
 
 
     private lateinit var mBind : SurveyContainerActivityBinding
@@ -173,76 +167,26 @@ class SurveyContainerActivity : AppCompatActivity(),
         }
     }
 
-    //OnHeaderInteractionListener
-    override fun headerGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity participantClickedStart")
+    // OnQuestionInteractionListener
+
+    override fun goToNextItem(currentQuestion: Question) {
         showQuestion(index = currentQuestion.next)
     }
 
-    override fun headerCancelPressed(currentQuestion: Question) {
-        println("SurveyContainerActivity participantClickedCancel")
+    override fun goToPrevoiusItem(currentQuestion: Question) {
+        showQuestion(index = currentQuestion.previous)
+    }
+
+    override fun cancelSurvey() {
         onBackPressed()
     }
 
-    //OnLikertScaleInteraktionListener
-    override fun likertScaleGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity likertScaleGoToNextItem")
-        showQuestion(index = currentQuestion.next)
+    override fun goToNextItemWithSkipLogic(currentQuestion: Question, nextIndex: Int) {
+        //TODO: set next and previous in the questions related
     }
 
-    override fun likertScaleGoToPrevoiusItem(currentQuestion: Question) {
-        println("SurveyContainerActivity likertScaleGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
-    }
-
-    override fun fillInBlankGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity fillInBlankGoToNextItem")
-        showQuestion(index = currentQuestion.next)
-    }
-
-    override fun fillInBlankGoToPrevoiusItem(currentQuestion: Question) {
-        println("SurveyContainerActivity fillInBlankGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
-    }
-
-    override fun multipleChoiceGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity multipleChoiceGoToNextItem")
-        showQuestion(index = currentQuestion.next)
-    }
-
-    override fun multipleChoiceGoToPrevoiusItem(currentQuestion: Question) {
-        println("SurveyContainerActivity multipleChoiceGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
-    }
-
-    override fun singleMultipleGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity singleMultipleGoToNextItem")
-        showQuestion(index = currentQuestion.next)
-    }
-
-    override fun singleMultipleGoToPrevoiusItem(currentQuestion: Question) {
-        println("SurveyContainerActivity singleMultipleGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
-    }
-
-    override fun openEndedGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity openEndedGoToNextItem")
-        showQuestion(index = currentQuestion.next)
-    }
-
-    override fun openEndedGoToPrevoiusItem(currentQuestion: Question) {
-        println("SurveyContainerActivity openEndedGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
-    }
-
-    override fun footerGoToPreviousItem(currentQuestion: Question) {
-        println("SurveyContainerActivity footerGoToPreviousItem")
-        showQuestion(index = currentQuestion.previous)
-    }
-
-    override fun footerSendInSurvey(currentQuestion: Question) {
-        println("SurveyContainerActivity footerSendInSurvey")
+    override fun sendInSurvey(currentQuestion: Question) {
+        //TODO: send in answer
         onBackPressed()
     }
-
 }
