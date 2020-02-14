@@ -18,11 +18,11 @@ import kotlinx.android.synthetic.main.open_ended_text_responses_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.OpenEndedTextResponsesFragmentBinding
-import se.lu.humlab.langtrackapp.interfaces.OnOpenEndedInteractionListener
+import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
 
 class OpenEndedTextResponsesFragment : Fragment(){
 
-    private var listener: OnOpenEndedInteractionListener? = null
+    private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: OpenEndedTextResponsesFragmentBinding
     lateinit var question: Question
 
@@ -37,17 +37,17 @@ class OpenEndedTextResponsesFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.openEndedTextNextButton.setOnClickListener {
-            listener?.openEndedGoToNextItem(currentQuestion = question)
+            listener?.goToNextItem(currentQuestion = question)
         }
         v.openEndedTextBackButton.setOnClickListener {
-            listener?.openEndedGoToPrevoiusItem(currentQuestion = question)
+            listener?.goToPrevoiusItem(currentQuestion = question)
         }
         return v
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnOpenEndedInteractionListener) {
+        if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
                 //load survey

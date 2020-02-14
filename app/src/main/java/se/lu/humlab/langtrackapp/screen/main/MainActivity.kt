@@ -47,8 +47,8 @@ class MainActivity : AppCompatActivity() {
     private lateinit var viewModel : MainViewModel
     lateinit var mAuth: FirebaseAuth
     private lateinit var linearLayoutManager: LinearLayoutManager
-    lateinit var recycler: RecyclerView
-    lateinit var adapter: SurveyAdapter
+    private lateinit var recycler: RecyclerView
+    private lateinit var adapter: SurveyAdapter
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -89,8 +89,6 @@ class MainActivity : AppCompatActivity() {
         viewModel.surveyListLiveData.observeForever {
             adapter.setTasks(it)
         }
-        //test
-        viewModel.getSurveys()
     }
 
     override fun onStart() {
@@ -99,7 +97,9 @@ class MainActivity : AppCompatActivity() {
         if (mAuth.currentUser == null){
             LoginActivity.start(this)
         }else{
-            //Set listeners
+            //Get surveys
+            //test
+            viewModel.getSurveys()
             val userEmail = mAuth.currentUser!!.email
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))

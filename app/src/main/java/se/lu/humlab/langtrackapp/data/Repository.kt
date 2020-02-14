@@ -21,7 +21,7 @@ class Repository(val context: Context) {
     var currentUserLiveData = MutableLiveData<User>()
     var surveyList = mutableListOf<Survey>()
     var surveyListLiveData = MutableLiveData<MutableList<Survey>>()
-    private val theUrl = "https://www.dropbox.com/s/kulz0i0gink3ad8/survey_json.txt?dl=1"
+    private val theUrl = "https://www.dropbox.com/s/j4ubcefxsu04neg/survey_json.txt?dl=1"
 
 
     fun setCurrentUser(user: User){
@@ -54,6 +54,36 @@ class Repository(val context: Context) {
     private fun convertJsonToSurveyList(jsonString: String): List<Survey>{
         val gson = Gson()
         val listType = object : TypeToken<List<Survey>>() { }.type
-        return gson.fromJson(jsonString, listType)
+        return setOrder(gson.fromJson(jsonString, listType))
     }
+
+    private fun setOrder(inList: List<Survey>): List<Survey>{
+        val sortedList = inList.sortedBy { it.date }
+        for (survey in sortedList){
+            if (survey.questions != null) {
+                val sortedQuestionList = survey.questions!!.sortedBy { it.index }
+                for ((index, question) in sortedQuestionList.withIndex()) {
+                    when {
+                        index == sortedQuestionList.last().index -> {
+                            //last question
+                            question.next = -1
+                            question.previous = index - 1
+                        }
+                        question.index == 0 -> {
+                            //first question
+                            question.previous = 0
+                            question.next = 1
+                        }
+                        else -> {
+                            //every other question
+                            question.next = question.index + 1
+                            question.previous = question.index - 1
+                        }
+                    }
+                }
+            }
+        }
+        return sortedList
+    }
+
 }

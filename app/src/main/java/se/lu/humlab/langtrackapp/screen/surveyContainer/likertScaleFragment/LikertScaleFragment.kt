@@ -13,18 +13,17 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.RadioGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.likert_scale_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.LikertScaleFragmentBinding
-import se.lu.humlab.langtrackapp.interfaces.OnLikertScaleInteraktionListener
+import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
 
 class LikertScaleFragment : Fragment(){
 
-    private var listener: OnLikertScaleInteraktionListener? = null
+    private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: LikertScaleFragmentBinding
     lateinit var question: Question
     var selectedRadioButton = 3
@@ -40,10 +39,14 @@ class LikertScaleFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.likertScaleNextButton.setOnClickListener {
-            listener?.likertScaleGoToNextItem(currentQuestion = checkOrderOfNextQuestion())
+            if (question.skip != null){
+                if (question.skip?.ifChosen == selectedRadioButton){
+                    listener?.goToNextItemWithSkipLogic(question,question.skip!!.goto)
+                }else listener?.goToNextItem(currentQuestion = question)
+            }else listener?.goToNextItem(currentQuestion = question)
         }
         v.likertScaleBackButton.setOnClickListener {
-            listener?.likertScaleGoToPrevoiusItem(currentQuestion = question)
+            listener?.goToPrevoiusItem(currentQuestion = question)
         }
         v.likertScaleRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             val radio: RadioButton = v.findViewById(checkedId)
@@ -54,7 +57,7 @@ class LikertScaleFragment : Fragment(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnLikertScaleInteraktionListener) {
+        if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
                 //load survey
@@ -63,17 +66,6 @@ class LikertScaleFragment : Fragment(){
         }else {
             throw RuntimeException(context.toString() + " must implement OnLikertScaleInteraktionListener")
         }
-    }
-
-    fun checkOrderOfNextQuestion(): Question{
-        if (question.skip != null){
-            if (question.skip?.ifChosen == selectedRadioButton){
-                question.next = question.skip?.goto ?: question.next
-            }else{
-                question.next = question.index + 1
-            }
-        }
-        return question
     }
 
     fun setQuestion(){

@@ -21,11 +21,11 @@ import kotlinx.android.synthetic.main.fill_in_the_blanks_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.FillInTheBlanksFragmentBinding
-import se.lu.humlab.langtrackapp.interfaces.OnFillInBlankInteractionListener
+import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
 
 class FillInTheBlankFragment : Fragment(){
 
-    private var listener: OnFillInBlankInteractionListener? = null
+    private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: FillInTheBlanksFragmentBinding
     lateinit var spinner: Spinner
     lateinit var question: Question
@@ -69,10 +69,10 @@ class FillInTheBlankFragment : Fragment(){
             }
         }
         v.fillInTheBlankNextButton.setOnClickListener {
-            listener?.fillInBlankGoToNextItem(currentQuestion = question)
+            listener?.goToNextItem(currentQuestion = question)
         }
         v.fillInTheBlankBackButton.setOnClickListener {
-            listener?.fillInBlankGoToPrevoiusItem(currentQuestion = question)
+            listener?.goToPrevoiusItem(currentQuestion = question)
         }
         return v
     }
@@ -85,7 +85,7 @@ class FillInTheBlankFragment : Fragment(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnFillInBlankInteractionListener) {
+        if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
                 //load survey

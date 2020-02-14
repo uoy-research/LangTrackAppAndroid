@@ -14,17 +14,16 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.single_multiple_answer_item.view.*
 import kotlinx.android.synthetic.main.single_multiple_answer_item.view.singleMultipleAnswerNextButton
 import kotlinx.android.synthetic.main.single_multiple_answers_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.SingleMultipleAnswersFragmentBinding
-import se.lu.humlab.langtrackapp.interfaces.OnSingleMultipleInteractionListener
+import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
 
 class SingleMultipleAnswersFragment : Fragment(){
 
-    private var listener: OnSingleMultipleInteractionListener? = null
+    private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: SingleMultipleAnswersFragmentBinding
     lateinit var question: Question
 
@@ -39,17 +38,17 @@ class SingleMultipleAnswersFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.singleMultipleAnswerNextButton.setOnClickListener {
-            listener?.singleMultipleGoToNextItem(currentQuestion = question)
+            listener?.goToNextItem(currentQuestion = question)
         }
         v.singleMultipleAnswerBackButton.setOnClickListener {
-            listener?.singleMultipleGoToPrevoiusItem(currentQuestion = question)
+            listener?.goToPrevoiusItem(currentQuestion = question)
         }
         return v
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnSingleMultipleInteractionListener) {
+        if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
                 //load survey

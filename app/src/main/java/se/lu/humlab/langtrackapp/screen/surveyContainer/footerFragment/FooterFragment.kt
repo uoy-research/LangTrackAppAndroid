@@ -18,11 +18,11 @@ import kotlinx.android.synthetic.main.footer_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.FooterFragmentBinding
-import se.lu.humlab.langtrackapp.interfaces.OnFooterInteractionListener
+import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
 
 class FooterFragment : Fragment(){
 
-    private var listener: OnFooterInteractionListener? = null
+    private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: FooterFragmentBinding
     lateinit var question: Question
 
@@ -37,17 +37,17 @@ class FooterFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.footerNextButton.setOnClickListener {
-            listener?.footerSendInSurvey(currentQuestion = question)
+            listener?.sendInSurvey(currentQuestion = question)
         }
         v.footerBackButton.setOnClickListener {
-            listener?.footerGoToPreviousItem(currentQuestion = question)
+            listener?.goToPrevoiusItem(currentQuestion = question)
         }
         return v
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnFooterInteractionListener) {
+        if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
                 //load survey
