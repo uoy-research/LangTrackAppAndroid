@@ -45,7 +45,7 @@ class HeaderFragment : Fragment(){
 
         //return super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.header_fragment, container,false)
-        binding.setLifecycleOwner(this)
+        binding.lifecycleOwner = this
         binding.executePendingBindings()
         viewModel = ViewModelProviders.of(this,
             SurveyContainerViewModelFactory(binding.root.context)
@@ -76,7 +76,6 @@ class HeaderFragment : Fragment(){
     fun setQuestion(){
         if (context is OnHeaderInteractionListener) {
             if (::binding.isInitialized) {
-                val mAuth = FirebaseAuth.getInstance()
                 binding.headerTitleTextView.text = question.title
                 binding.headerTextTextView.setText(
                     getString(

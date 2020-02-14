@@ -42,6 +42,7 @@ class SurveyContainerActivity : AppCompatActivity(),
     private lateinit var mBind : SurveyContainerActivityBinding
     private lateinit var viewModel : SurveyContainerViewModel
     var questionList = mutableListOf<Question>()
+    lateinit var selectedQuestion: Question
     lateinit var headerFragment: HeaderFragment
     lateinit var likertScaleFragment: LikertScaleFragment
     lateinit var fillInTheBlankFragment: FillInTheBlankFragment
@@ -113,6 +114,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
             for (question in questionList) {
                 if (question.index == index) {
+                    selectedQuestion = question
                     when (question.type) {
 
                         HEADER_VIEW -> {

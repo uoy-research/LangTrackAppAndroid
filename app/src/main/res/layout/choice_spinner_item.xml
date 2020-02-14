@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <TextView xmlns:android="http://schemas.android.com/apk/res/android"
     android:id="@android:id/text1"
-    android:background="@drawable/rounded_button_blue_lightgrey"
+    android:background="@color/lta_light_grey"
     android:textColor="@color/lta_grey"
     android:singleLine="true"
     android:layout_width="match_parent"
