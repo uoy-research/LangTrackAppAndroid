@@ -19,10 +19,11 @@ data class Question (
     var title: String = "",
     var text: String = "",
     var description: String = "",
-    var likertScale: List<String>? = null,
-    var fillBlanksChoises: List<String>? = null,
-    var multipleChoisesAnswers: List<String>? = null,
-    var singleMultipleAnswers: List<String>? = null
+    var likertScale: MutableList<String>? = null,
+    var fillBlanksChoises: MutableList<String>? = null,
+    var multipleChoisesAnswers: MutableList<String>? = null,
+    var singleMultipleAnswers: MutableList<String>? = null,
+    var skip: SkipLogic? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -36,9 +37,9 @@ data class Question (
         parcel.createStringArrayList(),
         parcel.createStringArrayList(),
         parcel.createStringArrayList(),
-        parcel.createStringArrayList()
-    ) {
-    }
+        parcel.createStringArrayList(),
+        parcel.readParcelable(SkipLogic::class.java.classLoader)
+    )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
         parcel.writeString(type)
@@ -53,6 +54,7 @@ data class Question (
         parcel.writeStringList(fillBlanksChoises)
         parcel.writeStringList(multipleChoisesAnswers)
         parcel.writeStringList(singleMultipleAnswers)
+        parcel.writeParcelable(skip, 0)
     }
 
     override fun describeContents(): Int {
@@ -68,4 +70,5 @@ data class Question (
             return arrayOfNulls(size)
         }
     }
+
 }

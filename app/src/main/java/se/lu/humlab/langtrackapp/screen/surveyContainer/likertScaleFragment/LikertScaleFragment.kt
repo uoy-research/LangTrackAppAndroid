@@ -12,6 +12,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
+import android.widget.RadioGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.likert_scale_fragment.view.*
@@ -25,6 +27,7 @@ class LikertScaleFragment : Fragment(){
     private var listener: OnLikertScaleInteraktionListener? = null
     lateinit var binding: LikertScaleFragmentBinding
     lateinit var question: Question
+    var selectedRadioButton = 3
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -37,10 +40,14 @@ class LikertScaleFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.likertScaleNextButton.setOnClickListener {
-            listener?.likertScaleGoToNextItem(currentQuestion = question)
+            listener?.likertScaleGoToNextItem(currentQuestion = checkOrderOfNextQuestion())
         }
         v.likertScaleBackButton.setOnClickListener {
             listener?.likertScaleGoToPrevoiusItem(currentQuestion = question)
+        }
+        v.likertScaleRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+            val radio: RadioButton = v.findViewById(checkedId)
+            selectedRadioButton = (radio.tag as String).toInt()
         }
         return v
     }
@@ -56,6 +63,17 @@ class LikertScaleFragment : Fragment(){
         }else {
             throw RuntimeException(context.toString() + " must implement OnLikertScaleInteraktionListener")
         }
+    }
+
+    fun checkOrderOfNextQuestion(): Question{
+        if (question.skip != null){
+            if (question.skip?.ifChosen == selectedRadioButton){
+                question.next = question.skip?.goto ?: question.next
+            }else{
+                question.next = question.index + 1
+            }
+        }
+        return question
     }
 
     fun setQuestion(){
