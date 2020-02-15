@@ -20,7 +20,8 @@
         android:text="TextView"
         android:textAlignment="center"
         android:textColor="@color/lta_text"
-        android:textSize="18sp"
+        android:textSize="20sp"
+        android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,9 +38,10 @@
         app:layout_constraintTop_toBottomOf="@+id/overviewText" />
 
     <LinearLayout
+        android:animateLayoutChanges="true"
         android:id="@+id/topView"
         android:layout_width="0dp"
-        android:layout_height="1dp"
+        android:layout_height="wrap_content"
         android:background="@color/lta_light_grey"
         android:gravity="center"
         android:orientation="vertical"
