@@ -15,7 +15,6 @@ import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.header_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
@@ -66,14 +65,14 @@ class HeaderFragment : Fragment(){
             listener = context
             if (::binding.isInitialized) {
                 //load survey
-                setQuestion()
+                setText()
             }
         }else {
             throw RuntimeException(context.toString() + " must implement OnHeaderInteractionListener")
         }
     }
 
-    fun setQuestion(){
+    fun setText(){
         if (context is OnQuestionInteractionListener) {
             if (::binding.isInitialized) {
                 binding.headerTitleTextView.text = question.title
@@ -91,7 +90,7 @@ class HeaderFragment : Fragment(){
     override fun onResume() {
         super.onResume()
         //update question
-        setQuestion()
+        setText()
     }
 
     override fun onDetach() {

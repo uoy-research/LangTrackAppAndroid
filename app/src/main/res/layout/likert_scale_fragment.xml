@@ -56,34 +56,18 @@
             android:layout_marginStart="10dp"
             android:layout_marginTop="20dp"
             android:layout_marginEnd="10dp"
-            android:background="@color/lta_blue"
             android:paddingStart="5dp"
             android:paddingTop="5dp"
             android:paddingEnd="5dp"
             android:paddingBottom="3dp"
             android:text="Likert scales"
             android:textAlignment="center"
-            android:textColor="@android:color/white"
             android:textSize="18sp"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/likertScaleDescriptionTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:layout_marginTop="30dp"
-            android:layout_marginEnd="15dp"
-            android:maxLines="3"
-            android:text="Hur mycket stämmer följande påstående?\n1: stämmer inte alls\n5: stämmer helt"
-            android:textSize="15sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
         <LinearLayout
             android:id="@+id/linearLayout2"
@@ -93,27 +77,44 @@
             app:layout_constraintBottom_toTopOf="@+id/likertScaleNextButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/likertScaleDescriptionTextView"
-            app:layout_constraintVertical_bias="0.32">
+            app:layout_constraintTop_toBottomOf="@+id/textView10"
+            app:layout_constraintVertical_bias="0.25">
 
             <TextView
                 android:id="@+id/likertScaleTextTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginEnd="20dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginEnd="25dp"
                 android:maxLines="20"
                 android:minLines="1"
                 android:padding="5dp"
                 android:text="Jag är idag säkrare på att delta i samtal än igår"
-                android:textSize="18sp" />
+                android:textAlignment="center"
+                android:textColor="@color/lta_text"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/likertScaleDescriptionTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="50dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="15dp"
+                android:maxLines="3"
+                android:text="Hur mycket stämmer följande påstående?\n1: stämmer inte alls\n5: stämmer helt"
+                android:textSize="15sp"
+                android:textStyle="italic"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textView10" />
 
             <RadioGroup
                 android:id="@+id/likertScaleRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="30dp"
                 android:layout_marginBottom="50dp"
                 android:checkedButton="@id/likertScaleRadioButton3"
@@ -127,7 +128,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="1"
-                    android:text="1" />
+                    android:text="1"
+                    android:textColor="@color/lta_text" />
 
                 <RadioButton
                     android:id="@+id/likertScaleRadioButton2"
@@ -135,7 +137,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="2"
-                    android:text="2" />
+                    android:text="2"
+                    android:textColor="@color/lta_text" />
 
                 <RadioButton
                     android:id="@+id/likertScaleRadioButton3"
@@ -143,7 +146,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="3"
-                    android:text="3" />
+                    android:text="3"
+                    android:textColor="@color/lta_text" />
 
                 <RadioButton
                     android:id="@+id/likertScaleRadioButton4"
@@ -151,7 +155,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="4"
-                    android:text="4" />
+                    android:text="4"
+                    android:textColor="@color/lta_text" />
 
                 <RadioButton
                     android:id="@+id/likertScaleRadioButton5"
@@ -159,7 +164,8 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:tag="5"
-                    android:text="5" />
+                    android:text="5"
+                    android:textColor="@color/lta_text" />
             </RadioGroup>
         </LinearLayout>
 
@@ -167,8 +173,9 @@
             android:id="@+id/textView10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="70dp"
-            android:text="⚖️"
+            android:layout_marginTop="50dp"
+            android:text="✳"
+            android:textColor="@color/lta_text"
             android:textSize="50sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -51,14 +51,14 @@ class FooterFragment : Fragment(){
             listener = context
             if (::binding.isInitialized) {
                 //load survey
-                setQuestion()
+                setText()
             }
         }else {
             throw RuntimeException(context.toString() + " must implement OnLikertScaleInteraktionListener")
         }
     }
 
-    fun setQuestion(){
+    fun setText(){
         if (::binding.isInitialized) {
             binding.footerTextView.text = "${question.title}\n\n${question.text}"
         }
@@ -67,7 +67,7 @@ class FooterFragment : Fragment(){
     override fun onResume() {
         super.onResume()
         //update question
-        setQuestion()
+        setText()
     }
 
     override fun onDetach() {

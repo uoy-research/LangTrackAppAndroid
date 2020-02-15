@@ -9,9 +9,12 @@ package se.lu.humlab.langtrackapp.screen.surveyContainer.singleMultipleAnswersFr
 
 import android.content.Context
 import android.os.Bundle
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.RadioButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.single_multiple_answer_item.view.singleMultipleAnswerNextButton
@@ -20,6 +23,7 @@ import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.SingleMultipleAnswersFragmentBinding
 import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
+
 
 class SingleMultipleAnswersFragment : Fragment(){
 
@@ -52,24 +56,38 @@ class SingleMultipleAnswersFragment : Fragment(){
             listener = context
             if (::binding.isInitialized) {
                 //load survey
-                setQuestion()
+                setQuestion(context)
             }
         }else {
             throw RuntimeException(context.toString() + " must implement OnLikertScaleInteraktionListener")
         }
     }
 
-    fun setQuestion(){
+    fun setQuestion(context: Context){
         if (::binding.isInitialized) {
-            binding.singleMultipleAnswerTextView.text =
-                "${question.title}\n\n${question.text}"
+            binding.singleMultipleAnswerTextTextView.text = question.text
+            binding.singleMultipleAnswerTitleTextView.text = question.title
+            presentChoices(context)
+        }
+    }
+
+    fun presentChoices(context: Context){
+        if (question.singleMultipleAnswers != null) {
+            binding.singleMultipleAnswerContainer.removeAllViews()
+            for (choice in question.singleMultipleAnswers!!) {
+                println("presentChoices")
+                val radioButton = RadioButton(context)
+                radioButton.text = choice
+                radioButton.textSize = 17f
+                binding.singleMultipleAnswerContainer.addView(radioButton)
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
         //update question
-        setQuestion()
+        setQuestion(binding.singleMultipleAnswerContainer.context)
     }
 
     override fun onDetach() {
