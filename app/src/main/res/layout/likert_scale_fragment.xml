@@ -169,16 +169,14 @@
             </RadioGroup>
         </LinearLayout>
 
-        <TextView
+        <ImageView
             android:id="@+id/textView10"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
             android:layout_marginTop="50dp"
-            android:text="✳"
-            android:textColor="@color/lta_text"
-            android:textSize="50sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/likertScaleTitleTextView" />
+            app:layout_constraintTop_toBottomOf="@+id/likertScaleTitleTextView"
+            app:srcCompat="@drawable/lta_icon_likert" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

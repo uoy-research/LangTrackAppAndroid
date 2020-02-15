@@ -80,14 +80,18 @@
             app:layout_constraintTop_toBottomOf="@+id/singleMultipleAnswerTitleTextView"
             app:layout_constraintVertical_bias="0.25">
 
-            <TextView
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:orientation="horizontal">
+
+            <ImageView
                 android:id="@+id/textView12"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="✅"
-                android:textAlignment="center"
-                android:textColor="@color/lta_text"
-                android:textSize="50sp" />
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/lta_icon_list" />
+        </LinearLayout>
 
             <TextView
                 android:id="@+id/singleMultipleAnswerTextTextView"
