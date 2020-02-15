@@ -115,7 +115,7 @@ class SurveyContainerActivity : AppCompatActivity(),
                         HEADER_VIEW -> {
                             headerFragment.question = question
                             loadFragment(headerFragment)
-                            headerFragment.setQuestion()
+                            headerFragment.setText()
                         }
                         LIKERT_SCALES -> {
                             likertScaleFragment.question = question
@@ -130,18 +130,22 @@ class SurveyContainerActivity : AppCompatActivity(),
                         MULTIPLE_CHOICE -> {
                             multipleChoiceFragment.question = question
                             loadFragment(multipleChoiceFragment)
+                            multipleChoiceFragment.setQuestion()
                         }
                         SINGLE_MULTIPLE_ANSWERS -> {
                             singleMultipleAnswersFragment.question = question
                             loadFragment(singleMultipleAnswersFragment)
+                            singleMultipleAnswersFragment.setQuestion(this)
                         }
                         OPEN_ENDED_TEXT_RESPONSES -> {
                             openEndedTextResponsesFragment.question = question
                             loadFragment(openEndedTextResponsesFragment)
+                            openEndedTextResponsesFragment.setQuestion()
                         }
                         FOOTER_VIEW -> {
                             footerFragment.question = question
                             loadFragment(footerFragment)
+                            footerFragment.setText()
                         }
                     }
                     return
