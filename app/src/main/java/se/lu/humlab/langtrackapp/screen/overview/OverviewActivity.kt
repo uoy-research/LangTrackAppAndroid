@@ -1,22 +1,16 @@
 package se.lu.humlab.langtrackapp.screen.overview
 
 import android.animation.ObjectAnimator
-import android.animation.ValueAnimator
 import android.content.Context
 import android.content.Intent
-import android.graphics.Typeface
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import android.widget.TextView
-import androidx.core.animation.doOnEnd
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
-import kotlinx.android.synthetic.main.overview_activity.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.OverviewActivityBinding
-import se.lu.humlab.langtrackapp.util.getDate
 
 class OverviewActivity : AppCompatActivity() {
 
@@ -40,7 +34,7 @@ class OverviewActivity : AppCompatActivity() {
             //changeSizeOfTopView()
             if (topViewIsShowing) {
                 binding.topView.removeAllViews()
-                unDimBackground(300L)
+                unDimBackground()
             }else{
                 addTextToTopView()
             }
@@ -57,40 +51,33 @@ class OverviewActivity : AppCompatActivity() {
 
     fun dimBackgroundClicked(view: View) {
         binding.topView.removeAllViews()
-        unDimBackground(300L)
+        unDimBackground()
         binding.dimBackgroundView.isClickable = false
         topViewIsShowing = false
     }
 
     private fun addTextToTopView() {
-        //TODO: add text with time of response
         val topView1 = TopViewItem(this)
-        topView1.setText("Besvarad ${getDate(theSurvey?.respondeddate ?: 0)}")
-        binding.topView.addView(topView1)
-
-        var activeText = "Denna enkät är aktiv"
-        if (theSurvey?.active == false) {
-            activeText = "Denna enkät är inte längre aktiv"
+        if (theSurvey != null) {
+            topView1.setText(theSurvey!!)
         }
-        val topView2 = TopViewItem(this)
-        topView2.setText(activeText)
-        binding.topView.addView(topView2)
-        dimBackground(300L)
+        binding.topView.addView(topView1)
+        dimBackground()
         binding.dimBackgroundView.isClickable = true
     }
 
 
-    fun dimBackground(time:Long){
+    fun dimBackground(){
         val anim = ObjectAnimator.ofFloat(binding.dimBackgroundView,
             "alpha",0.75F)
-        anim.duration = time
+        anim.duration = 300L
         anim.start()
     }
 
-    fun unDimBackground(time: Long){
+    fun unDimBackground(){
         val anim = ObjectAnimator.ofFloat(binding.dimBackgroundView,
             "alpha",0F)
-        anim.duration = time
+        anim.duration = 450L
         anim.start()
     }
 

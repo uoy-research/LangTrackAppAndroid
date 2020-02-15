@@ -22,7 +22,7 @@ data class Survey (
     var footerText: String = ""
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
-        parcel.readBoolean(),
+        parcel.readByte() != 0.toByte(),
         parcel.readString() ?: "",
         parcel.readLong(),
         parcel.readLong(),
@@ -35,7 +35,7 @@ data class Survey (
     }
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
-        parcel.writeBoolean(active)
+        parcel.writeByte(if (active) 1 else 0)
         parcel.writeString(id)
         parcel.writeLong(date)
         parcel.writeLong(respondeddate)
