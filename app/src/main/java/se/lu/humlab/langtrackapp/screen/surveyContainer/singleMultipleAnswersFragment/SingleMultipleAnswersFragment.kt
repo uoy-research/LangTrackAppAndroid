@@ -30,6 +30,7 @@ class SingleMultipleAnswersFragment : Fragment(){
     private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: SingleMultipleAnswersFragmentBinding
     lateinit var question: Question
+    var selectedRadioButton = 0
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,10 +43,18 @@ class SingleMultipleAnswersFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.singleMultipleAnswerNextButton.setOnClickListener {
-            listener?.goToNextItem(currentQuestion = question)
+            if (question.skip != null){
+                if (question.skip?.ifChosen == selectedRadioButton){
+                    listener?.goToNextItemWithSkipLogic(question)
+                }else listener?.goToNextItem(currentQuestion = question)
+            }else listener?.goToNextItem(currentQuestion = question)
         }
         v.singleMultipleAnswerBackButton.setOnClickListener {
             listener?.goToPrevoiusItem(currentQuestion = question)
+        }
+        v.singleMultipleAnswerContainer.setOnCheckedChangeListener { group, checkedId ->
+            val radio: RadioButton = v.findViewById(checkedId)
+            selectedRadioButton = radio.tag as Int
         }
         return v
     }
@@ -74,10 +83,11 @@ class SingleMultipleAnswersFragment : Fragment(){
     fun presentChoices(context: Context){
         if (question.singleMultipleAnswers != null) {
             binding.singleMultipleAnswerContainer.removeAllViews()
-            for (choice in question.singleMultipleAnswers!!) {
+            for ((index, choice) in question.singleMultipleAnswers!!.withIndex()) {
                 println("presentChoices")
                 val radioButton = RadioButton(context)
                 radioButton.text = choice
+                radioButton.tag = index
                 radioButton.textSize = 17f
                 binding.singleMultipleAnswerContainer.addView(radioButton)
             }
