@@ -11,6 +11,15 @@ import androidx.lifecycle.ViewModelProviders
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.OverviewActivityBinding
+import se.lu.humlab.langtrackapp.screen.overview.overviewQuestionViews.*
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.FILL_IN_THE_BLANK
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.FOOTER_VIEW
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.HEADER_VIEW
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.LIKERT_SCALES
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.MULTIPLE_CHOICE
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.OPEN_ENDED_TEXT_RESPONSES
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.SINGLE_MULTIPLE_ANSWERS
 
 class OverviewActivity : AppCompatActivity() {
 
@@ -45,7 +54,39 @@ class OverviewActivity : AppCompatActivity() {
         binding.dimBackgroundView.isClickable = false
 
         if (theSurvey != null) {
+            presentQuestionsInScrollview()
+        }
+    }
 
+    private fun presentQuestionsInScrollview(){
+        for (question in theSurvey!!.questions!!){
+            when (question.type){
+                LIKERT_SCALES -> {
+                    val likert = OverviewLikertView(this)
+                    likert.setText(question)
+                    binding.overviewQuestionContainer.addView(likert)
+                }
+                FILL_IN_THE_BLANK -> {
+                    val likert = OverviewFillInBlankView(this)
+                    likert.setText(question)
+                    binding.overviewQuestionContainer.addView(likert)
+                }
+                MULTIPLE_CHOICE -> {
+                    val likert = OverviewMultipleChoiceView(this)
+                    likert.setText(question)
+                    binding.overviewQuestionContainer.addView(likert)
+                }
+                SINGLE_MULTIPLE_ANSWERS -> {
+                    val likert = OverviewSingleMultipleView(this)
+                    likert.setText(question)
+                    binding.overviewQuestionContainer.addView(likert)
+                }
+                OPEN_ENDED_TEXT_RESPONSES -> {
+                    val likert = OverviewOpenEndedView(this)
+                    likert.setText(question)
+                    binding.overviewQuestionContainer.addView(likert)
+                }
+            }
         }
     }
 
