@@ -16,6 +16,7 @@ import androidx.recyclerview.widget.RecyclerView
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
+import se.lu.humlab.langtrackapp.util.getDate
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -42,13 +43,13 @@ class SurveyItemViewHolder(theItemView: View,
         return item
     }
 
-    private fun getDate(milli: Long): String{
+    /*private fun getDate(milli: Long): String{
         val formatter = SimpleDateFormat("dd MMMM yyyy    HH:mm",
             Locale("sv", "SE"))
         val calendar = Calendar.getInstance();
         calendar.timeInMillis = milli * 1000//TODO: temp, should be in milli
         return formatter.format(calendar.time)
-    }
+    }*/
 
 
     companion object {

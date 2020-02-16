@@ -39,6 +39,7 @@ import se.lu.humlab.langtrackapp.interfaces.OnBoolPopupReturnListener
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
 import se.lu.humlab.langtrackapp.popup.OneChoicePopup
 import se.lu.humlab.langtrackapp.screen.login.LoginActivity
+import se.lu.humlab.langtrackapp.screen.overview.OverviewActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
 
 class MainActivity : AppCompatActivity() {
@@ -73,7 +74,7 @@ class MainActivity : AppCompatActivity() {
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Survey) {
                 if (item.responded){//TODO: check if survey is active
-
+                    OverviewActivity.start(this@MainActivity, item)
                 }else{
                     SurveyContainerActivity.start(this@MainActivity, item)
                 }
