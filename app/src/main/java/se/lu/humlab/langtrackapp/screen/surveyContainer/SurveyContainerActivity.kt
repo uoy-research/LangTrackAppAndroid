@@ -196,9 +196,9 @@ class SurveyContainerActivity : AppCompatActivity(),
         onBackPressed()
     }
 
-    override fun goToNextItemWithSkipLogic(currentQuestion: Question, nextIndex: Int) {
+    override fun goToNextItemWithSkipLogic(currentQuestion: Question) {
         for (question in questionList){
-            if (question.index == nextIndex){
+            if (question.index == currentQuestion.skip!!.goto){
                 question.previous = currentQuestion.index
             }
         }

@@ -41,7 +41,7 @@ class LikertScaleFragment : Fragment(){
         v.likertScaleNextButton.setOnClickListener {
             if (question.skip != null){
                 if (question.skip?.ifChosen == selectedRadioButton){
-                    listener?.goToNextItemWithSkipLogic(question,question.skip!!.goto)
+                    listener?.goToNextItemWithSkipLogic(question)
                 }else listener?.goToNextItem(currentQuestion = question)
             }else listener?.goToNextItem(currentQuestion = question)
         }
