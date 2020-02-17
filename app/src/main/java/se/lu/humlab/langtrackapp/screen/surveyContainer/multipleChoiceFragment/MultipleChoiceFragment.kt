@@ -12,6 +12,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.CheckBox
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.multiple_choice_fragment.view.*
@@ -60,13 +61,33 @@ class MultipleChoiceFragment : Fragment(){
 
     fun setQuestion(){
         if (::binding.isInitialized) {
+            binding.multipleTextTextView.text = question.text
+            showChoices()
+        }
+    }
+
+    fun showChoices(){
+        if (question.multipleChoisesAnswers != null) {
+            for ((index,choice) in question.multipleChoisesAnswers!!.withIndex()) {
+                val checkBox = CheckBox(context)
+                checkBox.tag = index
+                checkBox.text = choice
+                checkBox.textSize = 18F
+                checkBox.setOnClickListener {
+                    val theCheckbox = it as? CheckBox
+                    println("radiobutton ${theCheckbox?.tag ?: -1} is set to ${theCheckbox?.isChecked}")
+                }
+                binding.multipleRadioButtonContainer.addView(checkBox)
+            }
         }
     }
 
     override fun onResume() {
         super.onResume()
         //update question
-        setQuestion()
+        if (::binding.isInitialized) {
+            setQuestion()
+        }
     }
 
     override fun onDetach() {
