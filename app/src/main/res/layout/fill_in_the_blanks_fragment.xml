@@ -7,27 +7,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <TextView
-            android:id="@+id/fillInTheBlankTitleTextView"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginTop="20dp"
-            android:layout_marginEnd="10dp"
-            android:background="@color/lta_blue"
-            android:paddingStart="5dp"
-            android:paddingTop="5dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="3dp"
-            android:text="Fill in the blank titel"
-            android:textAlignment="center"
-            android:textColor="@android:color/white"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
 
         <Button
             android:id="@+id/fillInTheBlankNextButton"
@@ -69,13 +48,13 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/fillInTheBlankBackButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/fillInTheBlankTitleTextView"
+            app:layout_constraintTop_toBottomOf="@+id/openIcon"
             app:layout_constraintVertical_bias="0.3">
 
             <TextView
@@ -89,14 +68,15 @@
                 android:text="TextView"
                 android:textAlignment="textStart"
                 android:textSize="18sp" />
+
             <TextView
+                android:id="@+id/fillInTheBlankSpinnerTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:id="@+id/fillInTheBlankSpinnerTitle"
-                android:text="\tVälj ord i listan"
                 android:layout_marginStart="40dp"
                 android:layout_marginEnd="40dp"
-                android:layout_marginBottom="5dp"/>
+                android:layout_marginBottom="5dp"
+                android:text="\tVälj ord i listan" />
 
             <Spinner
                 android:id="@+id/choice_spinner"
@@ -110,6 +90,17 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent" />
         </LinearLayout>
+
+        <ImageView
+            android:id="@+id/openIcon"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            app:layout_constraintBottom_toTopOf="@+id/fillInTheBlankNextButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.100000024"
+            app:srcCompat="@drawable/lta_icon_blank_light" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

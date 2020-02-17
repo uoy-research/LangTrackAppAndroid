@@ -13,7 +13,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/overviewSingleViewTextTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/overviewSingleViewTextTextView"
-        app:srcCompat="@drawable/lta_icon_list" />
+        app:srcCompat="@drawable/lta_icon_single_marked_light" />
 
     <TextView
         android:id="@+id/overviewSingleViewTextTextView"

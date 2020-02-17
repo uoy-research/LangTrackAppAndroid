@@ -13,7 +13,7 @@
         app:layout_constraintBottom_toBottomOf="@+id/overviewLikertViewTextTextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/overviewLikertViewTextTextView"
-        app:srcCompat="@drawable/lta_icon_likert" />
+        app:srcCompat="@drawable/lta_icon_likert_light" />
 
     <TextView
         android:id="@+id/overviewLikertViewTextTextView"

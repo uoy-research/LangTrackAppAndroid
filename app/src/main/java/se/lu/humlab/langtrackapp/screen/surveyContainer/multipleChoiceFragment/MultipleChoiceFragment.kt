@@ -60,8 +60,6 @@ class MultipleChoiceFragment : Fragment(){
 
     fun setQuestion(){
         if (::binding.isInitialized) {
-            binding.multipleChoiseFragmentTextView.text =
-                "${question.title}\n\n${question.text}"
         }
     }
 

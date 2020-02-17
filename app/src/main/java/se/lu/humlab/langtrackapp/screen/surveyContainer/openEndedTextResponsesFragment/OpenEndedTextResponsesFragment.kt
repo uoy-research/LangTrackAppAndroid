@@ -60,8 +60,6 @@ class OpenEndedTextResponsesFragment : Fragment(){
 
     fun setQuestion(){
         if (::binding.isInitialized) {
-            binding.openEndedTextTextView.text =
-                "${question.title}\n\n${question.text}"
         }
     }
 
