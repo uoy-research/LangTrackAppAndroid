@@ -75,7 +75,6 @@ class SingleMultipleAnswersFragment : Fragment(){
     fun setQuestion(context: Context){
         if (::binding.isInitialized) {
             binding.singleMultipleAnswerTextTextView.text = question.text
-            binding.singleMultipleAnswerTitleTextView.text = question.title
             presentChoices(context)
         }
     }
