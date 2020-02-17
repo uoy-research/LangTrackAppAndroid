@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
+import androidx.core.view.children
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.multiple_choice_fragment.view.*
@@ -38,7 +39,11 @@ class MultipleChoiceFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.multipleChoiseFragmentNextButton.setOnClickListener {
-            listener?.goToNextItem(currentQuestion = question)
+            if (question.skip != null){
+                if (question.skip?.ifChosen == getChoiceIfOnlyOneSelected() ?: -1){
+                    listener?.goToNextItemWithSkipLogic(question)
+                }else listener?.goToNextItem(currentQuestion = question)
+            }else listener?.goToNextItem(currentQuestion = question)
         }
         v.multipleChoiseFragmentBackButton.setOnClickListener {
             listener?.goToPrevoiusItem(currentQuestion = question)
@@ -66,10 +71,28 @@ class MultipleChoiceFragment : Fragment(){
         }
     }
 
+    fun getChoiceIfOnlyOneSelected(): Int?{
+        var choise = 0
+        var number = 0
+        for (view in binding.multipleRadioButtonContainer.children){
+            if (view is CheckBox){
+                if (view.isChecked ){
+                    choise = view.tag as Int
+                    number += 1
+                }
+            }
+        }
+        if (number == 1){
+            return choise
+        }else{
+            return null
+        }
+    }
+
     fun showChoices(){
         if (question.multipleChoisesAnswers != null) {
             for ((index,choice) in question.multipleChoisesAnswers!!.withIndex()) {
-                val checkBox = CheckBox(context)
+                val checkBox = CheckBox(binding.multipleRadioButtonContainer.context)
                 checkBox.tag = index
                 checkBox.text = choice
                 checkBox.textSize = 18F

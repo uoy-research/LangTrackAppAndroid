@@ -7,13 +7,17 @@ package se.lu.humlab.langtrackapp.screen.surveyContainer.openEndedTextResponsesF
 * stephan.bjorck@humlab.lu.se
 * */
 
+import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
+import kotlinx.android.synthetic.main.open_ended_text_responses_fragment.*
 import kotlinx.android.synthetic.main.open_ended_text_responses_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
@@ -42,6 +46,18 @@ class OpenEndedTextResponsesFragment : Fragment(){
         v.openEndedTextBackButton.setOnClickListener {
             listener?.goToPrevoiusItem(currentQuestion = question)
         }
+        v.openLayout.setOnClickListener {
+            hideKeyboard()
+        }
+        v.openEditText.setOnKeyListener { v, keyCode, event ->
+            if((event.action == KeyEvent.ACTION_DOWN)
+                && (event.keyCode == KeyEvent.KEYCODE_ENTER)){
+                hideKeyboard()
+                return@setOnKeyListener true
+            }
+
+            false
+        }
         return v
     }
 
@@ -60,6 +76,7 @@ class OpenEndedTextResponsesFragment : Fragment(){
 
     fun setQuestion(){
         if (::binding.isInitialized) {
+            binding.openTextTextView.text = question.text
         }
     }
 
@@ -67,6 +84,18 @@ class OpenEndedTextResponsesFragment : Fragment(){
         super.onResume()
         //update question
         setQuestion()
+    }
+
+    fun hideKeyboard() {
+
+        if (activity != null) {
+            val imm =
+                activity!!.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+            var view = binding.openEditText
+            //If no view currently has focus, create a new one, just so we can grab a window token from it
+
+            imm.hideSoftInputFromWindow(view.windowToken, 0)
+        }
     }
 
     override fun onDetach() {

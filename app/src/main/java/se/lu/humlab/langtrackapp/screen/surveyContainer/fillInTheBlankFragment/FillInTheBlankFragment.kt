@@ -69,7 +69,11 @@ class FillInTheBlankFragment : Fragment(){
             }
         }
         v.fillInTheBlankNextButton.setOnClickListener {
-            listener?.goToNextItem(currentQuestion = question)
+            if (question.skip != null){
+                if (question.skip?.ifChosen == theChosenWordIndex){
+                    listener?.goToNextItemWithSkipLogic(question)
+                }else listener?.goToNextItem(currentQuestion = question)
+            }else listener?.goToNextItem(currentQuestion = question)
         }
         v.fillInTheBlankBackButton.setOnClickListener {
             listener?.goToPrevoiusItem(currentQuestion = question)
