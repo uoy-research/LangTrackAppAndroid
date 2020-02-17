@@ -4,20 +4,54 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/openLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:clickable="true">
 
         <LinearLayout
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginEnd="1dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/openEndedTextBackButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/openIcon"
-            app:layout_constraintVertical_bias="0.3" />
+            app:layout_constraintVertical_bias="0.2">
+
+            <TextView
+                android:id="@+id/openTextTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textColor="@color/lta_text"
+                android:textSize="18sp"
+                android:text="Här kan du skriva text"/>
+
+            <TextView
+                android:layout_width="match_parent"
+                android:maxLines="2"
+                android:layout_height="wrap_content"
+                android:text="Klicka utanför textrutan för att fälla ner tangentbordet"
+                android:textSize="12sp"
+                android:layout_marginTop="10dp"/>
+
+            <EditText
+                android:id="@+id/openEditText"
+                android:autofillHints="Ange text"
+                android:hint="Ange text"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textMultiLine"
+                android:minLines="2"
+                android:maxLines="7"
+                android:background="@drawable/blue_rounded_corner"
+                android:textColor="@color/lta_text"
+                android:textSize="18sp"
+                android:padding="5dp"
+                android:layout_marginTop="2dp"/>
+        </LinearLayout>
 
         <Button
             android:id="@+id/openEndedTextNextButton"
