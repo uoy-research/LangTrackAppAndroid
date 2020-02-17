@@ -109,7 +109,7 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.100000024"
-            app:srcCompat="@drawable/lta_icon_single_marked_light" />
+            app:srcCompat="@drawable/lta_icon_single_marked_light2" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

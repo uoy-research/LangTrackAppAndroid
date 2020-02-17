@@ -5,6 +5,7 @@ import android.graphics.Typeface
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import android.widget.RadioButton
 import android.widget.TextView
 import kotlinx.android.synthetic.main.overview_single_multiple_view_layout.view.*
 import se.lu.humlab.langtrackapp.R
@@ -25,12 +26,10 @@ class OverviewSingleMultipleView @JvmOverloads constructor(
         overviewSingleViewTextTextView.text = question.text
         if (question.singleMultipleAnswers != null) {
             for (choice in question.singleMultipleAnswers!!) {
-                val  textView = TextView(overviewSingleViewChoices.context)
+                val  textView = RadioButton(overviewSingleViewChoices.context)
                 textView.text = choice
-                if (choice == tempChoice){
-                    textView.setTypeface(null, Typeface.BOLD)
-                    textView.textSize = 17F
-                }
+                textView.isChecked = choice == tempChoice
+                textView.isClickable = false
                 overviewSingleViewChoices.addView(textView)
             }
         }
