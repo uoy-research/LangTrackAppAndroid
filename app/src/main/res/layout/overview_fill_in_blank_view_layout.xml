@@ -6,12 +6,56 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/textView10"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/lta_blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/overviewFillBlankTextView"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/overviewFillBlankIcon"
+        app:layout_constraintTop_toBottomOf="@+id/overviewFillBlankChoicesLayout"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/overviewFillBlankTextView"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:maxLines="10"
+        android:text="Här skrivs en text där _____ ord saknas."
+        android:textAlignment="textStart"
+        android:textColor="@color/lta_text"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/overviewFillBlankIcon"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/overviewFillBlankIcon"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/overviewFillBlankTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/overviewFillBlankTextView"
+        app:srcCompat="@drawable/lta_icon_blank_light" />
+
+    <LinearLayout
+        android:id="@+id/overviewFillBlankChoicesLayout"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Overview Fill in blank"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="1dp"
+        android:gravity="center"
+        android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.4"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/overviewFillBlankTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

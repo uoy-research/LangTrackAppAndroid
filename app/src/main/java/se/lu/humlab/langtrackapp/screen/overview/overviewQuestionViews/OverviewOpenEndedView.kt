@@ -4,6 +4,7 @@ import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
 import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.overview_open_ended_view_layout.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
 
@@ -17,6 +18,7 @@ class OverviewOpenEndedView @JvmOverloads constructor(
     }
 
     fun setText(question: Question){
-
+        overviewOpenEnteredText.text = "Texten som deltagaren skrivit in visas här."
+        overviewOpenTextTextView.text = question.text
     }
 }
