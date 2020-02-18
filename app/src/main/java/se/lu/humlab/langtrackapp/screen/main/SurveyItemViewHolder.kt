@@ -10,6 +10,7 @@ package se.lu.humlab.langtrackapp.screen.main
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -26,6 +27,7 @@ class SurveyItemViewHolder(theItemView: View,
 
     private var task: TextView = itemView.findViewById(R.id.surveyRecyclerTitleTextView)
     private var date: TextView = itemView.findViewById(R.id.surveyRecyclerDateTextView)
+    private var activeIndicator: ImageView = itemView.findViewById(R.id.activeIndicator)
     private var cellLayout: ConstraintLayout = itemView.findViewById(R.id.surveyCellLayout)
     private lateinit var item: Survey
 
@@ -36,7 +38,13 @@ class SurveyItemViewHolder(theItemView: View,
     fun bind(item: Survey, pos: Int){
         this.item = item
         task.text = this.item.title
-        date.text = getDate(item.date)
+        if (item.active){
+            activeIndicator.visibility = View.VISIBLE
+            date.text = "53 minuter kvar"//TODO: calculate time left
+        }else{
+            activeIndicator.visibility = View.GONE
+            date.text = "Inaktiv"
+        }
     }
 
     fun getItem(): Survey {

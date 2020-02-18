@@ -21,7 +21,7 @@ class Repository(val context: Context) {
     var currentUserLiveData = MutableLiveData<User>()
     var surveyList = mutableListOf<Survey>()
     var surveyListLiveData = MutableLiveData<MutableList<Survey>>()
-    private val theUrl = "https://www.dropbox.com/s/1ts0b6r7d45s9lx/survey_json.txt?dl=1"
+    private val theUrl = "https://www.dropbox.com/s/zrpj2yf2kl1x5oo/survey_json.txt?dl=1"
 
 
     fun setCurrentUser(user: User){

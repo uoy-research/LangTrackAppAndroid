@@ -3,7 +3,9 @@ package se.lu.humlab.langtrackapp.screen.overview.overviewQuestionViews
 import android.content.Context
 import android.util.AttributeSet
 import android.view.LayoutInflater
+import android.widget.CheckBox
 import android.widget.LinearLayout
+import kotlinx.android.synthetic.main.overview_multiple_choice_view_layout.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
 
@@ -17,6 +19,23 @@ class OverviewMultipleChoiceView @JvmOverloads constructor(
     }
 
     fun setText(question: Question){
-
+        overviewMultipleViewTextTextView.text = question.text
+        if (question.multipleChoisesAnswers != null) {
+            for (answer in question.multipleChoisesAnswers!!) {
+                val checkbox = CheckBox(overviewMultipleViewChoices.context)
+                checkbox.text = answer
+                checkbox.isClickable = false
+                if (answer == "Val 4" || answer == "Val 2"){
+                    checkbox.textSize = 19F
+                    checkbox.setTextColor(resources.getColor(R.color.lta_blue,null))
+                    checkbox.isChecked = true
+                }else{
+                    checkbox.textSize = 15F
+                    checkbox.setTextColor(resources.getColor(R.color.lta_text,null))
+                    checkbox.isChecked = false
+                }
+                overviewMultipleViewChoices.addView(checkbox)
+            }
+        }
     }
 }

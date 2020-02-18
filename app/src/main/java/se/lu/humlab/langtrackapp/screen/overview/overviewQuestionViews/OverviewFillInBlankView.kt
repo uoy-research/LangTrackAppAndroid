@@ -30,8 +30,11 @@ class OverviewFillInBlankView @JvmOverloads constructor(
                 textview.text = choice
                 if (choice == tempChoice){
                     textview.setTypeface(null, Typeface.BOLD)
-                    textview.textSize = 17F
+                    textview.textSize = 19F
                     textview.setTextColor(resources.getColor(R.color.lta_blue,null))
+                }else{
+                    textview.textSize = 15F
+                    textview.setTextColor(resources.getColor(R.color.lta_text,null))
                 }
                 overviewFillBlankChoicesLayout.addView(textview)
             }
