@@ -25,7 +25,7 @@ class OverviewMultipleChoiceView @JvmOverloads constructor(
                 val checkbox = CheckBox(overviewMultipleViewChoices.context)
                 checkbox.text = answer
                 checkbox.isClickable = false
-                if (answer == "Val 4" || answer == "Val 2"){
+                if (answer == "Val 4" || answer == "Val 2"){//TODO: check answer
                     checkbox.textSize = 19F
                     checkbox.setTextColor(resources.getColor(R.color.lta_blue,null))
                     checkbox.isChecked = true
