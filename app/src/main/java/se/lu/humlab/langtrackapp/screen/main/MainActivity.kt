@@ -39,6 +39,8 @@ import se.lu.humlab.langtrackapp.interfaces.OnBoolPopupReturnListener
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
 import se.lu.humlab.langtrackapp.popup.OneChoicePopup
 import se.lu.humlab.langtrackapp.screen.about.AboutActivity
+import se.lu.humlab.langtrackapp.screen.contact.ContactActivity
+import se.lu.humlab.langtrackapp.screen.instructions.InstructionsActivity
 import se.lu.humlab.langtrackapp.screen.login.LoginActivity
 import se.lu.humlab.langtrackapp.screen.overview.OverviewActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
@@ -87,6 +89,12 @@ class MainActivity : AppCompatActivity() {
         }
         mBind.mainAboutButton.setOnClickListener {
             AboutActivity.start(this)
+        }
+        mBind.mainInfoButton.setOnClickListener {
+            InstructionsActivity.start(this)
+        }
+        mBind.mainContactButton.setOnClickListener {
+            ContactActivity.start(this)
         }
 
         viewModel.getUserLiveData().observeForever {
