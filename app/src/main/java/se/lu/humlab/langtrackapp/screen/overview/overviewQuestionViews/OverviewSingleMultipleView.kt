@@ -20,15 +20,15 @@ class OverviewSingleMultipleView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.overview_single_multiple_view_layout, this, true)
     }
 
-    fun setText(question: Question){
+    fun setText(question: Question, answer: String?){
         //TODO: check answer
-        val tempChoice = "Val 4"
+        //val tempChoice = "Val 4"
         overviewSingleViewTextTextView.text = question.text
         if (question.singleMultipleAnswers != null) {
             for (choice in question.singleMultipleAnswers!!) {
                 val  textView = RadioButton(overviewSingleViewChoices.context)
                 textView.text = choice
-                if (choice == tempChoice){
+                if (choice == answer){
                     textView.textSize = 19F
                     textView.setTextColor(resources.getColor(R.color.lta_blue,null))
                     textView.isChecked = true

@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Survey) {
-                if (item.responded){//TODO: check if survey is active
+                if (item.answer != null || !item.active){
                     OverviewActivity.start(this@MainActivity, item)
                 }else{
                     SurveyContainerActivity.start(this@MainActivity, item)

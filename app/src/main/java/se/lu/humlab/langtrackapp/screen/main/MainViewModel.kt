@@ -21,7 +21,19 @@ class MainViewModel(repo: Repository): ViewModel() {
 
     init {
         mRepository.surveyListLiveData.observeForever {
-            surveyList = it
+            val activelist = mutableListOf<Survey>()
+            val inactivelist = mutableListOf<Survey>()
+            for (survey in it){
+                if (survey.active){
+                    activelist.add(survey)
+                }else{
+                    inactivelist.add(survey)
+                }
+            }
+            val finallist = mutableListOf<Survey>()
+            finallist.addAll(activelist)
+            finallist.addAll(inactivelist)
+            surveyList = finallist
             surveyListLiveData.value = surveyList
         }
     }
