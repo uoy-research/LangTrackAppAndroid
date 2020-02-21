@@ -9,7 +9,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/overviewMultipleViewTextTextView"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/overviewMultipleViewTextTextView"
         app:srcCompat="@drawable/lta_icon_multiple_choice_light" />
@@ -34,15 +34,16 @@
 
     <LinearLayout
         android:id="@+id/overviewMultipleViewChoices"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
         android:layout_marginTop="20dp"
         android:layout_marginBottom="20dp"
         android:orientation="vertical"
         app:layout_constraintBottom_toTopOf="@+id/textView13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/overviewMultipleViewIcon"
         app:layout_constraintTop_toBottomOf="@+id/overviewMultipleViewTextTextView" />
 
     <TextView

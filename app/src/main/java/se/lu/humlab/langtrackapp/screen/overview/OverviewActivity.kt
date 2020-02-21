@@ -60,10 +60,12 @@ class OverviewActivity : AppCompatActivity() {
 
     private fun presentQuestionsInScrollview(){
         for (question in theSurvey!!.questions!!){
+            val selectedAnswer = theSurvey!!.answer?.get(question.index)
+
             when (question.type){
                 LIKERT_SCALES -> {
                     val likert = OverviewLikertView(this)
-                    likert.setText(question)
+                    //likert.setText(question, selectedAnswer ?: -1)
                     binding.overviewQuestionContainer.addView(likert)
                 }
                 FILL_IN_THE_BLANK -> {
@@ -78,8 +80,13 @@ class OverviewActivity : AppCompatActivity() {
                 }
                 SINGLE_MULTIPLE_ANSWERS -> {
                     val likert = OverviewSingleMultipleView(this)
-                    likert.setText(question)
-                    binding.overviewQuestionContainer.addView(likert)
+                    val selectedChoice = if (selectedAnswer != null) {
+                        question.singleMultipleAnswers?.get(selectedAnswer) ?: ""
+                    }else{
+                        null
+                    }
+                        likert.setText(question, selectedChoice)
+                        binding.overviewQuestionContainer.addView(likert)
                 }
                 OPEN_ENDED_TEXT_RESPONSES -> {
                     val likert = OverviewOpenEndedView(this)

@@ -9,7 +9,7 @@
         android:layout_width="50dp"
         android:layout_height="50dp"
         android:layout_marginStart="20dp"
-        app:layout_constraintBottom_toBottomOf="@+id/overviewOpenTextTextView"
+        android:layout_marginTop="5dp"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="@+id/overviewOpenTextTextView"
         app:srcCompat="@drawable/lta_icon_open_light" />

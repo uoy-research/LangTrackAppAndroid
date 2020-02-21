@@ -43,7 +43,7 @@ class SurveyItemViewHolder(theItemView: View,
             date.text = "53 minuter kvar"//TODO: calculate time left
         }else{
             activeIndicator.visibility = View.GONE
-            date.text = "Inaktiv"
+            date.text = "Inaktiv, ${if (item.answer != null) "besvarad" else "obesvarad"}"
         }
     }
 

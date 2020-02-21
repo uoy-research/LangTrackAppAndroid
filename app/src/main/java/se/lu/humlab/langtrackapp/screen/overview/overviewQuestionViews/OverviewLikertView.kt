@@ -17,10 +17,10 @@ class OverviewLikertView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.overview_likert_view_layout, this, true)
     }
 
-    fun setText(question: Question){
+    fun setText(question: Question, answer: Int){
         overviewLikertViewDescriptionTextView.text = question.description
         overviewLikertViewTextTextView.text = question.text
-        setRadiobutton(2)//TODO: set from answer
+        setRadiobutton(answer)
     }
 
     fun setRadiobutton(selected: Int){
