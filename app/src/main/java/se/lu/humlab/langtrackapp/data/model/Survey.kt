@@ -17,6 +17,8 @@ class Survey() : Parcelable {
     var id: String = ""
     var date: Long = -1
     var respondeddate: Long = -1
+    var published: Long = -1
+    var expiry: Long = -1
     var title: String = ""
     var headerText: String = ""
     var questions: List<Question>? = null
@@ -28,6 +30,8 @@ class Survey() : Parcelable {
         id = parcel.readString() ?: ""
         date = parcel.readLong()
         respondeddate = parcel.readLong()
+        published = parcel.readLong()
+        expiry = parcel.readLong()
         title = parcel.readString() ?: ""
         headerText = parcel.readString() ?: ""
         questions = parcel.createTypedArrayList(Question)
@@ -63,6 +67,8 @@ class Survey() : Parcelable {
         parcel.writeString(id)
         parcel.writeLong(date)
         parcel.writeLong(respondeddate)
+        parcel.writeLong(published)
+        parcel.writeLong(expiry)
         parcel.writeString(title)
         parcel.writeString(headerText)
         parcel.writeTypedList(questions)

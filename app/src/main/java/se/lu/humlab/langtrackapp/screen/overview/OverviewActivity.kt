@@ -85,7 +85,7 @@ class OverviewActivity : AppCompatActivity() {
                     }else{
                         null
                     }
-                        likert.setText(question, selectedChoice)
+                        likert.setText(question, selectedChoice)//TODO: not showing correct answer
                         binding.overviewQuestionContainer.addView(likert)
                 }
                 OPEN_ENDED_TEXT_RESPONSES -> {
