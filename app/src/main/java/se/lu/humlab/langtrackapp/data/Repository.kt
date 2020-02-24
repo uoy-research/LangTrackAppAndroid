@@ -11,10 +11,8 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
 import org.json.JSONArray
-import se.lu.humlab.langtrackapp.data.model.Question
-import se.lu.humlab.langtrackapp.data.model.SkipLogic
-import se.lu.humlab.langtrackapp.data.model.Survey
-import se.lu.humlab.langtrackapp.data.model.User
+import org.json.JSONObject
+import se.lu.humlab.langtrackapp.data.model.*
 import java.lang.Exception
 
 class Repository(val context: Context) {
@@ -23,7 +21,7 @@ class Repository(val context: Context) {
     var currentUserLiveData = MutableLiveData<User>()
     var surveyList = mutableListOf<Survey>()
     var surveyListLiveData = MutableLiveData<MutableList<Survey>>()
-    private val theUrl = "https://www.dropbox.com/s/grt4vpfg3fkcvlj/survey_json.txt?dl=1"
+    private val theUrl = "https://www.dropbox.com/s/xvcwxip6xhd5l72/survey_json.txt?dl=1"
 
 
     fun setCurrentUser(user: User){
@@ -43,7 +41,6 @@ class Repository(val context: Context) {
                 val (bytes, error) = result
                 if (error == null) {
                     if (bytes != null) {
-                        println("[response bytes] ${String(bytes)}")
                         surveyList = convertJsonToSurveyList(String(bytes)).toMutableList()
                         surveyListLiveData.value = surveyList
                     }
@@ -56,8 +53,9 @@ class Repository(val context: Context) {
     private fun convertJsonToSurveyList(jsonString: String): List<Survey>{
         //val gson = Gson()
         //val listType = object : TypeToken<List<Survey>>() { }.type
+        //return gson.fromJson(jsonString, listType))
 
-        return setOrder(setSurveyObjectsManually(jsonString))//gson.fromJson(jsonString, listType))
+        return setOrder(setSurveyObjectsManually(jsonString))
     }
 
     private fun setSurveyObjectsManually(json: String): List<Survey>{
@@ -111,12 +109,7 @@ class Repository(val context: Context) {
 
             try {
                 val answer = item.getJSONObject("answer")
-                val tempMap = mutableMapOf<Int,Int>()
-                for (a in answer.keys()){
-                    val value = answer.getInt(a) as? Int ?: 0
-                    tempMap[a.toInt()] = value
-                }
-                tempSurvey.answer = tempMap
+                tempSurvey.answer = getAnswer(answer).toMutableList()
             }catch (e: Exception){ println("e: ${e.localizedMessage}")}
 
             try {
@@ -197,6 +190,42 @@ class Repository(val context: Context) {
         }
         return theListWithSurveys
     }
+
+    private fun getAnswer(jObj: JSONObject): List<Answer>{
+
+        val tempListWithAnswers = mutableListOf<Answer>()
+        for (a in jObj.keys()) {
+            val theObject = jObj.getJSONObject(a)
+            val tempAnswer = Answer()
+            tempAnswer.index = a.toInt()
+            try {
+                tempAnswer.likertAnswer = theObject.get("likertAnswer") as? Int
+            }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
+            try {
+                tempAnswer.fillBlankAnswer = theObject.get("fillBlankAnswer") as? Int
+            }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
+            try {
+                val tempMultipleObj = theObject.get("multipleChoiceAnswer") as? JSONArray
+                if (tempMultipleObj != null) {
+                    val tempMultipleArray = mutableListOf<Int>()
+                    for (m in 0 until tempMultipleObj.length()) {
+                        tempMultipleArray.add(tempMultipleObj.getInt(m))
+                    }
+                    tempAnswer.multipleChoiceAnswer = tempMultipleArray
+                }
+            }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
+            try {
+                tempAnswer.singleMultipleAnswer = theObject.get("singleMultipleAnswer") as? Int
+            }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
+            try {
+                tempAnswer.OpenEndedAnswer = theObject.get("OpenEndedAnswer") as? String
+            }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
+            tempListWithAnswers.add(tempAnswer)
+        }
+
+        return tempListWithAnswers
+    }
+
 
 
     private fun setOrder(inList: List<Survey>): List<Survey>{

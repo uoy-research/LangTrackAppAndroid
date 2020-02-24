@@ -18,14 +18,14 @@ class OverviewMultipleChoiceView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.overview_multiple_choice_view_layout, this, true)
     }
 
-    fun setText(question: Question){
+    fun setText(question: Question, choices: List<String>){
         overviewMultipleViewTextTextView.text = question.text
         if (question.multipleChoisesAnswers != null) {
             for (answer in question.multipleChoisesAnswers!!) {
                 val checkbox = CheckBox(overviewMultipleViewChoices.context)
                 checkbox.text = answer
                 checkbox.isClickable = false
-                if (answer == "Val 4" || answer == "Val 2"){//TODO: check answer
+                if (choices.contains(answer)){
                     checkbox.textSize = 19F
                     checkbox.setTextColor(resources.getColor(R.color.lta_blue,null))
                     checkbox.isChecked = true
