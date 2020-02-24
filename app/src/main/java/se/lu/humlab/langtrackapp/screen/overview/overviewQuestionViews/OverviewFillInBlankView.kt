@@ -15,20 +15,17 @@ class OverviewFillInBlankView @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr)  {
 
-    //TODO: check answer
-    val tempChoice = "väljs"
-
     init {
         LayoutInflater.from(context).inflate(R.layout.overview_fill_in_blank_view_layout, this, true)
     }
 
-    fun setText(question: Question){
+    fun setText(question: Question, selectedchoice: String?){
         overviewFillBlankTextView.text = question.text
         if (question.fillBlanksChoises != null){
             for (choice in question.fillBlanksChoises!!){
                 val textview = TextView(overviewFillBlankChoicesLayout.context)
                 textview.text = choice
-                if (choice == tempChoice){
+                if (!selectedchoice.isNullOrBlank() && choice == selectedchoice){
                     textview.setTypeface(null, Typeface.BOLD)
                     textview.textSize = 19F
                     textview.setTextColor(resources.getColor(R.color.lta_blue,null))

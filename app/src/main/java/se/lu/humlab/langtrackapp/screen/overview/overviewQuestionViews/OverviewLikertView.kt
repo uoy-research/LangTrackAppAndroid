@@ -30,11 +30,11 @@ class OverviewLikertView @JvmOverloads constructor(
         overviewLikertViewRadioButton4.isChecked = false
         overviewLikertViewRadioButton5.isChecked = false
         when(selected){
-            1 -> overviewLikertViewRadioButton1.isChecked = true
-            2 -> overviewLikertViewRadioButton2.isChecked = true
-            3 -> overviewLikertViewRadioButton3.isChecked = true
-            4 -> overviewLikertViewRadioButton4.isChecked = true
-            5 -> overviewLikertViewRadioButton5.isChecked = true
+            0 -> overviewLikertViewRadioButton1.isChecked = true
+            1 -> overviewLikertViewRadioButton2.isChecked = true
+            2 -> overviewLikertViewRadioButton3.isChecked = true
+            3 -> overviewLikertViewRadioButton4.isChecked = true
+            4 -> overviewLikertViewRadioButton5.isChecked = true
         }
     }
 }

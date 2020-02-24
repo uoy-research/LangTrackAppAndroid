@@ -21,8 +21,6 @@ class OverviewSingleMultipleView @JvmOverloads constructor(
     }
 
     fun setText(question: Question, answer: String?){
-        //TODO: check answer
-        //val tempChoice = "Val 4"
         overviewSingleViewTextTextView.text = question.text
         if (question.singleMultipleAnswers != null) {
             for (choice in question.singleMultipleAnswers!!) {

@@ -9,10 +9,10 @@ import android.view.View
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.OverviewActivityBinding
 import se.lu.humlab.langtrackapp.screen.overview.overviewQuestionViews.*
-import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.FILL_IN_THE_BLANK
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.FOOTER_VIEW
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.HEADER_VIEW
@@ -20,6 +20,7 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.MULTIPLE_CHOICE
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.OPEN_ENDED_TEXT_RESPONSES
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.SINGLE_MULTIPLE_ANSWERS
+import java.lang.Exception
 
 class OverviewActivity : AppCompatActivity() {
 
@@ -59,39 +60,80 @@ class OverviewActivity : AppCompatActivity() {
     }
 
     private fun presentQuestionsInScrollview(){
-        for (question in theSurvey!!.questions!!){
-            val selectedAnswer = theSurvey!!.answer?.get(question.index)
+        if (!theSurvey!!.questions.isNullOrEmpty()) {
+            val questionsWithoutHeaderAndFooter = theSurvey!!.questions!!
+                .filter { it.type != HEADER_VIEW &&
+                    it.type != FOOTER_VIEW
+            }
+            for (question in questionsWithoutHeaderAndFooter) {
 
-            when (question.type){
-                LIKERT_SCALES -> {
-                    val likert = OverviewLikertView(this)
-                    //likert.setText(question, selectedAnswer ?: -1)
-                    binding.overviewQuestionContainer.addView(likert)
-                }
-                FILL_IN_THE_BLANK -> {
-                    val likert = OverviewFillInBlankView(this)
-                    likert.setText(question)
-                    binding.overviewQuestionContainer.addView(likert)
-                }
-                MULTIPLE_CHOICE -> {
-                    val likert = OverviewMultipleChoiceView(this)
-                    likert.setText(question)
-                    binding.overviewQuestionContainer.addView(likert)
-                }
-                SINGLE_MULTIPLE_ANSWERS -> {
-                    val likert = OverviewSingleMultipleView(this)
-                    val selectedChoice = if (selectedAnswer != null) {
-                        question.singleMultipleAnswers?.get(selectedAnswer) ?: ""
-                    }else{
-                        null
-                    }
-                        likert.setText(question, selectedChoice)
+                val selectedAnswerIndex = if(!theSurvey!!.answer.isNullOrEmpty())
+                    theSurvey!!.answer!!.indexOfFirst { it.index == question.index } else null
+                var selectedAnswer: Answer? = null
+                try {
+                    selectedAnswer = theSurvey!!.answer!![selectedAnswerIndex!!]
+                } catch (e: Exception){
+                    println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
+
+                when (question.type) {
+                    LIKERT_SCALES -> {
+                        val likert = OverviewLikertView(this)
+                        if (selectedAnswer?.likertAnswer ?: -1 != -1 &&
+                                selectedAnswer?.likertAnswer ?: -1 >= 0 &&
+                                selectedAnswer?.likertAnswer ?: -1 < 5){
+                            likert.setText(question, selectedAnswer?.likertAnswer!!)
+                        }
                         binding.overviewQuestionContainer.addView(likert)
-                }
-                OPEN_ENDED_TEXT_RESPONSES -> {
-                    val likert = OverviewOpenEndedView(this)
-                    likert.setText(question)
-                    binding.overviewQuestionContainer.addView(likert)
+                    }
+                    FILL_IN_THE_BLANK -> {
+                        val likert = OverviewFillInBlankView(this)
+                        val selectedWord =
+                            if (selectedAnswer != null){
+                                try {
+                                    question.fillBlanksChoises?.get(selectedAnswer.fillBlankAnswer!!)
+                                }catch (e: Exception){null}
+                            }  else null
+                        likert.setText(question, selectedWord)
+                        binding.overviewQuestionContainer.addView(likert)
+                    }
+                    MULTIPLE_CHOICE -> {
+                        val likert = OverviewMultipleChoiceView(this)
+                        val templist = mutableListOf<String>()
+                        for (wordIndex in selectedAnswer!!.multipleChoiceAnswer!!){
+                            try {
+                                templist.add(question.multipleChoisesAnswers?.get(wordIndex)!!)
+                            }catch (e: Exception){
+                                println("presentQuestionsInScrollview, e: ${e.localizedMessage}")
+                            }
+                        }
+                        likert.setText(question, templist)
+                        binding.overviewQuestionContainer.addView(likert)
+                    }
+                    SINGLE_MULTIPLE_ANSWERS -> {
+                        val likert = OverviewSingleMultipleView(this)
+                        var theChoice: String? = null
+                        if (selectedAnswer?.singleMultipleAnswer != null &&
+                            question.singleMultipleAnswers != null) {
+                            try {
+                                theChoice =
+                                    question.singleMultipleAnswers!!.get(selectedAnswer.singleMultipleAnswer!!)
+                            }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
+
+                        }
+                        likert.setText(question, theChoice)
+                        binding.overviewQuestionContainer.addView(likert)
+                    }
+                    OPEN_ENDED_TEXT_RESPONSES -> {
+                        val likert = OverviewOpenEndedView(this)
+                        var theText = ""
+                        if (selectedAnswer?.openEndedAnswer != null) {
+                            try {
+                                theText = selectedAnswer.openEndedAnswer ?: ""
+                            }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
+                        }
+                        likert.setText(question, theText)
+                        binding.overviewQuestionContainer.addView(likert)
+                    }
                 }
             }
         }

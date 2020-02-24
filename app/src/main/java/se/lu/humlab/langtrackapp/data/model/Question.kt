@@ -19,7 +19,6 @@ data class Question (
     var title: String = "",
     var text: String = "",
     var description: String = "",
-    var likertScale: MutableList<String>? = null,
     var fillBlanksChoises: MutableList<String>? = null,
     var multipleChoisesAnswers: MutableList<String>? = null,
     var singleMultipleAnswers: MutableList<String>? = null,
@@ -37,7 +36,6 @@ data class Question (
         parcel.createStringArrayList(),
         parcel.createStringArrayList(),
         parcel.createStringArrayList(),
-        parcel.createStringArrayList(),
         parcel.readParcelable(SkipLogic::class.java.classLoader)
     )
 
@@ -50,7 +48,6 @@ data class Question (
         parcel.writeString(title)
         parcel.writeString(text)
         parcel.writeString(description)
-        parcel.writeStringList(likertScale)
         parcel.writeStringList(fillBlanksChoises)
         parcel.writeStringList(multipleChoisesAnswers)
         parcel.writeStringList(singleMultipleAnswers)
