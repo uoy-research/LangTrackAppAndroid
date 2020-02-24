@@ -10,5 +10,5 @@ data class Answer(
     var fillBlankAnswer: Int? = null,
     var multipleChoiceAnswer: MutableList<Int>? = null,
     var singleMultipleAnswer: Int? = null,
-    var OpenEndedAnswer: String? = null
+    var openEndedAnswer: String? = null
     ): Parcelable

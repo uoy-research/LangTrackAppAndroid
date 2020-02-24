@@ -10,12 +10,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Answer
-import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.OverviewActivityBinding
-import se.lu.humlab.langtrackapp.screen.main.SurveyAdapter
 import se.lu.humlab.langtrackapp.screen.overview.overviewQuestionViews.*
-import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.FILL_IN_THE_BLANK
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.FOOTER_VIEW
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.HEADER_VIEW
@@ -81,11 +78,11 @@ class OverviewActivity : AppCompatActivity() {
                 when (question.type) {
                     LIKERT_SCALES -> {
                         val likert = OverviewLikertView(this)
-                        /*if (selectedAnswer != -1 &&
-                                selectedAnswer > 0 &&
-                                selectedAnswer <= 5){
-                            likert.setText(question, selectedAnswer)
-                        }*/
+                        if (selectedAnswer?.likertAnswer ?: -1 != -1 &&
+                                selectedAnswer?.likertAnswer ?: -1 >= 0 &&
+                                selectedAnswer?.likertAnswer ?: -1 < 5){
+                            likert.setText(question, selectedAnswer?.likertAnswer!!)
+                        }
                         binding.overviewQuestionContainer.addView(likert)
                     }
                     FILL_IN_THE_BLANK -> {
@@ -117,15 +114,24 @@ class OverviewActivity : AppCompatActivity() {
                         var theChoice: String? = null
                         if (selectedAnswer?.singleMultipleAnswer != null &&
                             question.singleMultipleAnswers != null) {
-                            theChoice =
-                                question.singleMultipleAnswers!!.get(selectedAnswer.singleMultipleAnswer!!)
+                            try {
+                                theChoice =
+                                    question.singleMultipleAnswers!!.get(selectedAnswer.singleMultipleAnswer!!)
+                            }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
+
                         }
                         likert.setText(question, theChoice)
                         binding.overviewQuestionContainer.addView(likert)
                     }
                     OPEN_ENDED_TEXT_RESPONSES -> {
                         val likert = OverviewOpenEndedView(this)
-                        likert.setText(question)
+                        var theText = ""
+                        if (selectedAnswer?.openEndedAnswer != null) {
+                            try {
+                                theText = selectedAnswer.openEndedAnswer ?: ""
+                            }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
+                        }
+                        likert.setText(question, theText)
                         binding.overviewQuestionContainer.addView(likert)
                     }
                 }

@@ -21,7 +21,7 @@ class Repository(val context: Context) {
     var currentUserLiveData = MutableLiveData<User>()
     var surveyList = mutableListOf<Survey>()
     var surveyListLiveData = MutableLiveData<MutableList<Survey>>()
-    private val theUrl = "https://www.dropbox.com/s/xvcwxip6xhd5l72/survey_json.txt?dl=1"
+    private val theUrl = "https://www.dropbox.com/s/xus0vmpgp4z85a8/survey_json.txt?dl=1"
 
 
     fun setCurrentUser(user: User){
@@ -218,7 +218,7 @@ class Repository(val context: Context) {
                 tempAnswer.singleMultipleAnswer = theObject.get("singleMultipleAnswer") as? Int
             }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
             try {
-                tempAnswer.OpenEndedAnswer = theObject.get("OpenEndedAnswer") as? String
+                tempAnswer.openEndedAnswer = theObject.get("OpenEndedAnswer") as? String
             }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
             tempListWithAnswers.add(tempAnswer)
         }

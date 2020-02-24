@@ -17,8 +17,8 @@ class OverviewOpenEndedView @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.overview_open_ended_view_layout, this, true)
     }
 
-    fun setText(question: Question){
-        overviewOpenEnteredText.text = "Texten som deltagaren skrivit in visas här."
+    fun setText(question: Question, text: String){
+        overviewOpenEnteredText.text = text
         overviewOpenTextTextView.text = question.text
     }
 }
