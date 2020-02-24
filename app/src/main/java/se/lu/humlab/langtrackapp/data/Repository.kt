@@ -83,7 +83,11 @@ class Repository(val context: Context) {
 
             try {
                 tempSurvey.date = item.get("date") as? Long ?: 0
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){
+                try {
+                    tempSurvey.date = (item.get("date") as? Int ?: 0).toLong()
+                }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }
 
             try {
                 tempSurvey.respondeddate = item.get("respondeddate") as? Long ?: 0

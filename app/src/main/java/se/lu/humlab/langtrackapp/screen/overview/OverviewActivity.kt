@@ -60,7 +60,7 @@ class OverviewActivity : AppCompatActivity() {
 
     private fun presentQuestionsInScrollview(){
         for (question in theSurvey!!.questions!!){
-            val selectedAnswer = theSurvey!!.answer?.get(question.index)
+            val selectedAnswer = theSurvey!!.answer?.get(question.index) ?: -1
 
             when (question.type){
                 LIKERT_SCALES -> {
@@ -70,7 +70,10 @@ class OverviewActivity : AppCompatActivity() {
                 }
                 FILL_IN_THE_BLANK -> {
                     val likert = OverviewFillInBlankView(this)
-                    likert.setText(question)
+                    val selectedWord = if(question.fillBlanksChoises?.size ?: 0 > selectedAnswer &&
+                            !question.fillBlanksChoises.isNullOrEmpty() &&
+                            selectedAnswer != -1) question.fillBlanksChoises?.get(selectedAnswer) else null
+                    likert.setText(question, selectedWord)
                     binding.overviewQuestionContainer.addView(likert)
                 }
                 MULTIPLE_CHOICE -> {
@@ -80,7 +83,9 @@ class OverviewActivity : AppCompatActivity() {
                 }
                 SINGLE_MULTIPLE_ANSWERS -> {
                     val likert = OverviewSingleMultipleView(this)
-                    val selectedChoice = if (selectedAnswer != null) {
+                    val selectedChoice = if (selectedAnswer != -1 &&
+                        !question.singleMultipleAnswers.isNullOrEmpty() &&
+                        question.singleMultipleAnswers?.size ?: 0 > selectedAnswer) {
                         question.singleMultipleAnswers?.get(selectedAnswer) ?: ""
                     }else{
                         null
