@@ -38,13 +38,13 @@ class SurveyItemViewHolder(theItemView: View,
     fun bind(item: Survey, pos: Int){
         this.item = item
         task.text = this.item.title
-        if (item.active){
+        /*if (item.active){//TODO: check if active
             activeIndicator.visibility = View.VISIBLE
             date.text = "53 minuter kvar"//TODO: calculate time left
         }else{
             activeIndicator.visibility = View.GONE
             date.text = "Inaktiv, ${if (item.answer != null) "besvarad" else "obesvarad"}"
-        }
+        }*/
     }
 
     fun getItem(): Survey {

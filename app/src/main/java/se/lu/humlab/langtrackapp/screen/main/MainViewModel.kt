@@ -24,11 +24,11 @@ class MainViewModel(repo: Repository): ViewModel() {
             val activelist = mutableListOf<Survey>()
             val inactivelist = mutableListOf<Survey>()
             for (survey in it){
-                if (survey.active){
+                /*if (survey.active){//TODO: check if active
                     activelist.add(survey)
                 }else{
                     inactivelist.add(survey)
-                }
+                }*/
             }
             val finallist = mutableListOf<Survey>()
             finallist.addAll(activelist)
@@ -56,9 +56,5 @@ class MainViewModel(repo: Repository): ViewModel() {
 
     fun getAssignments(){
         mRepository.getAssignments()
-    }
-
-    fun getSurveys(){
-        mRepository.getSurveysFromDropbox()
     }
 }

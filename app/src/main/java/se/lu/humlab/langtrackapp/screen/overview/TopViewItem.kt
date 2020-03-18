@@ -20,8 +20,8 @@ class TopViewItem @JvmOverloads constructor(
 
     fun setText(survey: Survey){
         topViewStatusText.text = "Status"
-        topViewAnsweredDateText.text = if (survey.answer != null) "Besvarad ${getDate(survey.respondeddate)}" else "Obesvarad"
-        topViewSentDateText.text = getDate(survey.date)
+        //topViewAnsweredDateText.text = if (survey.answer != null) "Besvarad ${getDate(survey.respondeddate)}" else "Obesvarad"
+        //topViewSentDateText.text = getDate(survey.date)//TODO: check date
         if (survey.answer != null){
             overviewStatusImage.setImageResource(R.drawable.lta_icon_ground_light)
         }else {

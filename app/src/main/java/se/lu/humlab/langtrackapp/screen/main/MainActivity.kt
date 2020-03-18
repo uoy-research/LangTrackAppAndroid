@@ -76,7 +76,7 @@ class MainActivity : AppCompatActivity() {
         mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Survey) {
-                if (item.answer != null || !item.active){
+                if (item.answer != null){//TODO: check expiary
                     OverviewActivity.start(this@MainActivity, item)
                 }else{
                     SurveyContainerActivity.start(this@MainActivity, item)
@@ -117,7 +117,6 @@ class MainActivity : AppCompatActivity() {
             //Get surveys
             //test
             viewModel.getAssignments()
-            viewModel.getSurveys()
             val userEmail = mAuth.currentUser!!.email
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))
