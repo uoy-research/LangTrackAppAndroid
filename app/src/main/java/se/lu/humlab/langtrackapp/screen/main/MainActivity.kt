@@ -116,10 +116,18 @@ class MainActivity : AppCompatActivity() {
         }else{
             //Get surveys
             //test
+            viewModel.getAssignments()
             viewModel.getSurveys()
             val userEmail = mAuth.currentUser!!.email
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))
+            mAuth.currentUser!!.getIdToken(true).addOnSuccessListener{
+                val idToken = it.token
+                if (!idToken.isNullOrBlank()){
+                    viewModel.setIdToken(idToken)
+                    println("idToken: $idToken")
+                }
+            }
         }
     }
 

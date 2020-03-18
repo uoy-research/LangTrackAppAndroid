@@ -99,11 +99,13 @@ class OverviewActivity : AppCompatActivity() {
                     MULTIPLE_CHOICE -> {
                         val likert = OverviewMultipleChoiceView(this)
                         val templist = mutableListOf<String>()
-                        for (wordIndex in selectedAnswer!!.multipleChoiceAnswer!!){
-                            try {
-                                templist.add(question.multipleChoisesAnswers?.get(wordIndex)!!)
-                            }catch (e: Exception){
-                                println("presentQuestionsInScrollview, e: ${e.localizedMessage}")
+                        if (selectedAnswer?.multipleChoiceAnswer != null){
+                            for (wordIndex in selectedAnswer!!.multipleChoiceAnswer!!) {
+                                try {
+                                    templist.add(question.multipleChoisesAnswers?.get(wordIndex)!!)
+                                } catch (e: Exception) {
+                                    println("presentQuestionsInScrollview, e: ${e.localizedMessage}")
+                                }
                             }
                         }
                         likert.setText(question, templist)

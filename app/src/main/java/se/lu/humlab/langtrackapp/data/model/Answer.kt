@@ -5,6 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Answer(
+    var type: String = "",
     var index: Int = 0,
     var likertAnswer: Int? = null,
     var fillBlankAnswer: Int? = null,

@@ -8,20 +8,33 @@ package se.lu.humlab.langtrackapp.data
 * */
 
 import android.content.Context
+import android.os.Parcelable
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
+import kotlinx.android.parcel.Parcelize
 import org.json.JSONArray
 import org.json.JSONObject
 import se.lu.humlab.langtrackapp.data.model.*
 import java.lang.Exception
 
+
 class Repository(val context: Context) {
+
+
+
+    var surveyList = mutableListOf<Survey>()
+    var surveyListLiveData = MutableLiveData<MutableList<Survey>>()
 
     private var currentUser = User()
     var currentUserLiveData = MutableLiveData<User>()
-    var surveyList = mutableListOf<Survey>()
-    var surveyListLiveData = MutableLiveData<MutableList<Survey>>()
-    private val theUrl = "https://www.dropbox.com/s/xus0vmpgp4z85a8/survey_json.txt?dl=1"
+    var selectedAssignment: Assignment? = null
+    var idToken = ""
+    var assignmentList = mutableListOf<Assignment>()
+    var assignmentListLiveData = MutableLiveData<MutableList<Assignment>>()
+    private val dropboxUrl = "https://www.dropbox.com/s/n2l1vssqm2pfaqp/survey_json.txt?dl=1"
+    private val mockUrl = "https://e3777de6-509b-46a9-a996-ea2708cc0192.mock.pstmn.io/"
 
 
     fun setCurrentUser(user: User){
@@ -32,8 +45,32 @@ class Repository(val context: Context) {
         return currentUser
     }
 
+    fun getAssignments(){
+        val assigmnentUrl = "${mockUrl}user/u123/assignments"
+        Fuel.get(assigmnentUrl)
+            .header(mapOf("token" to idToken))
+            .response { request, response, result ->
+                println(request)
+                println(response)
+                val (bytes, error) = result
+                if (error == null) {
+                    if (bytes != null) {
+                        val gson = Gson()
+                        val itemType = object : TypeToken<List<Assignment>>() {}.type
+                        val itemList = gson.fromJson<List<Assignment>>(String(bytes), itemType)
+
+                        println("")
+                    }
+                }else{
+                    println("Repository getAssignmens ERROR: ${error.localizedMessage}")
+                }
+            }
+    }
+
+    //***************'gammalt!**************
+
     fun getSurveysFromDropbox(){
-        Fuel.get(theUrl)
+        Fuel.get(dropboxUrl)
             .header(mapOf("token" to "nil"))// skicka med firebase token
             .response { request, response, result ->
                 println(request)
@@ -58,6 +95,21 @@ class Repository(val context: Context) {
         return setOrder(setSurveyObjectsManually(jsonString))
     }
 
+
+    private fun tryGetBoolean(id: String, item: JSONObject, aDefault: Boolean = false
+    ) : Boolean {
+
+        var result: Boolean = aDefault
+
+        try {
+            result = item.get(id) as? Boolean ?: aDefault
+        } catch (e: Exception) {
+            println("e: ${e.localizedMessage}")
+        }
+
+        return result//optBoolean
+    }
+
     private fun setSurveyObjectsManually(json: String): List<Survey>{
 
         val theListWithSurveys = mutableListOf<Survey>()
@@ -67,9 +119,7 @@ class Repository(val context: Context) {
             val item = jsonObj.getJSONObject(i)
             val tempSurvey = Survey()
 
-            try {
-                tempSurvey.active = item.get("active") as? Boolean ?: false
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            tempSurvey.active = tryGetBoolean("active", item)
 
             try {
                 tempSurvey.title = item.get("title") as? String ?: ""
@@ -89,7 +139,9 @@ class Repository(val context: Context) {
 
             try {
                 tempSurvey.respondeddate = item.get("respondeddate") as? Long ?: 0
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ try {
+                tempSurvey.respondeddate = (item.get("respondeddate") as? Int ?: 0).toLong()
+            }catch (e: Exception){ println("e: ${e.localizedMessage}")}}
 
             try {
                 tempSurvey.expiry = item.get("expiry") as? Long ?: 0

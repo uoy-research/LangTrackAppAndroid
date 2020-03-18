@@ -38,6 +38,9 @@ class MainViewModel(repo: Repository): ViewModel() {
         }
     }
 
+    fun setIdToken(token: String){
+        mRepository.idToken = token
+    }
 
     fun getUserLiveData(): MutableLiveData<User> {
         return mRepository.currentUserLiveData
@@ -49,6 +52,10 @@ class MainViewModel(repo: Repository): ViewModel() {
 
     fun getCurrentUser() : User{
         return mRepository.getCurrentUser()
+    }
+
+    fun getAssignments(){
+        mRepository.getAssignments()
     }
 
     fun getSurveys(){
