@@ -11,6 +11,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Survey
+import se.lu.humlab.langtrackapp.interfaces.OnExpiredListener
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
 import se.lu.humlab.langtrackapp.util.toDate
 import java.util.*
@@ -31,6 +32,13 @@ class SurveyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     }
 
+    override fun onViewRecycled(holder: RecyclerView.ViewHolder) {
+        super.onViewRecycled(holder)
+        if (holder is ActiveViewHolder){
+            holder.removeCallbacks()
+        }
+    }
+
     override fun getItemCount(): Int {
         return items.size
     }
@@ -41,7 +49,12 @@ class SurveyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-            is ActiveViewHolder -> holder.bind(items[position], position)
+            is ActiveViewHolder -> holder.bind(items[position], position, object: OnExpiredListener{
+                override fun assignmentExpired() {
+                    notifyDataSetChanged()
+                }
+
+            })
             is SurveyItemViewHolder -> holder.bind(items[position], position)
         }
 

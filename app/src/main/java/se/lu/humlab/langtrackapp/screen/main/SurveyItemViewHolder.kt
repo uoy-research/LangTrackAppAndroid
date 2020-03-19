@@ -16,13 +16,9 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Assignment
-import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
 import se.lu.humlab.langtrackapp.util.formatToReadable
-import se.lu.humlab.langtrackapp.util.getDate
 import se.lu.humlab.langtrackapp.util.toDate
-import java.text.SimpleDateFormat
-import java.util.*
 
 class SurveyItemViewHolder(theItemView: View,
                            onRowClickedListener: OnSurveyRowClickedListener
@@ -41,27 +37,14 @@ class SurveyItemViewHolder(theItemView: View,
     fun bind(item: Assignment, pos: Int){
         this.item = item
         task.text = this.item.survey.title
-        if (item.isActive()){
-            activeIndicator.visibility = View.VISIBLE
-            date.text = "53 minuter kvar"//TODO: calculate time left
-        }else{
-            activeIndicator.visibility = View.GONE
-            date.text = "Inaktiv, ${if (item.dataset != null) "besvarad" else "obesvarad"}"
-        }
+        activeIndicator.visibility = View.GONE
+        date.text = "Inaktiv, ${if (item.dataset != null) "besvarad" else "obesvarad"}"
         date.text = item.publishAt.toDate()?.formatToReadable() ?: "noDate"
     }
 
     fun getItem(): Assignment {
         return item
     }
-
-    /*private fun getDate(milli: Long): String{
-        val formatter = SimpleDateFormat("dd MMMM yyyy    HH:mm",
-            Locale("sv", "SE"))
-        val calendar = Calendar.getInstance();
-        calendar.timeInMillis = milli * 1000//TODO: temp, should be in milli
-        return formatter.format(calendar.time)
-    }*/
 
 
     companion object {

@@ -1,5 +1,7 @@
 package se.lu.humlab.langtrackapp.screen.main
 
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,9 +11,10 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Assignment
+import se.lu.humlab.langtrackapp.interfaces.OnExpiredListener
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
-import se.lu.humlab.langtrackapp.util.formatToReadable
 import se.lu.humlab.langtrackapp.util.toDate
+import java.util.*
 
 class ActiveViewHolder(theItemView: View,
                        onRowClickedListener: OnSurveyRowClickedListener
@@ -22,35 +25,84 @@ class ActiveViewHolder(theItemView: View,
     private var activeIndicator: ImageView = itemView.findViewById(R.id.activeIndicator)
     private var cellLayout: ConstraintLayout = itemView.findViewById(R.id.surveyCellLayout)
     private lateinit var item: Assignment
+    lateinit var mainHandler: Handler
+    lateinit var expiryListener: OnExpiredListener
+
+
+    private val repeatUpdatingText = object : Runnable {
+        override fun run() {
+            setRemainingTime()
+            println("running repeatUpdatingText in object ${item.survey.title}")
+            mainHandler.postDelayed(this, 1000 * 60)
+        }
+    }
 
     init {
         theItemView.setOnClickListener { onRowClickedListener.rowClicked(item) }
+
+        mainHandler = Handler(Looper.getMainLooper())
+        mainHandler.post(repeatUpdatingText)
+
+        /*countDownHandler.postDelayed(object : Runnable {
+            override fun run() {
+                setRemainingTime()
+                println("running countDownHandler in object ${item.survey.name}")
+                countDownHandler.postDelayed(this, 1000 * 60)//1 min delay
+            }
+        }, 0)*/
     }
 
-    fun bind(item: Assignment, pos: Int){
+
+    fun bind(item: Assignment, pos: Int, listener: OnExpiredListener){
+        this.expiryListener = listener
         this.item = item
-        task.text = "Aktiv!!"
-        if (item.isActive()){
-            activeIndicator.visibility = View.VISIBLE
-            date.text = "53 minuter kvar"//TODO: calculate time left
-        }else{
-            activeIndicator.visibility = View.GONE
-            date.text = "Inaktiv, ${if (item.dataset != null) "besvarad" else "obesvarad"}"
+        task.text = "Enkät att besvara"
+        setRemainingTime()
+        activeIndicator.visibility = View.VISIBLE
+    }
+
+    fun setRemainingTime(){
+        val endTimeInSec = (item.expireAt.toDate()?.time ?: 0) / 1000
+        val now = Date().time / 1000
+        if (endTimeInSec != 0L){
+            val diff = endTimeInSec - now
+            if (diff > 0){
+                val minutes = ((diff / 60) % 60).toInt()
+                val hours = (diff / 3600).toInt()
+                if (hours == 0) {
+                    if(minutes < 10) {
+                        date.text = "Tid kvar: %1d minuter".format(minutes)
+                    }else {
+                        date.text = "Tid kvar: %2d minuter".format(minutes)
+                    }
+                }else {
+                    var hourString = "timme"
+                    if (hours > 1){
+                        hourString = "timmar"
+                    }
+                    if(minutes < 10) {
+                        date.text = "Tid kvar: %2d %s och %1d minuter".format(hours,hourString, minutes)
+                    }else {
+                        date.text = "Tid kvar: %2d %s och %2d minuter".format(hours,hourString, minutes)
+                    }
+                }
+            }else{
+                removeCallbacks()
+                expiryListener.assignmentExpired()
+            }
+        }else {
+            date.text = ""
         }
-        date.text = item.publishAt.toDate()?.formatToReadable() ?: "noDate"
+    }
+
+    fun removeCallbacks(){
+        mainHandler.removeCallbacks(repeatUpdatingText)
+        mainHandler.removeCallbacksAndMessages(null)
     }
 
     fun getItem(): Assignment {
         return item
     }
-
-    /*private fun getDate(milli: Long): String{
-        val formatter = SimpleDateFormat("dd MMMM yyyy    HH:mm",
-            Locale("sv", "SE"))
-        val calendar = Calendar.getInstance();
-        calendar.timeInMillis = milli * 1000//TODO: temp, should be in milli
-        return formatter.format(calendar.time)
-    }*/
 
 
     companion object {
