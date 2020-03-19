@@ -32,6 +32,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.data.model.User
 import se.lu.humlab.langtrackapp.databinding.ActivityMainBinding
@@ -75,8 +76,8 @@ class MainActivity : AppCompatActivity() {
 
         mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
-            override fun rowClicked(item: Survey) {
-                if (item.answer != null){//TODO: check expiary
+            override fun rowClicked(item: Assignment) {
+                if (item.dataset != null){//TODO: check expiary
                     OverviewActivity.start(this@MainActivity, item)
                 }else{
                     SurveyContainerActivity.start(this@MainActivity, item)
@@ -101,12 +102,14 @@ class MainActivity : AppCompatActivity() {
             mBind.currentUser = it
         }
 
-        adapter.setTasks(viewModel.surveyList)
+        adapter.setAssignments(viewModel.assignmentList)
 
-        viewModel.surveyListLiveData.observeForever {
-            adapter.setTasks(it)
+        viewModel.assignmentListLiveData.observeForever {
+            adapter.setAssignments(it)
         }
     }
+
+
 
     override fun onStart() {
         super.onStart()
@@ -114,8 +117,6 @@ class MainActivity : AppCompatActivity() {
         if (mAuth.currentUser == null){
             LoginActivity.start(this)
         }else{
-            //Get surveys
-            //test
             viewModel.getAssignments()
             val userEmail = mAuth.currentUser!!.email
             val userName = userEmail?.substringBefore('@')

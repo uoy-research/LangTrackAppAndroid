@@ -56,7 +56,8 @@ class Repository(val context: Context) {
                         val itemList = gson.fromJson<List<Assignment>>(String(bytes), itemType)*/
 
                         //TODO: sort and set livedata...
-                        val theAttachmentsList = getAssignmentsFromJson(String(bytes))
+                        assignmentList = getAssignmentsFromJson(String(bytes)).toMutableList()
+                        assignmentListLiveData.value = assignmentList
                     }
                 }else{
                     println("Repository getAssignmens ERROR: ${error.localizedMessage}")
@@ -525,7 +526,7 @@ class Repository(val context: Context) {
         return theListWithSurveys
     }*/
 
-    private fun getAnswer(jObj: JSONObject): List<Answer>{
+    /*private fun getAnswer(jObj: JSONObject): List<Answer>{
 
         val tempListWithAnswers = mutableListOf<Answer>()
         for (a in jObj.keys()) {
@@ -558,7 +559,7 @@ class Repository(val context: Context) {
         }
 
         return tempListWithAnswers
-    }
+    }*/
 
 
 

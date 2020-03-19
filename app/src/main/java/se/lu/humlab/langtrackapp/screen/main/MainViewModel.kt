@@ -10,6 +10,7 @@ package se.lu.humlab.langtrackapp.screen.main
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import se.lu.humlab.langtrackapp.data.Repository
+import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.data.model.User
 
@@ -18,9 +19,15 @@ class MainViewModel(repo: Repository): ViewModel() {
     var mRepository: Repository = repo
     var surveyList = mutableListOf<Survey>()
     var surveyListLiveData = MutableLiveData<MutableList<Survey>>()
+    var assignmentList = mutableListOf<Assignment>()
+    var assignmentListLiveData = MutableLiveData<MutableList<Assignment>>()
 
     init {
-        mRepository.surveyListLiveData.observeForever {
+        mRepository.assignmentListLiveData.observeForever {
+            assignmentList = it
+            assignmentListLiveData.value = it
+        }
+        /*mRepository.surveyListLiveData.observeForever {
             val activelist = mutableListOf<Survey>()
             val inactivelist = mutableListOf<Survey>()
             for (survey in it){
@@ -35,7 +42,7 @@ class MainViewModel(repo: Repository): ViewModel() {
             finallist.addAll(inactivelist)
             surveyList = finallist
             surveyListLiveData.value = surveyList
-        }
+        }*/
     }
 
     fun setIdToken(token: String){

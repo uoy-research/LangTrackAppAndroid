@@ -1,12 +1,5 @@
 package se.lu.humlab.langtrackapp.screen.main
 
-/*
-* Stephan Björck
-* Humanistlaboratoriet
-* Lunds Universitet
-* stephan.bjorck@humlab.lu.se
-* */
-
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,16 +9,12 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Assignment
-import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
 import se.lu.humlab.langtrackapp.util.formatToReadable
-import se.lu.humlab.langtrackapp.util.getDate
 import se.lu.humlab.langtrackapp.util.toDate
-import java.text.SimpleDateFormat
-import java.util.*
 
-class SurveyItemViewHolder(theItemView: View,
-                           onRowClickedListener: OnSurveyRowClickedListener
+class ActiveViewHolder(theItemView: View,
+                       onRowClickedListener: OnSurveyRowClickedListener
 ): RecyclerView.ViewHolder(theItemView) {
 
     private var task: TextView = itemView.findViewById(R.id.surveyRecyclerTitleTextView)
@@ -40,7 +29,7 @@ class SurveyItemViewHolder(theItemView: View,
 
     fun bind(item: Assignment, pos: Int){
         this.item = item
-        task.text = this.item.survey.title
+        task.text = "Aktiv!!"
         if (item.isActive()){
             activeIndicator.visibility = View.VISIBLE
             date.text = "53 minuter kvar"//TODO: calculate time left
@@ -66,8 +55,9 @@ class SurveyItemViewHolder(theItemView: View,
 
     companion object {
         fun newInstance(parent: ViewGroup,
-                        onRowClickedListener: OnSurveyRowClickedListener):SurveyItemViewHolder{
-            return SurveyItemViewHolder(
+                        onRowClickedListener: OnSurveyRowClickedListener
+        ):ActiveViewHolder{
+            return ActiveViewHolder(
                 LayoutInflater.from(parent.context).inflate(
                     R.layout.recycle_surveyitem_row,
                     parent,

@@ -37,3 +37,16 @@ fun dpToPx(dp: Int, context: Context): Int{
     val density = context.resources.displayMetrics.density
     return Math.round(dp.toFloat() * density)
 }
+
+//inString: 2020-03-16T22:15:25.820Z
+fun String.toDate(dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss", timeZone: TimeZone = TimeZone.getTimeZone("UTC")): Date? {
+    val parser = SimpleDateFormat(dateFormat, Locale.getDefault())
+    parser.timeZone = timeZone
+    return parser.parse(this.substringBefore('.'))
+}
+
+fun Date.formatToReadable(dateFormat: String = "yyyy-MM-dd HH:mm", timeZone: TimeZone = TimeZone.getDefault()): String {
+    val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
+    formatter.timeZone = timeZone
+    return formatter.format(this)
+}

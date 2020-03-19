@@ -3,6 +3,8 @@ package se.lu.humlab.langtrackapp.data.model
 import android.os.Parcelable
 import com.google.gson.annotations.SerializedName
 import kotlinx.android.parcel.Parcelize
+import se.lu.humlab.langtrackapp.util.toDate
+import java.util.*
 
 @Parcelize
 data class Assignment(
@@ -14,7 +16,19 @@ data class Assignment(
     var publishAt: String,
     var expireAt: String,
     var id: String
-) : Parcelable
+) : Parcelable{
+
+    fun isActive(): Boolean{
+
+        val assignmentDate = this.expireAt.toDate() ?: Date(Date().time + 1000)
+        var isActive: Boolean
+        isActive = this.dataset == null
+        if (isActive){
+            isActive = assignmentDate.time > Date().time
+        }
+        return isActive
+    }
+}
 
 /*
 * var survey = Survey()
