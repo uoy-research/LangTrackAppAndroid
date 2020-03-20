@@ -6,8 +6,8 @@ import android.view.LayoutInflater
 import android.widget.LinearLayout
 import kotlinx.android.synthetic.main.overview_top_view_layout.view.*
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Survey
-import se.lu.humlab.langtrackapp.util.getDate
 
 class TopViewItem @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
@@ -18,11 +18,11 @@ class TopViewItem @JvmOverloads constructor(
         LayoutInflater.from(context).inflate(R.layout.overview_top_view_layout, this, true)
     }
 
-    fun setText(survey: Survey){
+    fun setText(assignment: Assignment){
         topViewStatusText.text = "Status"
-        topViewAnsweredDateText.text = if (survey.answer != null) "Besvarad ${getDate(survey.respondeddate)}" else "Obesvarad"
-        topViewSentDateText.text = getDate(survey.date)
-        if (survey.answer != null){
+        //topViewAnsweredDateText.text = if (survey.answer != null) "Besvarad ${getDate(survey.respondeddate)}" else "Obesvarad"
+        //topViewSentDateText.text = getDate(survey.date)//TODO: check date
+        if (assignment.survey.answer != null){
             overviewStatusImage.setImageResource(R.drawable.lta_icon_ground_light)
         }else {
             overviewStatusImage.setImageResource(R.drawable.lta_icon_unanswered_light)

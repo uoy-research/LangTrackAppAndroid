@@ -10,6 +10,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Answer
+import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.OverviewActivityBinding
 import se.lu.humlab.langtrackapp.screen.overview.overviewQuestionViews.*
@@ -27,7 +28,7 @@ class OverviewActivity : AppCompatActivity() {
     lateinit var binding: OverviewActivityBinding
     private lateinit var viewModel :OverviewViewModel
     var topViewIsShowing = false
-    var theSurvey: Survey? = null
+    var theAssignment: Assignment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,8 +38,8 @@ class OverviewActivity : AppCompatActivity() {
         viewModel = ViewModelProviders.of(this,
             OverviewViewModelFactory(this)
         ).get(OverviewViewModel::class.java)
-        theSurvey = intent.getParcelableExtra(SURVEY)
-        binding.overviewText.text = theSurvey?.title ?: "hej"
+        theAssignment = intent.getParcelableExtra(ASSIGNMENT)
+        binding.overviewText.text = theAssignment?.survey?.title ?: "hej"
 
         binding.overviewText.setOnClickListener {
             //changeSizeOfTopView()
@@ -54,24 +55,24 @@ class OverviewActivity : AppCompatActivity() {
         binding.dimBackgroundView.alpha = 0F
         binding.dimBackgroundView.isClickable = false
 
-        if (theSurvey != null) {
+        if (theAssignment != null) {
             presentQuestionsInScrollview()
         }
     }
 
     private fun presentQuestionsInScrollview(){
-        if (!theSurvey!!.questions.isNullOrEmpty()) {
-            val questionsWithoutHeaderAndFooter = theSurvey!!.questions!!
+        if (!theAssignment!!.survey.questions.isNullOrEmpty()) {
+            val questionsWithoutHeaderAndFooter = theAssignment!!.survey.questions!!
                 .filter { it.type != HEADER_VIEW &&
                     it.type != FOOTER_VIEW
             }
             for (question in questionsWithoutHeaderAndFooter) {
 
-                val selectedAnswerIndex = if(!theSurvey!!.answer.isNullOrEmpty())
-                    theSurvey!!.answer!!.indexOfFirst { it.index == question.index } else null
+                val selectedAnswerIndex = if(!theAssignment!!.dataset?.answers.isNullOrEmpty())
+                    theAssignment!!.dataset!!.answers.indexOfFirst { it.index == question.index } else null
                 var selectedAnswer: Answer? = null
                 try {
-                    selectedAnswer = theSurvey!!.answer!![selectedAnswerIndex!!]
+                    selectedAnswer = theAssignment!!.dataset!!.answers[selectedAnswerIndex!!]
                 } catch (e: Exception){
                     println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
 
@@ -99,11 +100,13 @@ class OverviewActivity : AppCompatActivity() {
                     MULTIPLE_CHOICE -> {
                         val likert = OverviewMultipleChoiceView(this)
                         val templist = mutableListOf<String>()
-                        for (wordIndex in selectedAnswer!!.multipleChoiceAnswer!!){
-                            try {
-                                templist.add(question.multipleChoisesAnswers?.get(wordIndex)!!)
-                            }catch (e: Exception){
-                                println("presentQuestionsInScrollview, e: ${e.localizedMessage}")
+                        if (selectedAnswer?.multipleChoiceAnswer != null){
+                            for (wordIndex in selectedAnswer.multipleChoiceAnswer!!) {
+                                try {
+                                    templist.add(question.multipleChoisesAnswers?.get(wordIndex)!!)
+                                } catch (e: Exception) {
+                                    println("presentQuestionsInScrollview, e: ${e.localizedMessage}")
+                                }
                             }
                         }
                         likert.setText(question, templist)
@@ -148,8 +151,8 @@ class OverviewActivity : AppCompatActivity() {
 
     private fun addTextToTopView() {
         val topView1 = TopViewItem(this)
-        if (theSurvey != null) {
-            topView1.setText(theSurvey!!)
+        if (theAssignment != null) {
+            topView1.setText(theAssignment!!)
         }
         binding.topView.addView(topView1)
         dimBackground()
@@ -173,11 +176,11 @@ class OverviewActivity : AppCompatActivity() {
 
 
     companion object {
-        const val SURVEY = "overviewsurvey"
+        const val ASSIGNMENT = "overviewsurvey"
 
-        fun start(context: Context, survey: Survey) {
+        fun start(context: Context, assignment: Assignment) {
             context.startActivity(Intent(context, OverviewActivity::class.java).apply {
-                this.putExtra(SURVEY, survey)
+                this.putExtra(ASSIGNMENT, assignment)
             })
         }
     }

@@ -15,6 +15,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.survey_container_activity.*
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.SurveyContainerActivityBinding
@@ -48,7 +49,7 @@ class SurveyContainerActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val theSurvey = intent.getParcelableExtra<Survey>(SURVEY)
+        val theSurvey = intent.getParcelableExtra<Assignment>(ASSIGNMENT)
 
         mBind = DataBindingUtil.setContentView(this, R.layout.survey_container_activity)
         mBind.lifecycleOwner = this
@@ -75,8 +76,8 @@ class SurveyContainerActivity : AppCompatActivity(),
         }
     }
 
-    private fun setSurvey(survey: Survey){
-        val temp = survey.questions?.toMutableList()
+    private fun setSurvey(assignment: Assignment){
+        val temp = assignment.survey.questions?.toMutableList()
         if (!temp.isNullOrEmpty()) {
             questionList = temp
             showQuestion(questionList.first().index)
@@ -155,18 +156,18 @@ class SurveyContainerActivity : AppCompatActivity(),
     }
 
     companion object {
-        const val SURVEY = "survey"
+        const val ASSIGNMENT = "assignment"
         const val HEADER_VIEW = "header"
         const val LIKERT_SCALES = "likert"
         const val FILL_IN_THE_BLANK = "blanks"
-        const val MULTIPLE_CHOICE = "multiple"
+        const val MULTIPLE_CHOICE = "multi"
         const val SINGLE_MULTIPLE_ANSWERS = "single"
         const val OPEN_ENDED_TEXT_RESPONSES = "open"
         const val FOOTER_VIEW = "footer"
 
-        fun start(context: Context, survey: Survey){
+        fun start(context: Context, assignment: Assignment){
             context.startActivity(Intent(context, SurveyContainerActivity::class.java).apply {
-                this.putExtra(SURVEY,survey)
+                this.putExtra(ASSIGNMENT,assignment)
             })
         }
     }

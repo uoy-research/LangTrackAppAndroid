@@ -7,8 +7,8 @@ package se.lu.humlab.langtrackapp.interfaces
 * stephan.bjorck@humlab.lu.se
 * */
 
-import se.lu.humlab.langtrackapp.data.model.Survey
+import se.lu.humlab.langtrackapp.data.model.Assignment
 
 interface OnSurveyRowClickedListener {
-    fun rowClicked(item: Survey)
+    fun rowClicked(item: Assignment)
 }
