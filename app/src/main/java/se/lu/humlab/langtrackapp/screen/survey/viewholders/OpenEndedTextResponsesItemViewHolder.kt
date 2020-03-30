@@ -1,18 +1,6 @@
 package se.lu.humlab.langtrackapp.screen.survey.viewholders
 
-import android.app.Activity
-import android.content.Context
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.view.inputmethod.InputMethodManager
-import android.widget.Button
-import android.widget.EditText
-import androidx.recyclerview.widget.RecyclerView
-import se.lu.humlab.langtrackapp.R
-import se.lu.humlab.langtrackapp.data.model.Question
-import se.lu.humlab.langtrackapp.interfaces.OnOpenEndedTextItemClickedListener
-
+/*
 class OpenEndedTextResponsesItemViewHolder(theItemView: View, listener: OnOpenEndedTextItemClickedListener
 ): RecyclerView.ViewHolder(theItemView) {
 
@@ -51,4 +39,4 @@ class OpenEndedTextResponsesItemViewHolder(theItemView: View, listener: OnOpenEn
             )
         }
     }
-}
+}*/

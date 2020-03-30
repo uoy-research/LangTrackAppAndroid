@@ -1,14 +1,6 @@
 package se.lu.humlab.langtrackapp.screen.survey.viewholders
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import androidx.recyclerview.widget.RecyclerView
-import se.lu.humlab.langtrackapp.R
-import se.lu.humlab.langtrackapp.data.model.Question
-import se.lu.humlab.langtrackapp.interfaces.OnFillBlanksItemClickedListener
-
+/*
 class FillBlanksItemViewHolder(theItemView: View, listener: OnFillBlanksItemClickedListener
 ): RecyclerView.ViewHolder(theItemView) {
 
@@ -39,4 +31,4 @@ class FillBlanksItemViewHolder(theItemView: View, listener: OnFillBlanksItemClic
             )
         }
     }
-}
+}*/

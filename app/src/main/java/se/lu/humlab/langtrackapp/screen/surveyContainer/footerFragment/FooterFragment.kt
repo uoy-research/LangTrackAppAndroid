@@ -1,5 +1,12 @@
 package se.lu.humlab.langtrackapp.screen.surveyContainer.footerFragment
 
+/*
+* Stephan Björck
+* Humanistlaboratoriet
+* Lunds Universitet
+* stephan.bjorck@humlab.lu.se
+* */
+
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -11,11 +18,11 @@ import kotlinx.android.synthetic.main.footer_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.FooterFragmentBinding
-import se.lu.humlab.langtrackapp.interfaces.OnFooterInteractionListener
+import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
 
 class FooterFragment : Fragment(){
 
-    private var listener: OnFooterInteractionListener? = null
+    private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: FooterFragmentBinding
     lateinit var question: Question
 
@@ -30,37 +37,37 @@ class FooterFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.footerNextButton.setOnClickListener {
-            listener?.footerGoToNextItem(currentQuestion = question)
+            listener?.sendInSurvey(currentQuestion = question)
         }
         v.footerBackButton.setOnClickListener {
-            listener?.footerSendInSurvey(currentQuestion = question)
+            listener?.goToPrevoiusItem(currentQuestion = question)
         }
         return v
     }
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        if (context is OnFooterInteractionListener) {
+        if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
                 //load survey
-                setQuestion()
+                setText()
             }
         }else {
             throw RuntimeException(context.toString() + " must implement OnLikertScaleInteraktionListener")
         }
     }
 
-    fun setQuestion(){
+    fun setText(){
         if (::binding.isInitialized) {
-            binding.footerTextView.text = "Här kommer texten:\n\n${question.title}\n${question.text}"
+            binding.footerTextView.text = "${question.title}\n\n${question.text}"
         }
     }
 
     override fun onResume() {
         super.onResume()
         //update question
-        setQuestion()
+        setText()
     }
 
     override fun onDetach() {

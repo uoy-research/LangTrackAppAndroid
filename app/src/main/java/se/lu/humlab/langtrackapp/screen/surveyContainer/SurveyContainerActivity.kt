@@ -1,16 +1,26 @@
 package se.lu.humlab.langtrackapp.screen.surveyContainer
 
+/*
+* Stephan Björck
+* Humanistlaboratoriet
+* Lunds Universitet
+* stephan.bjorck@humlab.lu.se
+* */
+
 import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import kotlinx.android.synthetic.main.survey_container_activity.*
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Question
+import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.SurveyContainerActivityBinding
 import se.lu.humlab.langtrackapp.interfaces.*
-import se.lu.humlab.langtrackapp.screen.survey.SurveyAdapter
+import se.lu.humlab.langtrackapp.popup.PopupAlert
 import se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment.FillInTheBlankFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.footerFragment.FooterFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.header.HeaderFragment
@@ -21,28 +31,25 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.singleMultipleAnswersFra
 import se.lu.humlab.langtrackapp.util.loadFragment
 
 class SurveyContainerActivity : AppCompatActivity(),
-    OnHeaderInteractionListener,
-    OnLikertScaleInteraktionListener,
-    OnFillInBlankInteractionListener,
-    OnMultipleChoiceInteractionListener,
-    OnSingleMultipleInteractionListener,
-    OnOpenEndedInteractionListener,
-    OnFooterInteractionListener{
+    OnQuestionInteractionListener{
 
 
     private lateinit var mBind : SurveyContainerActivityBinding
     private lateinit var viewModel : SurveyContainerViewModel
-    var questionList = mutableListOf<Question>()
-    lateinit var headerFragment: HeaderFragment
-    lateinit var likertScaleFragment: LikertScaleFragment
-    lateinit var fillInTheBlankFragment: FillInTheBlankFragment
-    lateinit var multipleChoiceFragment: MultipleChoiceFragment
-    lateinit var singleMultipleAnswersFragment: SingleMultipleAnswersFragment
-    lateinit var openEndedTextResponsesFragment: OpenEndedTextResponsesFragment
-    lateinit var footerFragment: FooterFragment
+    private var questionList = mutableListOf<Question>()
+    private lateinit var selectedQuestion: Question
+    private lateinit var headerFragment: HeaderFragment
+    private lateinit var likertScaleFragment: LikertScaleFragment
+    private lateinit var fillInTheBlankFragment: FillInTheBlankFragment
+    private lateinit var multipleChoiceFragment: MultipleChoiceFragment
+    private lateinit var singleMultipleAnswersFragment: SingleMultipleAnswersFragment
+    private lateinit var openEndedTextResponsesFragment: OpenEndedTextResponsesFragment
+    private lateinit var footerFragment: FooterFragment
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val theSurvey = intent.getParcelableExtra<Assignment>(ASSIGNMENT)
 
         mBind = DataBindingUtil.setContentView(this, R.layout.survey_container_activity)
         mBind.lifecycleOwner = this
@@ -62,127 +69,84 @@ class SurveyContainerActivity : AppCompatActivity(),
         openEndedTextResponsesFragment = OpenEndedTextResponsesFragment.newInstance()
         footerFragment = FooterFragment.newInstance()
 
-        //TODO: här kommer json och görs om till survey
-        val q0 = Question(
-            type = SurveyAdapter.HEADER_VIEW,
-            id = "id",
-            previous = 0,
-            index = 0,
-            next = 1,
-            title = "Header titel",
-            text = "Här är texten i header",
-            description = ""
-            )
-        questionList.add(q0)
-        val q1 = Question(
-            type = SurveyAdapter.LIKERT_SCALES,
-            id = "id",
-            previous = 0,
-            index = 1,
-            next = 2,
-            title = "LikertScale titel",
-            text = "Här är texten i LikertScale",
-            description = ""
-        )
-        questionList.add(q1)
-        val q2 = Question(
-            type = SurveyAdapter.FILL_IN_THE_BLANK,
-            id = "id",
-            previous = 1,
-            index = 2,
-            next = 3,
-            title = "FillInTheBlanks titel",
-            text = "Här är texten i FillInTheBlanks",
-            description = ""
-        )
-        questionList.add(q2)
-        val q3 = Question(
-            type = SurveyAdapter.MULTIPLE_CHOICE,
-            id = "id",
-            previous = 2,
-            index = 3,
-            next = 4,
-            title = "MultipleChoise titel",
-            text = "Här är texten i MultipleChoise",
-            description = ""
-        )
-        questionList.add(q3)
-        val q4 = Question(
-            type = SurveyAdapter.SINGLE_MULTIPLE_ANSWERS,
-            id = "id",
-            previous = 3,
-            index = 4,
-            next = 5,
-            title = "SingleMultipleAnswer titel",
-            text = "Här är texten i SingleMultipleAnswer",
-            description = ""
-        )
-        questionList.add(q4)
-        val q5 = Question(
-            type = SurveyAdapter.OPEN_ENDED_TEXT_RESPONSES,
-            id = "id",
-            previous = 4,
-            index = 5,
-            next = 6,
-            title = "OpenEndedTextResponses titel",
-            text = "Här är texten i OpenEndedTextResponses",
-            description = ""
-        )
-        questionList.add(q5)
-        val q6 = Question(
-            type = SurveyAdapter.FOOTER_VIEW,
-            id = "id",
-            previous = 5,
-            index = 6,
-            next = 0,
-            title = "Footer titel",
-            text = "Här är texten i Footer",
-            description = ""
-        )
-        questionList.add(q6)
-
-        questionList.sortByDescending { it.index }
-
-        showQuestion(0)
+        if (theSurvey != null){
+            setSurvey(theSurvey!!)
+        }else{
+            showErrorPopup()
+        }
     }
 
-    fun showQuestion(index: Int){
+    private fun setSurvey(assignment: Assignment){
+        val temp = assignment.survey.questions?.toMutableList()
+        if (!temp.isNullOrEmpty()) {
+            questionList = temp
+            showQuestion(questionList.first().index)
+        }else{
+            //no questions - close Survey
+            showErrorPopup()
+        }
+    }
+
+    private fun showErrorPopup(){
+        val alertFm = supportFragmentManager.beginTransaction()
+        val width = (surveyContainer_layout.measuredWidth * 0.75).toInt()
+        val alertPopup = PopupAlert.show(
+            width = width,
+            title = "Något gick fel!",
+            textViewText = "Det går tyvärr inte att visa detta formulär.\nMeddelande skickat till humanist lab...",
+            placecenter = true
+        )
+        alertPopup.setCompleteListener(object : OnBoolPopupReturnListener{
+            override fun popupReturn(value: Boolean) {
+                onBackPressed()
+                //TODO: send info to backend
+            }
+        })
+        alertPopup.show(alertFm, "alertPopup")
+    }
+
+    private fun showQuestion(index: Int){
         if (questionList.size > index) {
 
             for (question in questionList) {
                 if (question.index == index) {
+                    selectedQuestion = question
                     when (question.type) {
 
-                        SurveyAdapter.HEADER_VIEW -> {
+                        HEADER_VIEW -> {
                             headerFragment.question = question
                             loadFragment(headerFragment)
-                            headerFragment.setQuestion()
+                            headerFragment.setText()
                         }
-                        SurveyAdapter.LIKERT_SCALES -> {
+                        LIKERT_SCALES -> {
                             likertScaleFragment.question = question
                             loadFragment(likertScaleFragment)
                             likertScaleFragment.setQuestion()
                         }
-                        SurveyAdapter.FILL_IN_THE_BLANK -> {
+                        FILL_IN_THE_BLANK -> {
                             fillInTheBlankFragment.question = question
                             loadFragment(fillInTheBlankFragment)
                             fillInTheBlankFragment.setQuestion()
                         }
-                        SurveyAdapter.MULTIPLE_CHOICE -> {
+                        MULTIPLE_CHOICE -> {
                             multipleChoiceFragment.question = question
                             loadFragment(multipleChoiceFragment)
+                            multipleChoiceFragment.setQuestion()
                         }
-                        SurveyAdapter.SINGLE_MULTIPLE_ANSWERS -> {
+                        SINGLE_MULTIPLE_ANSWERS -> {
                             singleMultipleAnswersFragment.question = question
                             loadFragment(singleMultipleAnswersFragment)
+                            singleMultipleAnswersFragment.setQuestion(this)
                         }
-                        SurveyAdapter.OPEN_ENDED_TEXT_RESPONSES -> {
+                        OPEN_ENDED_TEXT_RESPONSES -> {
                             openEndedTextResponsesFragment.question = question
                             loadFragment(openEndedTextResponsesFragment)
+                            openEndedTextResponsesFragment.setQuestion()
                         }
-                        SurveyAdapter.FOOTER_VIEW -> {
+                        FOOTER_VIEW -> {
                             footerFragment.question = question
                             loadFragment(footerFragment)
+                            footerFragment.setText()
                         }
                     }
                     return
@@ -192,80 +156,58 @@ class SurveyContainerActivity : AppCompatActivity(),
     }
 
     companion object {
-        fun start(context: Context){
-            context.startActivity(Intent(context, SurveyContainerActivity::class.java))
+        const val ASSIGNMENT = "assignment"
+        const val HEADER_VIEW = "header"
+        const val LIKERT_SCALES = "likert"
+        const val FILL_IN_THE_BLANK = "blanks"
+        const val MULTIPLE_CHOICE = "multi"
+        const val SINGLE_MULTIPLE_ANSWERS = "single"
+        const val OPEN_ENDED_TEXT_RESPONSES = "open"
+        const val FOOTER_VIEW = "footer"
+
+        fun start(context: Context, assignment: Assignment){
+            context.startActivity(Intent(context, SurveyContainerActivity::class.java).apply {
+                this.putExtra(ASSIGNMENT,assignment)
+            })
         }
     }
 
-    //OnHeaderInteractionListener
-    override fun headerGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity participantClickedStart")
+    private fun resetPreviousOfQuestions(){
+        for ((index, question) in questionList.withIndex()){
+            if (index == 0){
+                question.previous = index
+            }else question.previous = index - 1
+        }
+    }
+
+    // OnQuestionInteractionListener
+
+    override fun goToNextItem(currentQuestion: Question) {
         showQuestion(index = currentQuestion.next)
     }
 
-    override fun headerCancelPressed(currentQuestion: Question) {
-        println("SurveyContainerActivity participantClickedCancel")
+    override fun goToPrevoiusItem(currentQuestion: Question) {
+        showQuestion(index = currentQuestion.previous)
+        if (currentQuestion.previous < currentQuestion.index - 1) {
+            resetPreviousOfQuestions()
+        }
+    }
+
+    override fun cancelSurvey() {
         onBackPressed()
     }
 
-    //OnLikertScaleInteraktionListener
-    override fun likertScaleGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity likertScaleGoToNextItem")
-        showQuestion(index = currentQuestion.next)
+    override fun goToNextItemWithSkipLogic(currentQuestion: Question) {
+        for (question in questionList){
+            if (question.index == currentQuestion.skip!!.goto){
+                question.previous = currentQuestion.index
+            }
+        }
+        showQuestion(index = currentQuestion.skip!!.goto)
     }
 
-    override fun likertScaleGoToPrevoiusItem(currentQuestion: Question) {
-        println("SurveyContainerActivity likertScaleGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
-    }
-
-    override fun fillInBlankGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity fillInBlankGoToNextItem")
-        showQuestion(index = currentQuestion.next)
-    }
-
-    override fun fillInBlankGoToPrevoiusItem(currentQuestion: Question) {
-        println("SurveyContainerActivity fillInBlankGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
-    }
-
-    override fun multipleChoiceGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity multipleChoiceGoToNextItem")
-        showQuestion(index = currentQuestion.next)
-    }
-
-    override fun multipleChoiceGoToPrevoiusItem(currentQuestion: Question) {
-        println("SurveyContainerActivity multipleChoiceGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
-    }
-
-    override fun singleMultipleGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity singleMultipleGoToNextItem")
-        showQuestion(index = currentQuestion.next)
-    }
-
-    override fun singleMultipleGoToPrevoiusItem(currentQuestion: Question) {
-        println("SurveyContainerActivity singleMultipleGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
-    }
-
-    override fun openEndedGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity openEndedGoToNextItem")
-        showQuestion(index = currentQuestion.next)
-    }
-
-    override fun openEndedGoToPrevoiusItem(currentQuestion: Question) {
-        println("SurveyContainerActivity openEndedGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
-    }
-
-    override fun footerGoToNextItem(currentQuestion: Question) {
-        println("SurveyContainerActivity footerGoToNextItem")
-        showQuestion(index = currentQuestion.next)
-    }
-
-    override fun footerSendInSurvey(currentQuestion: Question) {
-        println("SurveyContainerActivity footerGoToPrevoiusItem")
-        showQuestion(index = currentQuestion.previous)
+    override fun sendInSurvey(currentQuestion: Question) {
+        //TODO: send in answer
+        onBackPressed()
     }
 }

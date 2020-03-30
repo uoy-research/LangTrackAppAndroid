@@ -1,14 +1,6 @@
 package se.lu.humlab.langtrackapp.screen.survey.viewholders
 
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
-import android.widget.Button
-import androidx.recyclerview.widget.RecyclerView
-import se.lu.humlab.langtrackapp.interfaces.OnLikertScalesItemClickedListener
-import se.lu.humlab.langtrackapp.R
-import se.lu.humlab.langtrackapp.data.model.Question
-
+/*
 class LikertScalesItemViewHolder(theItemView: View, onAttRowClickedListener: OnLikertScalesItemClickedListener
 ): RecyclerView.ViewHolder(theItemView) {
 
@@ -40,4 +32,4 @@ class LikertScalesItemViewHolder(theItemView: View, onAttRowClickedListener: OnL
             )
         }
     }
-}
+}*/
