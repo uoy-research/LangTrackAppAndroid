@@ -12,163 +12,191 @@
             type="se.lu.humlab.langtrackapp.data.model.User" />
     </data>
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/main_layout"
+    <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#FFFFFF"
-        tools:context=".screen.main.MainActivity">
-
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:text="Lang-Track-App"
-            android:textColor="@color/lta_blue"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toBottomOf="@+id/imageView"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/imageView"
-            app:layout_constraintTop_toTopOf="@+id/imageView"
-            app:layout_constraintVertical_bias="0.32999998" />
-
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="110dp"
-            android:layout_height="110dp"
-            android:layout_marginTop="15dp"
-            android:src="@drawable/lunds_universitet_small"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:text="Humanistlaboratoriet"
-            android:textColor="@color/lta_blue"
-            app:layout_constraintStart_toStartOf="@+id/textView2"
-            app:layout_constraintTop_toBottomOf="@+id/textView2" />
-
-        <View
-            android:id="@+id/mainTopDivider"
-            android:layout_width="match_parent"
-            android:layout_height="1dp"
-            android:layout_marginStart="40dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="40dp"
-            android:background="@color/lta_blue"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+        android:fitsSystemWindows="true"
+        tools:openDrawer="start"
+        android:id="@+id/drawerLayout">
 
         <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/topLayout"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="1dp"
-            android:layout_marginTop="10dp"
-            android:layout_marginEnd="1dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/mainTopDivider">
+            android:id="@+id/main_layout"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#FFFFFF"
+            tools:context=".screen.main.MainActivity">
 
-
-            <Button
-                android:id="@+id/mainLogOutButton"
-                style="@style/Widget.AppCompat.Button.Small"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginTop="10dp"
-                android:background="@drawable/rounded_button_blue_lightgrey"
-                android:text="Logga ut"
-                android:textAllCaps="false"
-                android:textColor="@color/lta_grey"
-                android:textSize="13sp"
-                app:layout_constraintEnd_toEndOf="@+id/mainContactButton"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <TextView
-                android:id="@+id/mainEmailTextView"
+            <androidx.appcompat.widget.Toolbar
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="5dp"
-                android:text= "@{currentUser == null ? @string/loading : @string/logged_in_as(currentUser.userName)}"
-                android:textColor="@color/lta_grey"
-                android:textSize="15sp"
-                android:textStyle="italic"
-                app:layout_constraintBottom_toBottomOf="@+id/mainLogOutButton"
-                app:layout_constraintEnd_toStartOf="@+id/mainLogOutButton"
-                app:layout_constraintStart_toStartOf="@+id/mainAboutButton"
-                app:layout_constraintTop_toTopOf="@+id/mainLogOutButton" />
+                android:id="@+id/toolbar"
+                android:background="@color/lta_blue"
+                android:minHeight="?attr/actionBarSize"
+                style="@style/Toolbar"
+                app:collapseIcon="@drawable/menu_icon"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:navigationIcon="@drawable/menu_icon"
+                app:titleTextColor="@color/lta_light_grey"/>
 
-            <Button
-                android:id="@+id/mainAboutButton"
-                android:layout_width="100dp"
-                android:layout_height="45dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/rounded_button_white_blue"
-                android:text="Om"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/mainInfoButton"
+            <TextView
+                android:id="@+id/textView2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="Lang-Track-App"
+                android:textColor="@color/lta_blue"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                app:layout_constraintBottom_toBottomOf="@+id/imageView"
                 app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent" />
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageView"
+                app:layout_constraintTop_toTopOf="@+id/imageView"
+                app:layout_constraintVertical_bias="0.32999998" />
 
-            <Button
-                android:id="@+id/mainInfoButton"
-                android:layout_width="100dp"
-                android:layout_height="45dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/rounded_button_white_blue"
-                android:text="Instruktioner"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/mainContactButton"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/mainAboutButton" />
+            <ImageView
+                android:id="@+id/imageView"
+                android:layout_width="110dp"
+                android:layout_height="110dp"
+                android:layout_marginTop="15dp"
+                android:src="@drawable/lunds_universitet_small"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
-            <Button
-                android:id="@+id/mainContactButton"
-                android:layout_width="100dp"
-                android:layout_height="45dp"
-                android:layout_marginTop="18dp"
-                android:layout_marginBottom="15dp"
-                android:background="@drawable/rounded_button_white_blue"
-                android:text="Kontakt"
-                android:textAllCaps="false"
-                android:textColor="@android:color/white"
+            <TextView
+                android:id="@+id/textView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="Humanistlaboratoriet"
+                android:textColor="@color/lta_blue"
+                app:layout_constraintStart_toStartOf="@+id/textView2"
+                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+
+            <View
+                android:id="@+id/mainTopDivider"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="40dp"
+                android:background="@color/lta_blue"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/topLayout"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="1dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/mainTopDivider">
+
+
+                <Button
+                    android:id="@+id/mainLogOutButton"
+                    style="@style/Widget.AppCompat.Button.Small"
+                    android:layout_width="wrap_content"
+                    android:layout_height="30dp"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/rounded_button_blue_lightgrey"
+                    android:text="Logga ut"
+                    android:textAllCaps="false"
+                    android:textColor="@color/lta_grey"
+                    android:textSize="13sp"
+                    app:layout_constraintEnd_toEndOf="@+id/mainContactButton"
+                    app:layout_constraintTop_toTopOf="parent" />
+
+                <TextView
+                    android:id="@+id/mainEmailTextView"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="5dp"
+                    android:text= "@{currentUser == null ? @string/loading : @string/logged_in_as(currentUser.userName)}"
+                    android:textColor="@color/lta_grey"
+                    android:textSize="15sp"
+                    android:textStyle="italic"
+                    app:layout_constraintBottom_toBottomOf="@+id/mainLogOutButton"
+                    app:layout_constraintEnd_toStartOf="@+id/mainLogOutButton"
+                    app:layout_constraintStart_toStartOf="@+id/mainAboutButton"
+                    app:layout_constraintTop_toTopOf="@+id/mainLogOutButton" />
+
+                <Button
+                    android:id="@+id/mainAboutButton"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/rounded_button_white_blue"
+                    android:text="Om"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/mainInfoButton"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+                <Button
+                    android:id="@+id/mainInfoButton"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/rounded_button_white_blue"
+                    android:text="Instruktioner"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/mainContactButton"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/mainAboutButton" />
+
+                <Button
+                    android:id="@+id/mainContactButton"
+                    android:layout_width="100dp"
+                    android:layout_height="45dp"
+                    android:layout_marginTop="18dp"
+                    android:layout_marginBottom="15dp"
+                    android:background="@drawable/rounded_button_white_blue"
+                    android:text="Kontakt"
+                    android:textAllCaps="false"
+                    android:textColor="@android:color/white"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.5"
+                    app:layout_constraintStart_toEndOf="@+id/mainInfoButton"
+                    app:layout_constraintTop_toBottomOf="@id/mainLogOutButton"
+                    app:layout_constraintVertical_bias="0.0" />
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/surveyRecycler"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
+                android:layout_marginBottom="10dp"
+                android:paddingStart="5dp"
+                android:paddingEnd="5dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toEndOf="@+id/mainInfoButton"
-                app:layout_constraintTop_toBottomOf="@id/mainLogOutButton"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/topLayout" />
+
+
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/surveyRecycler"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="10dp"
-            android:paddingStart="5dp"
-            android:paddingEnd="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/topLayout" />
-
-
-
-    </androidx.constraintlayout.widget.ConstraintLayout>
+        <include layout="@layout/left_drawer_menu"
+            android:layout_width="250dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start"
+            android:id="@+id/leftDrawerMenu"/>
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>

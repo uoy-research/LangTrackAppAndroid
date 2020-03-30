@@ -25,6 +25,8 @@ import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -54,6 +56,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var linearLayoutManager: LinearLayoutManager
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: SurveyAdapter
+    lateinit var drawerToggle: ActionBarDrawerToggle
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -106,6 +109,19 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.assignmentListLiveData.observeForever {
             adapter.setAssignments(it)
+        }
+
+        setSupportActionBar(mBind.toolbar)
+        drawerToggle = ActionBarDrawerToggle(
+            this,
+            drawerLayout,
+            mBind.toolbar,
+            R.string.Open,
+            R.string.Close
+        )
+        supportActionBar?.apply {
+            title = "Lunds Universitet"
+            setDisplayHomeAsUpEnabled(true)
         }
     }
 
