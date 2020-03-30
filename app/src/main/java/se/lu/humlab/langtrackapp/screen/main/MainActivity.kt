@@ -117,10 +117,10 @@ class MainActivity : AppCompatActivity() {
         if (mAuth.currentUser == null){
             LoginActivity.start(this)
         }else{
-            viewModel.getAssignments()
             val userEmail = mAuth.currentUser!!.email
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))
+            viewModel.getAssignments()
             mAuth.currentUser!!.getIdToken(true).addOnSuccessListener{
                 val idToken = it.token
                 if (!idToken.isNullOrBlank()){
