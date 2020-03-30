@@ -22,7 +22,8 @@ data class Question (
     var fillBlanksChoises: MutableList<String>? = null,
     var multipleChoisesAnswers: MutableList<String>? = null,
     var singleMultipleAnswers: MutableList<String>? = null,
-    var skip: SkipLogic? = null
+    var skip: SkipLogic? = null,
+    var includeIf: IncludeIf? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString() ?: "",
@@ -36,7 +37,8 @@ data class Question (
         parcel.createStringArrayList(),
         parcel.createStringArrayList(),
         parcel.createStringArrayList(),
-        parcel.readParcelable(SkipLogic::class.java.classLoader)
+        parcel.readParcelable(SkipLogic::class.java.classLoader),
+        parcel.readParcelable(IncludeIf::class.java.classLoader)
     )
 
     override fun writeToParcel(parcel: Parcel, flags: Int) {
@@ -52,6 +54,7 @@ data class Question (
         parcel.writeStringList(multipleChoisesAnswers)
         parcel.writeStringList(singleMultipleAnswers)
         parcel.writeParcelable(skip, 0)
+        parcel.writeParcelable(includeIf, 0)
     }
 
     override fun describeContents(): Int {

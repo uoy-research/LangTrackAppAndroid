@@ -29,8 +29,9 @@ class Repository(val context: Context) {
     var idToken = ""
     var assignmentList = mutableListOf<Assignment>()
     var assignmentListLiveData = MutableLiveData<MutableList<Assignment>>()
-    private val dropboxUrl = "https://www.dropbox.com/s/n2l1vssqm2pfaqp/survey_json.txt?dl=1"
-    private val mockUrl = "https://e3777de6-509b-46a9-a996-ea2708cc0192.mock.pstmn.io/"
+    //private val dropboxUrl = "https://www.dropbox.com/s/n2l1vssqm2pfaqp/survey_json.txt?dl=1"
+    //private val mockUrl = "https://e3777de6-509b-46a9-a996-ea2708cc0192.mock.pstmn.io/"
+    private val ltaUrl = "http://ht-lang-track.ht.lu.se/api/"
 
 
     fun setCurrentUser(user: User){
@@ -42,7 +43,7 @@ class Repository(val context: Context) {
     }
 
     fun getAssignments(){
-        val assigmnentUrl = "${mockUrl}user/u123/assignments"
+        val assigmnentUrl = "${ltaUrl}users/${currentUser.userName}/assignments"
         Fuel.get(assigmnentUrl)
             .header(mapOf("token" to idToken))
             .response { request, response, result ->
@@ -70,13 +71,13 @@ class Repository(val context: Context) {
         val jsonObj = JSONArray(json.substring(json.indexOf("["), json.lastIndexOf("]") + 1))
         for (i in 0 until jsonObj.length()) {
             var newsurvey: Survey? = null
-            var newupdatedAt: String = ""
-            var newcreatedAt: String = ""
-            var newuserId: String = ""
+            var newupdatedAt = ""
+            var newcreatedAt = ""
+            var newuserId = ""
             var newdataset: Dataset? = null
-            var newpublishAt: String = ""
-            var newexpireAt: String = ""
-            var newid: String = ""
+            var newpublishAt = ""
+            var newexpireAt = ""
+            var newid = ""
             val assignment = jsonObj.getJSONObject(i)
             try {
                 val tempSurveyObj = assignment.get("survey") as? JSONObject
@@ -321,6 +322,15 @@ class Repository(val context: Context) {
                     theSkip.goto = tempskip.getInt("goto")
                 }
                 tempQuestion.skip = theSkip
+            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            try {
+                val includeIfObject = question.getJSONObject("includeIf")
+                val tempIncludeIf = IncludeIf()
+                for (s in includeIfObject.keys()){
+                    tempIncludeIf.ifIndex = includeIfObject.getInt("ifIndex")
+                    tempIncludeIf.ifValue = includeIfObject.getInt("ifValue")
+                }
+                tempQuestion.includeIf = tempIncludeIf
             }catch (e: Exception){ println("e: ${e.localizedMessage}")}
 
             try {
