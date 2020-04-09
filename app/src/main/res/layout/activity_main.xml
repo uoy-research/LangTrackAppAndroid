@@ -88,98 +88,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:id="@+id/topLayout"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="1dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="1dp"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/mainTopDivider">
-
-
-                <Button
-                    android:id="@+id/mainLogOutButton"
-                    style="@style/Widget.AppCompat.Button.Small"
-                    android:layout_width="wrap_content"
-                    android:layout_height="30dp"
-                    android:layout_marginTop="10dp"
-                    android:background="@drawable/rounded_button_blue_lightgrey"
-                    android:text="Logga ut"
-                    android:textAllCaps="false"
-                    android:textColor="@color/lta_grey"
-                    android:textSize="13sp"
-                    app:layout_constraintEnd_toEndOf="@+id/mainContactButton"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/mainEmailTextView"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="5dp"
-                    android:text= "@{currentUser == null ? @string/loading : @string/logged_in_as(currentUser.userName)}"
-                    android:textColor="@color/lta_grey"
-                    android:textSize="15sp"
-                    android:textStyle="italic"
-                    app:layout_constraintBottom_toBottomOf="@+id/mainLogOutButton"
-                    app:layout_constraintEnd_toStartOf="@+id/mainLogOutButton"
-                    app:layout_constraintStart_toStartOf="@+id/mainAboutButton"
-                    app:layout_constraintTop_toTopOf="@+id/mainLogOutButton" />
-
-                <Button
-                    android:id="@+id/mainAboutButton"
-                    android:layout_width="100dp"
-                    android:layout_height="45dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="@drawable/rounded_button_white_blue"
-                    android:text="Om"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/mainInfoButton"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toStartOf="parent" />
-
-                <Button
-                    android:id="@+id/mainInfoButton"
-                    android:layout_width="100dp"
-                    android:layout_height="45dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="@drawable/rounded_button_white_blue"
-                    android:text="Instruktioner"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/mainContactButton"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/mainAboutButton" />
-
-                <Button
-                    android:id="@+id/mainContactButton"
-                    android:layout_width="100dp"
-                    android:layout_height="45dp"
-                    android:layout_marginTop="18dp"
-                    android:layout_marginBottom="15dp"
-                    android:background="@drawable/rounded_button_white_blue"
-                    android:text="Kontakt"
-                    android:textAllCaps="false"
-                    android:textColor="@android:color/white"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.5"
-                    app:layout_constraintStart_toEndOf="@+id/mainInfoButton"
-                    app:layout_constraintTop_toBottomOf="@id/mainLogOutButton"
-                    app:layout_constraintVertical_bias="0.0" />
-
-            </androidx.constraintlayout.widget.ConstraintLayout>
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/surveyRecycler"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
                 android:layout_marginStart="10dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:paddingStart="5dp"
@@ -187,7 +102,7 @@
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/topLayout" />
+                app:layout_constraintTop_toBottomOf="@+id/mainTopDivider" />
 
 
 
