@@ -280,6 +280,20 @@ class Repository(val context: Context) {
         try {
             tempSurvey.updatedAt = jsonObj.get("updatedAt") as? String ?: ""
         }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+        if (tempSurvey.questions != null) {
+            for (question in tempSurvey.questions!!) {
+                if (question.index == 0){
+                    question.previous = 0
+                    question.next = question.index + 1
+                }else if (question.index < tempSurvey.questions!!.size - 1){
+                    question.next = question.index + 1
+                    question.previous = question.index - 1
+                }else{
+                    question.next = 0
+                    question.previous = question.index - 1
+                }
+            }
+        }
         return tempSurvey
     }
 
