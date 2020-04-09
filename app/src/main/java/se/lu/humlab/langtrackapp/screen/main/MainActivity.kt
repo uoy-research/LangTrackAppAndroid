@@ -90,23 +90,6 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        /*mBind.mainLogOutButton.setOnClickListener {
-            showLogOutPopup()
-        }
-        mBind.mainAboutButton.setOnClickListener {
-            AboutActivity.start(this)
-        }
-        mBind.mainInfoButton.setOnClickListener {
-            InstructionsActivity.start(this)
-        }
-        mBind.mainContactButton.setOnClickListener {
-            ContactActivity.start(this)
-        }
-
-        viewModel.getUserLiveData().observeForever {
-            mBind.currentUser = it
-        }*/
-
         adapter.setAssignments(viewModel.assignmentList)
 
         viewModel.assignmentListLiveData.observeForever {
@@ -154,6 +137,7 @@ class MainActivity : AppCompatActivity() {
             val userEmail = mAuth.currentUser!!.email
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))
+            menuUserNameTextView.text = userName ?: "noName"
             viewModel.getAssignments()
             mAuth.currentUser!!.getIdToken(true).addOnSuccessListener{
                 val idToken = it.token
