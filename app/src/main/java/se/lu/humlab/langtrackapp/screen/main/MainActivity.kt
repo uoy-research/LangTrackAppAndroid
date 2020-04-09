@@ -27,12 +27,14 @@ import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.left_drawer_menu.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Survey
@@ -88,7 +90,7 @@ class MainActivity : AppCompatActivity() {
             }
         })
 
-        mBind.mainLogOutButton.setOnClickListener {
+        /*mBind.mainLogOutButton.setOnClickListener {
             showLogOutPopup()
         }
         mBind.mainAboutButton.setOnClickListener {
@@ -103,7 +105,7 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.getUserLiveData().observeForever {
             mBind.currentUser = it
-        }
+        }*/
 
         adapter.setAssignments(viewModel.assignmentList)
 
@@ -122,6 +124,22 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.apply {
             title = "Lunds Universitet"
             setDisplayHomeAsUpEnabled(true)
+        }
+
+        menuLogOutTextView.setOnClickListener {
+            showLogOutPopup()
+        }
+        menuAboutButton.setOnClickListener {
+            AboutActivity.start(this)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        menuInstructionsButton.setOnClickListener {
+            InstructionsActivity.start(this)
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }
+        menuContactButton.setOnClickListener {
+            ContactActivity.start(this)
+            drawerLayout.closeDrawer(GravityCompat.START)
         }
     }
 
