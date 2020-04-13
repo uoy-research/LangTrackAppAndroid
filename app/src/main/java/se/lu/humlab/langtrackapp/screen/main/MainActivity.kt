@@ -42,7 +42,9 @@ import se.lu.humlab.langtrackapp.data.model.User
 import se.lu.humlab.langtrackapp.databinding.ActivityMainBinding
 import se.lu.humlab.langtrackapp.interfaces.OnBoolPopupReturnListener
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
+import se.lu.humlab.langtrackapp.popup.ExpiredSurveyPopup
 import se.lu.humlab.langtrackapp.popup.OneChoicePopup
+import se.lu.humlab.langtrackapp.popup.PopupAlert
 import se.lu.humlab.langtrackapp.screen.about.AboutActivity
 import se.lu.humlab.langtrackapp.screen.contact.ContactActivity
 import se.lu.humlab.langtrackapp.screen.instructions.InstructionsActivity
@@ -82,10 +84,17 @@ class MainActivity : AppCompatActivity() {
         mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Assignment) {
-                if (item.dataset != null){//TODO: check expiary
-                    OverviewActivity.start(this@MainActivity, item)
-                }else{
+                if (item.isActive()){
+                    // show survey
                     SurveyContainerActivity.start(this@MainActivity, item)
+                }else{
+                    if (item.dataset != null) {
+                        // show overview
+                        OverviewActivity.start(this@MainActivity, item)
+                    }else{
+                        // show popup
+                        showPopupSurveyInfo(item = item)
+                    }
                 }
             }
         })
@@ -169,6 +178,26 @@ class MainActivity : AppCompatActivity() {
             }
         })
         oneChoicePopup.show(alertFm, "oneChoicePopup")
+    }
+
+    fun showPopupSurveyInfo(item: Assignment){
+        val alertFm = supportFragmentManager.beginTransaction()
+        val width = (main_layout.measuredWidth * 0.8).toInt()
+
+        val alertPopup = ExpiredSurveyPopup.show(
+            width = width,
+            published = item.publishAt,
+            expired = item.expireAt,
+            numberOfQuestions = item.survey.questions?.size ?: 0,
+            textViewText = item.survey.title,
+            placecenter = true
+        )
+        alertPopup.setCompleteListener(object : OnBoolPopupReturnListener{
+            override fun popupReturn(value: Boolean) {
+                onBackPressed()
+            }
+        })
+        alertPopup.show(alertFm, "surveyInfoPopup")
     }
 
     companion object {
