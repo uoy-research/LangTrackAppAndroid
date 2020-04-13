@@ -13,7 +13,9 @@ import com.github.kittinunf.fuel.Fuel
 import org.json.JSONArray
 import org.json.JSONObject
 import se.lu.humlab.langtrackapp.data.model.*
+import se.lu.humlab.langtrackapp.util.toDate
 import java.lang.Exception
+import java.util.*
 
 
 class Repository(val context: Context) {
@@ -57,13 +59,32 @@ class Repository(val context: Context) {
                         val itemList = gson.fromJson<List<Assignment>>(String(bytes), itemType)*/
 
                         //TODO: sort and set livedata...
-                        assignmentList = getAssignmentsFromJson(String(bytes)).toMutableList()
+                        assignmentList = sortList(getAssignmentsFromJson(String(bytes))).toMutableList()
                         assignmentListLiveData.value = assignmentList
                     }
                 }else{
                     println("Repository getAssignmens ERROR: ${error.localizedMessage}")
                 }
             }
+    }
+
+    fun sortList(theListWithSurveys: List<Assignment>): List<Assignment>{
+
+        //if no dataset and not expired
+        val activeList = theListWithSurveys.filter {
+            it.dataset == null &&
+                    Date().before(it.expireAt.toDate())
+        }.sortedByDescending { it.publishAt }
+
+        //if dataset or expired
+        val inactiveList = theListWithSurveys.filter {
+            it.dataset != null ||
+                    Date().after(it.expireAt.toDate())
+        }.sortedByDescending { it.publishAt }
+
+        val returnlist = activeList.toMutableList()
+        returnlist.addAll(inactiveList)
+        return returnlist
     }
 
     fun getAssignmentsFromJson(json: String): List<Assignment>{
