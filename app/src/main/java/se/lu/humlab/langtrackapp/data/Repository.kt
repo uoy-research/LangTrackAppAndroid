@@ -72,14 +72,12 @@ class Repository(val context: Context) {
 
         //if no dataset and not expired
         val activeList = theListWithSurveys.filter {
-            it.dataset == null &&
-                    Date().before(it.expireAt.toDate())
+            it.isActive()
         }.sortedByDescending { it.publishAt }
 
         //if dataset or expired
         val inactiveList = theListWithSurveys.filter {
-            it.dataset != null ||
-                    Date().after(it.expireAt.toDate())
+            !it.isActive()
         }.sortedByDescending { it.publishAt }
 
         val returnlist = activeList.toMutableList()
