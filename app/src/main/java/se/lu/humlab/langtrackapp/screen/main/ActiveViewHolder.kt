@@ -22,7 +22,6 @@ class ActiveViewHolder(theItemView: View,
 
     private var task: TextView = itemView.findViewById(R.id.activerSurveyRecyclerTitleTextView)
     private var date: TextView = itemView.findViewById(R.id.activeSurveyRecyclerDateTextView)
-    private var activeIndicator: ImageView = itemView.findViewById(R.id.activeRowIndicator)
     private var cellLayout: ConstraintLayout = itemView.findViewById(R.id.activeSurveyCellLayout)
     private lateinit var item: Assignment
     lateinit var mainHandler: Handler
@@ -58,7 +57,6 @@ class ActiveViewHolder(theItemView: View,
         this.item = item
         task.text = "Enkät att besvara"
         setRemainingTime()
-        activeIndicator.visibility = View.VISIBLE
     }
 
     fun setRemainingTime(){

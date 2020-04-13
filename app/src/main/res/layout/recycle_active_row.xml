@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:id="@+id/activeSurveyCellLayout"
-    android:background="@drawable/blue_rounded_corner">
+    android:background="@drawable/active_item_background">
 
 
     <TextView
@@ -13,14 +13,15 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginTop="55dp"
         android:layout_marginEnd="10dp"
         android:maxLines="6"
         android:minLines="1"
         android:singleLine="false"
-        android:text="Detta är en testtext. Detta är en testtext. Detta är en testtext.Detta är en testtext."
-        android:textColor="@color/lta_blue"
-        android:textSize="18sp"
+        android:text="Enkät att besvara"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -30,26 +31,14 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="10dp"
-        android:layout_marginBottom="5dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginBottom="8dp"
         android:text="Test"
-        android:textColor="@color/lta_blue"
-        android:textSize="15sp"
+        android:textColor="@android:color/white"
+        android:textSize="13sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/activeRowIndicator"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/activerSurveyRecyclerTitleTextView" />
-
-    <ImageView
-        android:id="@+id/activeRowIndicator"
-        android:layout_width="15dp"
-        android:layout_height="15dp"
-        android:layout_marginEnd="10dp"
-        app:layout_constraintBottom_toBottomOf="@+id/activeSurveyRecyclerDateTextView"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/activeSurveyRecyclerDateTextView"
-        app:srcCompat="@drawable/lta_icon_ground_light" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

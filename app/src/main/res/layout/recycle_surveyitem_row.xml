@@ -2,10 +2,9 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
     android:id="@+id/surveyCellLayout"
-    android:background="@drawable/blue_rounded_corner">
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
 
     <TextView
@@ -29,14 +28,12 @@
         android:id="@+id/surveyRecyclerDateTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="5dp"
         android:text="Test"
         android:textSize="14sp"
         android:textStyle="italic"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/surveyRecyclerAnsweredTextView"
         app:layout_constraintEnd_toEndOf="@+id/surveyRecyclerTitleTextView"
-        app:layout_constraintTop_toBottomOf="@+id/surveyRecyclerTitleTextView" />
+        app:layout_constraintTop_toTopOf="@+id/surveyRecyclerAnsweredTextView" />
 
     <TextView
         android:id="@+id/surveyRecyclerAnsweredTextView"
@@ -45,6 +42,20 @@
         android:layout_marginTop="5dp"
         android:text="TextView"
         app:layout_constraintStart_toStartOf="@+id/surveyRecyclerTitleTextView"
-        app:layout_constraintTop_toBottomOf="@+id/surveyRecyclerTitleTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/surveyRecyclerTitleTextView"/>
+
+    <View
+        android:id="@+id/surveyRecyclerDivider"
+        android:layout_width="0dp"
+        android:layout_height="0.4dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="50dp"
+        android:layout_marginBottom="5dp"
+        android:background="@color/lta_blue"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/surveyRecyclerAnsweredTextView" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
