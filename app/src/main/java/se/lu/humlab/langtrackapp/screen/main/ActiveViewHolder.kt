@@ -20,10 +20,9 @@ class ActiveViewHolder(theItemView: View,
                        onRowClickedListener: OnSurveyRowClickedListener
 ): RecyclerView.ViewHolder(theItemView) {
 
-    private var task: TextView = itemView.findViewById(R.id.surveyRecyclerTitleTextView)
-    private var date: TextView = itemView.findViewById(R.id.surveyRecyclerDateTextView)
-    private var activeIndicator: ImageView = itemView.findViewById(R.id.activeIndicator)
-    private var cellLayout: ConstraintLayout = itemView.findViewById(R.id.surveyCellLayout)
+    private var task: TextView = itemView.findViewById(R.id.activerSurveyRecyclerTitleTextView)
+    private var date: TextView = itemView.findViewById(R.id.activeSurveyRecyclerDateTextView)
+    private var cellLayout: ConstraintLayout = itemView.findViewById(R.id.activeSurveyCellLayout)
     private lateinit var item: Assignment
     lateinit var mainHandler: Handler
     lateinit var expiryListener: OnExpiredListener
@@ -58,7 +57,6 @@ class ActiveViewHolder(theItemView: View,
         this.item = item
         task.text = "Enkät att besvara"
         setRemainingTime()
-        activeIndicator.visibility = View.VISIBLE
     }
 
     fun setRemainingTime(){
@@ -111,7 +109,7 @@ class ActiveViewHolder(theItemView: View,
         ):ActiveViewHolder{
             return ActiveViewHolder(
                 LayoutInflater.from(parent.context).inflate(
-                    R.layout.recycle_surveyitem_row,
+                    R.layout.recycle_active_row,
                     parent,
                     false
                 ),

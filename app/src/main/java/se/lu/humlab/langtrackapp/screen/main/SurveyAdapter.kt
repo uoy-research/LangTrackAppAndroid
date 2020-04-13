@@ -53,7 +53,6 @@ class SurveyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
                 override fun assignmentExpired() {
                     notifyDataSetChanged()
                 }
-
             })
             is SurveyItemViewHolder -> holder.bind(items[position], position)
         }

@@ -105,7 +105,7 @@ class MainActivity : AppCompatActivity() {
             R.string.Close
         )
         supportActionBar?.apply {
-            title = "Lunds Universitet"
+            title = ""
             setDisplayHomeAsUpEnabled(true)
         }
 
