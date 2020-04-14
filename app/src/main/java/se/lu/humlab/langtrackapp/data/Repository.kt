@@ -34,6 +34,7 @@ class Repository(val context: Context) {
     //private val dropboxUrl = "https://www.dropbox.com/s/n2l1vssqm2pfaqp/survey_json.txt?dl=1"
     //private val mockUrl = "https://e3777de6-509b-46a9-a996-ea2708cc0192.mock.pstmn.io/"
     private val ltaUrl = "http://ht-lang-track.ht.lu.se/api/"
+    //private val ltaUrl = "http://ht-lang-track.ht.lu.se:443/"
 
 
     fun setCurrentUser(user: User){
