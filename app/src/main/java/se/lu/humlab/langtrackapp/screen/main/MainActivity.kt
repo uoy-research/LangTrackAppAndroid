@@ -25,7 +25,6 @@ import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
@@ -37,14 +36,12 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.left_drawer_menu.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Assignment
-import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.data.model.User
 import se.lu.humlab.langtrackapp.databinding.ActivityMainBinding
 import se.lu.humlab.langtrackapp.interfaces.OnBoolPopupReturnListener
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
 import se.lu.humlab.langtrackapp.popup.ExpiredSurveyPopup
 import se.lu.humlab.langtrackapp.popup.OneChoicePopup
-import se.lu.humlab.langtrackapp.popup.PopupAlert
 import se.lu.humlab.langtrackapp.screen.about.AboutActivity
 import se.lu.humlab.langtrackapp.screen.contact.ContactActivity
 import se.lu.humlab.langtrackapp.screen.instructions.InstructionsActivity
@@ -61,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: SurveyAdapter
     lateinit var drawerToggle: ActionBarDrawerToggle
+    private var inTestMode = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -84,16 +82,21 @@ class MainActivity : AppCompatActivity() {
         mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Assignment) {
-                if (item.isActive()){
-                    // show survey
+                if (inTestMode) {
+                    // in testMode, always show survey
                     SurveyContainerActivity.start(this@MainActivity, item)
-                }else{
-                    if (item.dataset != null) {
-                        // show overview
-                        OverviewActivity.start(this@MainActivity, item)
-                    }else{
-                        // show popup
-                        showPopupSurveyInfo(item = item)
+                } else {
+                    if (item.isActive()) {
+                        // show survey
+                        SurveyContainerActivity.start(this@MainActivity, item)
+                    } else {
+                        if (item.dataset != null) {
+                            // show overview
+                            OverviewActivity.start(this@MainActivity, item)
+                        } else {
+                            // show popup
+                            showPopupSurveyInfo(item = item)
+                        }
                     }
                 }
             }
@@ -132,6 +135,10 @@ class MainActivity : AppCompatActivity() {
         menuContactButton.setOnClickListener {
             ContactActivity.start(this)
             drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+        menuTestSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            inTestMode = isChecked
         }
     }
 

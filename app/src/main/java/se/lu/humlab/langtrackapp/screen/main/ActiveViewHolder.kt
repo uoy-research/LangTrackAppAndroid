@@ -5,7 +5,6 @@ import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
@@ -31,26 +30,18 @@ class ActiveViewHolder(theItemView: View,
     private val repeatUpdatingText = object : Runnable {
         override fun run() {
             setRemainingTime()
-            println("running repeatUpdatingText in object ${item.survey.title}")
             mainHandler.postDelayed(this, 1000 * 60)
         }
     }
 
     init {
         theItemView.setOnClickListener { onRowClickedListener.rowClicked(item) }
-
-        mainHandler = Handler(Looper.getMainLooper())
-        mainHandler.post(repeatUpdatingText)
-
-        /*countDownHandler.postDelayed(object : Runnable {
-            override fun run() {
-                setRemainingTime()
-                println("running countDownHandler in object ${item.survey.name}")
-                countDownHandler.postDelayed(this, 1000 * 60)//1 min delay
-            }
-        }, 0)*/
     }
 
+    fun setCallbacks(){
+        mainHandler = Handler(Looper.getMainLooper())
+        mainHandler.post(repeatUpdatingText)
+    }
 
     fun bind(item: Assignment, pos: Int, listener: OnExpiredListener){
         this.expiryListener = listener
@@ -85,13 +76,14 @@ class ActiveViewHolder(theItemView: View,
                     }
                 }
             }else{
-                removeCallbacks()
                 expiryListener.assignmentExpired()
             }
         }else {
             date.text = ""
         }
     }
+
+
 
     fun removeCallbacks(){
         mainHandler.removeCallbacks(repeatUpdatingText)
