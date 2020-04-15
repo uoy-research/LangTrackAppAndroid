@@ -54,6 +54,7 @@ class LikertScaleFragment : Fragment(){
         }
         v.likertScaleBackButton.setOnClickListener {
             listener?.prevoiusQuestion(current = question)
+            theAnswer = null
         }
         v.likertScaleRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId != -1) {

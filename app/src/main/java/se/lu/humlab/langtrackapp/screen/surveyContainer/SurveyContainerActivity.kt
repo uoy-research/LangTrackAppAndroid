@@ -123,9 +123,9 @@ class SurveyContainerActivity : AppCompatActivity(),
                         LIKERT_SCALES -> {
                             likertScaleFragment.question = question
                             loadFragment(likertScaleFragment)
-                            likertScaleFragment.setQuestion()
                             val existingAnswer = answer[question.index]
                             likertScaleFragment.theAnswer = existingAnswer
+                            likertScaleFragment.setQuestion()
                         }
                         FILL_IN_THE_BLANK -> {
                             fillInTheBlankFragment.question = question
@@ -138,9 +138,11 @@ class SurveyContainerActivity : AppCompatActivity(),
                             multipleChoiceFragment.setQuestion()
                         }
                         SINGLE_MULTIPLE_ANSWERS -> {
-                            singleMultipleAnswersFragment.question = question
+                            singleMultipleAnswersFragment.theQuestion = question
                             loadFragment(singleMultipleAnswersFragment)
-                            singleMultipleAnswersFragment.setQuestion(this)
+                            val existingAnswer = answer[question.index]
+                            singleMultipleAnswersFragment.theAnswer = existingAnswer
+                            singleMultipleAnswersFragment.setQuestion()
                         }
                         OPEN_ENDED_TEXT_RESPONSES -> {
                             openEndedTextResponsesFragment.question = question
