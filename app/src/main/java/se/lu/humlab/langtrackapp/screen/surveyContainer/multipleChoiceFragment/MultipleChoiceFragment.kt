@@ -41,12 +41,12 @@ class MultipleChoiceFragment : Fragment(){
         v.multipleChoiseFragmentNextButton.setOnClickListener {
             if (question.skip != null){
                 if (question.skip?.ifChosen == getChoiceIfOnlyOneSelected() ?: -1){
-                    listener?.goToNextItemWithSkipLogic(question)
-                }else listener?.goToNextItem(currentQuestion = question)
-            }else listener?.goToNextItem(currentQuestion = question)
+                    //listener?.goToNextItemWithSkipLogic(question)
+                }else listener?.nextQuestion(current = question)
+            }else listener?.nextQuestion(current = question)
         }
         v.multipleChoiseFragmentBackButton.setOnClickListener {
-            listener?.goToPrevoiusItem(currentQuestion = question)
+            listener?.prevoiusQuestion(current = question)
         }
         return v
     }

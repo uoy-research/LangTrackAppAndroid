@@ -9,11 +9,9 @@ package se.lu.humlab.langtrackapp.screen.surveyContainer.singleMultipleAnswersFr
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.RadioButton
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
@@ -45,12 +43,12 @@ class SingleMultipleAnswersFragment : Fragment(){
         v.singleMultipleAnswerNextButton.setOnClickListener {
             if (question.skip != null){
                 if (question.skip?.ifChosen == selectedRadioButton){
-                    listener?.goToNextItemWithSkipLogic(question)
-                }else listener?.goToNextItem(currentQuestion = question)
-            }else listener?.goToNextItem(currentQuestion = question)
+                    //listener?.goToNextItemWithSkipLogic(question)
+                }else listener?.nextQuestion(current = question)
+            }else listener?.nextQuestion(current = question)
         }
         v.singleMultipleAnswerBackButton.setOnClickListener {
-            listener?.goToPrevoiusItem(currentQuestion = question)
+            listener?.prevoiusQuestion(current = question)
         }
         v.singleMultipleAnswerContainer.setOnCheckedChangeListener { group, checkedId ->
             val radio: RadioButton = v.findViewById(checkedId)

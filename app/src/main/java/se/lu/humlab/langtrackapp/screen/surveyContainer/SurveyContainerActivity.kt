@@ -15,9 +15,9 @@ import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import kotlinx.android.synthetic.main.survey_container_activity.*
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Question
-import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.SurveyContainerActivityBinding
 import se.lu.humlab.langtrackapp.interfaces.*
 import se.lu.humlab.langtrackapp.popup.PopupAlert
@@ -37,7 +37,6 @@ class SurveyContainerActivity : AppCompatActivity(),
     private lateinit var mBind : SurveyContainerActivityBinding
     private lateinit var viewModel : SurveyContainerViewModel
     private var questionList = mutableListOf<Question>()
-    private lateinit var selectedQuestion: Question
     private lateinit var headerFragment: HeaderFragment
     private lateinit var likertScaleFragment: LikertScaleFragment
     private lateinit var fillInTheBlankFragment: FillInTheBlankFragment
@@ -45,11 +44,14 @@ class SurveyContainerActivity : AppCompatActivity(),
     private lateinit var singleMultipleAnswersFragment: SingleMultipleAnswersFragment
     private lateinit var openEndedTextResponsesFragment: OpenEndedTextResponsesFragment
     private lateinit var footerFragment: FooterFragment
+    private var currentPage = Question()
+    private var answer = mutableMapOf<Int,Answer>()
+    private var theAssignment: Assignment? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val theSurvey = intent.getParcelableExtra<Assignment>(ASSIGNMENT)
+        theAssignment = intent.getParcelableExtra<Assignment>(ASSIGNMENT)
 
         mBind = DataBindingUtil.setContentView(this, R.layout.survey_container_activity)
         mBind.lifecycleOwner = this
@@ -69,8 +71,8 @@ class SurveyContainerActivity : AppCompatActivity(),
         openEndedTextResponsesFragment = OpenEndedTextResponsesFragment.newInstance()
         footerFragment = FooterFragment.newInstance()
 
-        if (theSurvey != null){
-            setSurvey(theSurvey!!)
+        if (theAssignment != null){
+            setSurvey(theAssignment!!)
         }else{
             showErrorPopup()
         }
@@ -110,7 +112,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
             for (question in questionList) {
                 if (question.index == index) {
-                    selectedQuestion = question
+                    currentPage = question
                     when (question.type) {
 
                         HEADER_VIEW -> {
@@ -122,6 +124,8 @@ class SurveyContainerActivity : AppCompatActivity(),
                             likertScaleFragment.question = question
                             loadFragment(likertScaleFragment)
                             likertScaleFragment.setQuestion()
+                            val existingAnswer = answer[question.index]
+                            likertScaleFragment.theAnswer = existingAnswer
                         }
                         FILL_IN_THE_BLANK -> {
                             fillInTheBlankFragment.question = question
@@ -182,32 +186,136 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     // OnQuestionInteractionListener
 
-    override fun goToNextItem(currentQuestion: Question) {
-        showQuestion(index = currentQuestion.next)
+    override fun nextQuestion(current: Question) {
+        showQuestion(index = current.next)
     }
 
-    override fun goToPrevoiusItem(currentQuestion: Question) {
-        showQuestion(index = currentQuestion.previous)
-        if (currentQuestion.previous < currentQuestion.index - 1) {
+    override fun prevoiusQuestion(current: Question) {
+        showQuestion(index = current.previous)
+        if (current.previous < current.index - 1) {
             resetPreviousOfQuestions()
         }
     }
 
-    override fun cancelSurvey() {
+    override fun closeSurvey() {
         onBackPressed()
     }
 
-    override fun goToNextItemWithSkipLogic(currentQuestion: Question) {
+    /*override fun goToNextItemWithSkipLogic(currentQuestion: Question) {
         for (question in questionList){
             if (question.index == currentQuestion.skip!!.goto){
                 question.previous = currentQuestion.index
             }
         }
         showQuestion(index = currentQuestion.skip!!.goto)
+    }*/
+
+    override fun sendInSurvey() {
+        if (answer.isNotEmpty()){
+            val tempList = theAssignment?.survey?.questions?.sortedBy {it.index }
+            val answersToInclude = mutableListOf<Int>()
+
+            var counter = tempList?.get(0)?.index ?: -99
+            if (counter != -99){
+                while (counter > 0) {
+                    val currentQuestion = tempList?.first { it.index == counter }
+                    if (currentQuestion?.type ?: "header" != "header" &&
+                    currentQuestion?.type ?: "footer" != "footer"){
+                    answersToInclude.add(counter)
+                }
+                    counter = currentQuestion?.previous ?: 0
+                }
+            }
+            val tempAnswers = mutableMapOf<Int,Answer>()
+            for (a in answersToInclude){
+                val theAnswer = answer.filter { it.value.index == a }
+                if (theAnswer.size == 1){
+                    theAnswer.forEach {
+                        tempAnswers[it.value.index] = it.value
+                    }
+                }
+            }
+            println("tempAnswers: $tempAnswers")
+            //SurveyRepository.postAnswer(answerDict: tempAnswers)
+        }
+        onBackPressed()
     }
 
-    override fun sendInSurvey(currentQuestion: Question) {
-        //TODO: send in answer
-        onBackPressed()
+    override fun setSingleMultipleAnswer(selected: Int) {
+        answer[currentPage.index] = Answer(
+            type = "single",
+            index = currentPage.index,
+            likertAnswer = null,
+            fillBlankAnswer = null,
+            multipleChoiceAnswer = null,
+            singleMultipleAnswer = selected,
+            openEndedAnswer = null,
+            timeDurationAnswer = null
+        )
+    }
+
+    override fun setMultipleAnswersAnswer(selected: List<Int>) {
+        answer[currentPage.index] = Answer(
+            type = "multi",
+            index = currentPage.index,
+            likertAnswer = null,
+            fillBlankAnswer = null,
+            multipleChoiceAnswer = selected.toMutableList(),
+            singleMultipleAnswer = null,
+            openEndedAnswer = null,
+            timeDurationAnswer = null
+        )
+    }
+
+    override fun setLikertAnswer(selected: Int) {
+        answer[currentPage.index] = Answer(
+            type = "likert",
+            index = currentPage.index,
+            likertAnswer = selected,
+            fillBlankAnswer = null,
+            multipleChoiceAnswer = null,
+            singleMultipleAnswer = null,
+            openEndedAnswer = null,
+            timeDurationAnswer = null
+        )
+    }
+
+    override fun setOpenEndedAnswer(text: String) {
+        answer[currentPage.index] = Answer(
+            type = "open",
+            index = currentPage.index,
+            likertAnswer = null,
+            fillBlankAnswer = null,
+            multipleChoiceAnswer = null,
+            singleMultipleAnswer = null,
+            openEndedAnswer = text,
+            timeDurationAnswer = null
+        )
+    }
+
+    override fun setFillBlankAnswer(selected: Int) {
+        answer[currentPage.index] = Answer(
+            type = "blanks",
+            index = currentPage.index,
+            likertAnswer = null,
+            fillBlankAnswer = selected,
+            multipleChoiceAnswer = null,
+            singleMultipleAnswer = null,
+            openEndedAnswer = null,
+            timeDurationAnswer = null
+        )
+    }
+
+    override fun setTimeDurationAnswer(selected: Int) {
+        answer[currentPage.index] = Answer(
+            type = "duration",
+            index = currentPage.index,
+            likertAnswer = null,
+            fillBlankAnswer = null,
+            multipleChoiceAnswer = null,
+            singleMultipleAnswer = null,
+            openEndedAnswer = null,
+            timeDurationAnswer = selected
+        )
     }
 }

@@ -17,7 +17,6 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.open_ended_text_responses_fragment.*
 import kotlinx.android.synthetic.main.open_ended_text_responses_fragment.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
@@ -41,10 +40,10 @@ class OpenEndedTextResponsesFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.openEndedTextNextButton.setOnClickListener {
-            listener?.goToNextItem(currentQuestion = question)
+            listener?.nextQuestion(current = question)
         }
         v.openEndedTextBackButton.setOnClickListener {
-            listener?.goToPrevoiusItem(currentQuestion = question)
+            listener?.prevoiusQuestion(current = question)
         }
         v.openLayout.setOnClickListener {
             hideKeyboard()
