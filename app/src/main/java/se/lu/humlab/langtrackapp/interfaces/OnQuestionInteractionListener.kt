@@ -12,6 +12,6 @@ interface OnQuestionInteractionListener {
     fun setMultipleAnswersAnswer(selected: List<Int>?)
     fun setLikertAnswer(selected: Int)
     fun setOpenEndedAnswer(text: String?)
-    fun setFillBlankAnswer(selected: Int)
+    fun setFillBlankAnswer(selected: Int?)
     fun setTimeDurationAnswer(selected: Int)
 }

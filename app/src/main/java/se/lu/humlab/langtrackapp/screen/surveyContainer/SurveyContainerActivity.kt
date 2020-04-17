@@ -128,9 +128,11 @@ class SurveyContainerActivity : AppCompatActivity(),
                             likertScaleFragment.setQuestion()
                         }
                         FILL_IN_THE_BLANK -> {
-                            fillInTheBlankFragment.question = question
+                            fillInTheBlankFragment.theQuestion = question
                             loadFragment(fillInTheBlankFragment)
-                            fillInTheBlankFragment.setQuestion()
+                            val existingAnswer = answer[question.index]
+                            fillInTheBlankFragment.theAnswer = existingAnswer
+                            //fillInTheBlankFragment.setQuestion()
                         }
                         MULTIPLE_CHOICE -> {
                             multipleChoiceFragment.theQuestion = question
@@ -299,7 +301,7 @@ class SurveyContainerActivity : AppCompatActivity(),
         )
     }
 
-    override fun setFillBlankAnswer(selected: Int) {
+    override fun setFillBlankAnswer(selected: Int?) {
         answer[currentPage.index] = Answer(
             type = "blanks",
             index = currentPage.index,
