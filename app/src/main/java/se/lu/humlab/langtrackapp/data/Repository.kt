@@ -24,7 +24,6 @@ class Repository(val context: Context) {
 
     var surveyList = mutableListOf<Survey>()
     var surveyListLiveData = MutableLiveData<MutableList<Survey>>()
-
     private var currentUser = User()
     var currentUserLiveData = MutableLiveData<User>()
     var selectedAssignment: Assignment? = null
@@ -55,11 +54,6 @@ class Repository(val context: Context) {
                 val (bytes, error) = result
                 if (error == null) {
                     if (bytes != null) {
-                        /*val gson = Gson()
-                        val itemType = object : TypeToken<List<Assignment>>() {}.type
-                        val itemList = gson.fromJson<List<Assignment>>(String(bytes), itemType)*/
-
-                        //TODO: sort and set livedata...
                         assignmentList = sortList(getAssignmentsFromJson(String(bytes))).toMutableList()
                         assignmentListLiveData.value = assignmentList
                     }
