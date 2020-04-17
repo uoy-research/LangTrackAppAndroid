@@ -114,7 +114,6 @@ class MultipleChoiceFragment : Fragment(){
                                 saveChoices.add(selected.key)
                             }
                         }
-                        println("saveChoices: $saveChoices")
                         if (saveChoices.isEmpty()){
                             listener?.setMultipleAnswersAnswer(null)
                         }else {

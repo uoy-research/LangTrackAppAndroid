@@ -135,7 +135,6 @@ class SurveyContainerActivity : AppCompatActivity(),
                         MULTIPLE_CHOICE -> {
                             multipleChoiceFragment.theQuestion = question
                             loadFragment(multipleChoiceFragment)
-                            multipleChoiceFragment.setQuestion()
                             val existingAnswer = answer[question.index]
                             multipleChoiceFragment.theAnswer = existingAnswer
                             multipleChoiceFragment.setQuestion()
@@ -150,6 +149,8 @@ class SurveyContainerActivity : AppCompatActivity(),
                         OPEN_ENDED_TEXT_RESPONSES -> {
                             openEndedTextResponsesFragment.question = question
                             loadFragment(openEndedTextResponsesFragment)
+                            val existingAnswer = answer[question.index]
+                            openEndedTextResponsesFragment.theAnswer = existingAnswer
                             openEndedTextResponsesFragment.setQuestion()
                         }
                         FOOTER_VIEW -> {
@@ -285,7 +286,7 @@ class SurveyContainerActivity : AppCompatActivity(),
         )
     }
 
-    override fun setOpenEndedAnswer(text: String) {
+    override fun setOpenEndedAnswer(text: String?) {
         answer[currentPage.index] = Answer(
             type = "open",
             index = currentPage.index,
