@@ -133,8 +133,11 @@ class SurveyContainerActivity : AppCompatActivity(),
                             fillInTheBlankFragment.setQuestion()
                         }
                         MULTIPLE_CHOICE -> {
-                            multipleChoiceFragment.question = question
+                            multipleChoiceFragment.theQuestion = question
                             loadFragment(multipleChoiceFragment)
+                            multipleChoiceFragment.setQuestion()
+                            val existingAnswer = answer[question.index]
+                            multipleChoiceFragment.theAnswer = existingAnswer
                             multipleChoiceFragment.setQuestion()
                         }
                         SINGLE_MULTIPLE_ANSWERS -> {
@@ -256,13 +259,13 @@ class SurveyContainerActivity : AppCompatActivity(),
         )
     }
 
-    override fun setMultipleAnswersAnswer(selected: List<Int>) {
+    override fun setMultipleAnswersAnswer(selected: List<Int>?) {
         answer[currentPage.index] = Answer(
             type = "multi",
             index = currentPage.index,
             likertAnswer = null,
             fillBlankAnswer = null,
-            multipleChoiceAnswer = selected.toMutableList(),
+            multipleChoiceAnswer = selected?.toMutableList(),
             singleMultipleAnswer = null,
             openEndedAnswer = null,
             timeDurationAnswer = null

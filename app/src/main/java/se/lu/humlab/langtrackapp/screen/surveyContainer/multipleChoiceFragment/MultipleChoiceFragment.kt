@@ -18,6 +18,7 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.multiple_choice_fragment.view.*
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.MultipleChoiceFragmentBinding
 import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
@@ -26,7 +27,9 @@ class MultipleChoiceFragment : Fragment(){
 
     private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: MultipleChoiceFragmentBinding
-    lateinit var question: Question
+    lateinit var theQuestion: Question
+    var theAnswer: Answer? = null
+    var selectedChoices = mutableMapOf<Int, Boolean>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -39,14 +42,17 @@ class MultipleChoiceFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.multipleChoiseFragmentNextButton.setOnClickListener {
-            if (question.skip != null){
+            listener?.nextQuestion(theQuestion)
+            theAnswer = null
+            /*if (question.skip != null){
                 if (question.skip?.ifChosen == getChoiceIfOnlyOneSelected() ?: -1){
                     //listener?.goToNextItemWithSkipLogic(question)
                 }else listener?.nextQuestion(current = question)
-            }else listener?.nextQuestion(current = question)
+            }else listener?.nextQuestion(current = question)*/
         }
         v.multipleChoiseFragmentBackButton.setOnClickListener {
-            listener?.prevoiusQuestion(current = question)
+            listener?.prevoiusQuestion(current = theQuestion)
+            theAnswer = null
         }
         return v
     }
@@ -66,7 +72,7 @@ class MultipleChoiceFragment : Fragment(){
 
     fun setQuestion(){
         if (::binding.isInitialized) {
-            binding.multipleTextTextView.text = question.text
+            binding.multipleTextTextView.text = theQuestion.text
             showChoices()
         }
     }
@@ -90,17 +96,34 @@ class MultipleChoiceFragment : Fragment(){
     }
 
     fun showChoices(){
-        if (question.multipleChoisesAnswers != null) {
-            for ((index,choice) in question.multipleChoisesAnswers!!.withIndex()) {
+        if (theQuestion.multipleChoisesAnswers != null) {
+            for ((index,choice) in theQuestion.multipleChoisesAnswers!!.withIndex()) {
                 val checkBox = CheckBox(binding.multipleRadioButtonContainer.context)
                 checkBox.tag = index
                 checkBox.text = choice
                 checkBox.textSize = 18F
                 checkBox.setOnClickListener {
                     val theCheckbox = it as? CheckBox
-                    println("radiobutton ${theCheckbox?.tag ?: -1} is set to ${theCheckbox?.isChecked}")
+                    if (theCheckbox != null){
+                        if (theCheckbox.tag is Int) {
+                            selectedChoices[theCheckbox.tag as? Int ?: -99] = theCheckbox.isChecked
+                        }
+                        var saveChoices = mutableListOf<Int>()
+                        for (selected in selectedChoices){
+                            if (selected.value == true){
+                                saveChoices.add(selected.key)
+                            }
+                        }
+                        println("saveChoices: $saveChoices")
+                        if (saveChoices.isEmpty()){
+                            listener?.setMultipleAnswersAnswer(null)
+                        }else {
+                            listener?.setMultipleAnswersAnswer(saveChoices)
+                        }
+                    }
                 }
                 binding.multipleRadioButtonContainer.addView(checkBox)
+                checkBox.isChecked = theAnswer?.multipleChoiceAnswer?.contains(index) == true
             }
         }
     }
