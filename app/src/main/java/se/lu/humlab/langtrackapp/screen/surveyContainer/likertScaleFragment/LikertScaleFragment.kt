@@ -43,9 +43,8 @@ class LikertScaleFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.likertScaleNextButton.setOnClickListener {
-
-            listener?.nextQuestion(question)
             theAnswer = null
+            listener?.nextQuestion(question)
             /*if (question.skip != null){
                 if (question.skip?.ifChosen == selectedRadioButton){
                     listener?.goToNextItemWithSkipLogic(question)
@@ -53,8 +52,8 @@ class LikertScaleFragment : Fragment(){
             }else listener?.nextItem(current = question)*/
         }
         v.likertScaleBackButton.setOnClickListener {
-            listener?.prevoiusQuestion(current = question)
             theAnswer = null
+            listener?.prevoiusQuestion(current = question)
         }
         v.likertScaleRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId != -1) {

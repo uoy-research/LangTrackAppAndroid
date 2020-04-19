@@ -29,7 +29,6 @@ class MultipleChoiceFragment : Fragment(){
     lateinit var binding: MultipleChoiceFragmentBinding
     lateinit var theQuestion: Question
     var theAnswer: Answer? = null
-    var selectedChoices = mutableMapOf<Int, Boolean>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,8 +41,8 @@ class MultipleChoiceFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.multipleChoiseFragmentNextButton.setOnClickListener {
-            listener?.nextQuestion(theQuestion)
             theAnswer = null
+            listener?.nextQuestion(theQuestion)
             /*if (question.skip != null){
                 if (question.skip?.ifChosen == getChoiceIfOnlyOneSelected() ?: -1){
                     //listener?.goToNextItemWithSkipLogic(question)
@@ -51,8 +50,8 @@ class MultipleChoiceFragment : Fragment(){
             }else listener?.nextQuestion(current = question)*/
         }
         v.multipleChoiseFragmentBackButton.setOnClickListener {
-            listener?.prevoiusQuestion(current = theQuestion)
             theAnswer = null
+            listener?.prevoiusQuestion(current = theQuestion)
         }
         return v
     }
@@ -97,6 +96,7 @@ class MultipleChoiceFragment : Fragment(){
 
     fun showChoices(){
         if (theQuestion.multipleChoisesAnswers != null) {
+            binding.multipleRadioButtonContainer.removeAllViews()
             for ((index,choice) in theQuestion.multipleChoisesAnswers!!.withIndex()) {
                 val checkBox = CheckBox(binding.multipleRadioButtonContainer.context)
                 checkBox.tag = index
@@ -106,9 +106,33 @@ class MultipleChoiceFragment : Fragment(){
                     val theCheckbox = it as? CheckBox
                     if (theCheckbox != null){
                         if (theCheckbox.tag is Int) {
-                            selectedChoices[theCheckbox.tag as? Int ?: -99] = theCheckbox.isChecked
+                            val theTag = theCheckbox.tag as? Int ?: -99
+                            if (theTag != -99){
+                                if (theCheckbox.isChecked){
+                                    if (theAnswer == null){
+                                        theAnswer = Answer()
+                                    }
+                                    if (theAnswer?.multipleChoiceAnswer.isNullOrEmpty()) {
+                                        if (theAnswer!!.multipleChoiceAnswer == null) {
+                                            theAnswer!!.multipleChoiceAnswer = mutableListOf()
+                                        }
+                                        theAnswer!!.multipleChoiceAnswer!!.add(theTag)
+                                    }else{
+                                        if (theAnswer?.multipleChoiceAnswer != null) {
+                                            if (!theAnswer!!.multipleChoiceAnswer!!.contains(theTag)) {
+                                                theAnswer!!.multipleChoiceAnswer!!.add(theTag)
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    if (theAnswer?.multipleChoiceAnswer != null) {
+                                        theAnswer!!.multipleChoiceAnswer!!.remove(theTag)
+                                    }
+                                }
+                                listener?.setMultipleAnswersAnswer(theAnswer?.multipleChoiceAnswer)
+                            }
                         }
-                        var saveChoices = mutableListOf<Int>()
+                        /*var saveChoices = mutableListOf<Int>()
                         for (selected in selectedChoices){
                             if (selected.value == true){
                                 saveChoices.add(selected.key)
@@ -116,9 +140,11 @@ class MultipleChoiceFragment : Fragment(){
                         }
                         if (saveChoices.isEmpty()){
                             listener?.setMultipleAnswersAnswer(null)
+                            println("saveChoices: null")
                         }else {
                             listener?.setMultipleAnswersAnswer(saveChoices)
-                        }
+                            println("saveChoices: $saveChoices")
+                        }*/
                     }
                 }
                 binding.multipleRadioButtonContainer.addView(checkBox)

@@ -44,8 +44,8 @@ class SingleMultipleAnswersFragment : Fragment(){
         binding.executePendingBindings()
         val v = binding.root
         v.singleMultipleAnswerNextButton.setOnClickListener {
-            listener?.nextQuestion(theQuestion)
             theAnswer = null
+            listener?.nextQuestion(theQuestion)
             /*if (question.skip != null){
                 if (question.skip?.ifChosen == selectedRadioButton){
                     //listener?.goToNextItemWithSkipLogic(question)
@@ -53,8 +53,8 @@ class SingleMultipleAnswersFragment : Fragment(){
             }else listener?.nextQuestion(current = question)*/
         }
         v.singleMultipleAnswerBackButton.setOnClickListener {
-            listener?.prevoiusQuestion(current = theQuestion)
             theAnswer = null
+            listener?.prevoiusQuestion(current = theQuestion)
         }
         v.singleMultipleAnswerContainer.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId != -1 ) {
@@ -90,7 +90,6 @@ class SingleMultipleAnswersFragment : Fragment(){
     }
 
     fun presentChoices(){
-        binding.singleMultipleAnswerContainer.removeAllViews()
         if (theQuestion.singleMultipleAnswers != null) {
             binding.singleMultipleAnswerContainer.removeAllViews()
             for ((index, choice) in theQuestion.singleMultipleAnswers!!.withIndex()) {
