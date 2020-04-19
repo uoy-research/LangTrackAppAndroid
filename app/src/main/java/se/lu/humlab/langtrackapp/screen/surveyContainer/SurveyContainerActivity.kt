@@ -28,6 +28,7 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.likertScaleFragment.Like
 import se.lu.humlab.langtrackapp.screen.surveyContainer.multipleChoiceFragment.MultipleChoiceFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.openEndedTextResponsesFragment.OpenEndedTextResponsesFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.singleMultipleAnswersFragment.SingleMultipleAnswersFragment
+import se.lu.humlab.langtrackapp.screen.surveyContainer.timeDuration.TimeDurationFragment
 import se.lu.humlab.langtrackapp.util.loadFragment
 
 class SurveyContainerActivity : AppCompatActivity(),
@@ -43,6 +44,7 @@ class SurveyContainerActivity : AppCompatActivity(),
     private lateinit var multipleChoiceFragment: MultipleChoiceFragment
     private lateinit var singleMultipleAnswersFragment: SingleMultipleAnswersFragment
     private lateinit var openEndedTextResponsesFragment: OpenEndedTextResponsesFragment
+    private lateinit var timeDurationFragment: TimeDurationFragment
     private lateinit var footerFragment: FooterFragment
     private var currentPage = Question()
     private var answer = mutableMapOf<Int,Answer>()
@@ -69,6 +71,7 @@ class SurveyContainerActivity : AppCompatActivity(),
         multipleChoiceFragment = MultipleChoiceFragment.newInstance()
         singleMultipleAnswersFragment = SingleMultipleAnswersFragment.newInstance()
         openEndedTextResponsesFragment = OpenEndedTextResponsesFragment.newInstance()
+        timeDurationFragment = TimeDurationFragment.newInstance()
         footerFragment = FooterFragment.newInstance()
 
         if (theAssignment != null){
@@ -113,6 +116,7 @@ class SurveyContainerActivity : AppCompatActivity(),
             for (question in questionList) {
                 if (question.index == index) {
                     currentPage = question
+                    val existingAnswer = answer[question.index]
                     when (question.type) {
 
                         HEADER_VIEW -> {
@@ -123,37 +127,38 @@ class SurveyContainerActivity : AppCompatActivity(),
                         LIKERT_SCALES -> {
                             likertScaleFragment.question = question
                             loadFragment(likertScaleFragment)
-                            val existingAnswer = answer[question.index]
                             likertScaleFragment.theAnswer = existingAnswer
                             likertScaleFragment.setQuestion()
                         }
                         FILL_IN_THE_BLANK -> {
                             fillInTheBlankFragment.theQuestion = question
                             loadFragment(fillInTheBlankFragment)
-                            val existingAnswer = answer[question.index]
                             fillInTheBlankFragment.theAnswer = existingAnswer
                             //fillInTheBlankFragment.setQuestion()
                         }
                         MULTIPLE_CHOICE -> {
                             multipleChoiceFragment.theQuestion = question
                             loadFragment(multipleChoiceFragment)
-                            val existingAnswer = answer[question.index]
                             multipleChoiceFragment.theAnswer = existingAnswer
                             multipleChoiceFragment.setQuestion()
                         }
                         SINGLE_MULTIPLE_ANSWERS -> {
                             singleMultipleAnswersFragment.theQuestion = question
                             loadFragment(singleMultipleAnswersFragment)
-                            val existingAnswer = answer[question.index]
                             singleMultipleAnswersFragment.theAnswer = existingAnswer
                             singleMultipleAnswersFragment.setQuestion()
                         }
                         OPEN_ENDED_TEXT_RESPONSES -> {
                             openEndedTextResponsesFragment.question = question
                             loadFragment(openEndedTextResponsesFragment)
-                            val existingAnswer = answer[question.index]
                             openEndedTextResponsesFragment.theAnswer = existingAnswer
                             openEndedTextResponsesFragment.setQuestion()
+                        }
+                        TIME_DURATION -> {
+                            timeDurationFragment.theQuestion = question
+                            loadFragment(timeDurationFragment)
+                            timeDurationFragment.theAnswer = existingAnswer
+                            timeDurationFragment.setQuestion()
                         }
                         FOOTER_VIEW -> {
                             footerFragment.question = question
@@ -175,6 +180,7 @@ class SurveyContainerActivity : AppCompatActivity(),
         const val MULTIPLE_CHOICE = "multi"
         const val SINGLE_MULTIPLE_ANSWERS = "single"
         const val OPEN_ENDED_TEXT_RESPONSES = "open"
+        const val TIME_DURATION = "duration"
         const val FOOTER_VIEW = "footer"
 
         fun start(context: Context, assignment: Assignment){

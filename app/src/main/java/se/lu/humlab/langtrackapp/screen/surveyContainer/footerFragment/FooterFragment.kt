@@ -60,7 +60,7 @@ class FooterFragment : Fragment(){
 
     fun setText(){
         if (::binding.isInitialized) {
-            binding.footerTextView.text = "${question.title}\n\n${question.text}"
+            binding.footerTextView.text = question.text
         }
     }
 
