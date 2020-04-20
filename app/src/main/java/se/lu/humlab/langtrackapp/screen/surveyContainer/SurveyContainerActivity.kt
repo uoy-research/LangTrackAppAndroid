@@ -134,7 +134,7 @@ class SurveyContainerActivity : AppCompatActivity(),
                             fillInTheBlankFragment.theQuestion = question
                             loadFragment(fillInTheBlankFragment)
                             fillInTheBlankFragment.theAnswer = existingAnswer
-                            //fillInTheBlankFragment.setQuestion()
+                            fillInTheBlankFragment.setQuestion()
                         }
                         MULTIPLE_CHOICE -> {
                             multipleChoiceFragment.theQuestion = question
