@@ -9,6 +9,9 @@ package se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment
 
 import android.content.Context
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +26,7 @@ import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.FillInTheBlanksFragmentBinding
 import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
+
 
 class FillInTheBlankFragment : Fragment(){
 
@@ -69,10 +73,14 @@ class FillInTheBlankFragment : Fragment(){
         }
         v.fillInTheBlankNextButton.setOnClickListener {
             theAnswer = null
+            theChosenWordIndex = null
+            theSentence = null
             listener?.nextQuestion(theQuestion)
         }
         v.fillInTheBlankBackButton.setOnClickListener {
             theAnswer = null
+            theChosenWordIndex = null
+            theSentence = null
             listener?.prevoiusQuestion(current = theQuestion)
         }
         return v
@@ -142,6 +150,14 @@ class FillInTheBlankFragment : Fragment(){
         }
     }
 
+    fun underlineSelectedWord(list: List<String>, selectedWord: String): SpannableString{
+        val theOrgSentence = list.joinToString(separator = " ")
+        val start = theOrgSentence.indexOf(selectedWord)
+        val end = start + selectedWord.length
+        val returnString = SpannableString(theOrgSentence)
+        returnString.setSpan(UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        return returnString
+    }
 
     fun setSentence(indexOfWord: Int?){
         if (indexOfWord == null){
@@ -150,11 +166,13 @@ class FillInTheBlankFragment : Fragment(){
         }else if (theChosenWordIndex != null){
             val tempListWithWords = theSentence!!.listWithWords.toMutableList()
             tempListWithWords[theSentence!!.indexForMissingWord] = theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: ""
-            binding.fillInTheBlankTextView.text = tempListWithWords.joinToString(separator = " ")
+            binding.fillInTheBlankTextView.text = underlineSelectedWord(tempListWithWords,
+                theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: "")
         }else{
             val tempListWithWords = theSentence!!.listWithWords.toMutableList()
             tempListWithWords[theSentence!!.indexForMissingWord] = theQuestion.fillBlanksChoises?.get(indexOfWord) ?: ""
-            binding.fillInTheBlankTextView.text = tempListWithWords.joinToString(separator = " ")
+            binding.fillInTheBlankTextView.text = underlineSelectedWord(tempListWithWords,
+                theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: "")
         }
     }
 
