@@ -40,7 +40,6 @@ class FillInTheBlankFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        println("FillInTheBlankFragment onCreateView")
         binding = DataBindingUtil.inflate(inflater, R.layout.fill_in_the_blanks_fragment, container,false)
         binding.lifecycleOwner = this
         binding.executePendingBindings()
@@ -81,29 +80,9 @@ class FillInTheBlankFragment : Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        println("FillInTheBlankFragment onViewCreated")
         setQuestion()
     }
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        println("FillInTheBlankFragment onActivityCreated")
-    }
-
-    override fun onStart() {
-        super.onStart()
-        println("FillInTheBlankFragment onStart")
-    }
-
-    override fun onPause() {
-        super.onPause()
-        println("FillInTheBlankFragment onPause")
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        println("FillInTheBlankFragment onDestroy")
-    }
     fun setAdapter(){
         addEmptyWordToTopOfList()
         val adapter =
@@ -140,20 +119,14 @@ class FillInTheBlankFragment : Fragment(){
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        println("FillInTheBlankFragment onAttach")
         if (context is OnQuestionInteractionListener) {
             listener = context
-            if (::binding.isInitialized) {
-                //load survey
-                //setQuestion()
-            }
         }else {
             throw RuntimeException(context.toString() + " must implement OnFillInBlankInteractionListener")
         }
     }
 
     fun setQuestion(){
-        println("FillInTheBlankFragment setQuestion")
         if (::binding.isInitialized) {
             check = 0
             getTextAsList(theQuestion.text)
@@ -201,14 +174,6 @@ class FillInTheBlankFragment : Fragment(){
             indexForMissingWord = ind
         )
         this.theSentence = theSentence
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        println("FillInTheBlankFragment onResume")
-        //update question
-        //setQuestion()
     }
 
     override fun onDetach() {

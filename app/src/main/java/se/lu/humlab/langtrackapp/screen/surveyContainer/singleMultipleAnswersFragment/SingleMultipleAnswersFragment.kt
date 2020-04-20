@@ -38,7 +38,6 @@ class SingleMultipleAnswersFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //return super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.single_multiple_answers_fragment, container,false)
         binding.lifecycleOwner = this
         binding.executePendingBindings()
@@ -46,11 +45,6 @@ class SingleMultipleAnswersFragment : Fragment(){
         v.singleMultipleAnswerNextButton.setOnClickListener {
             theAnswer = null
             listener?.nextQuestion(theQuestion)
-            /*if (question.skip != null){
-                if (question.skip?.ifChosen == selectedRadioButton){
-                    //listener?.goToNextItemWithSkipLogic(question)
-                }else listener?.nextQuestion(current = question)
-            }else listener?.nextQuestion(current = question)*/
         }
         v.singleMultipleAnswerBackButton.setOnClickListener {
             theAnswer = null
@@ -74,7 +68,6 @@ class SingleMultipleAnswersFragment : Fragment(){
         if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
-                //load survey
                 setQuestion()
             }
         }else {
@@ -110,7 +103,6 @@ class SingleMultipleAnswersFragment : Fragment(){
 
     override fun onResume() {
         super.onResume()
-        //update question
         setQuestion()
     }
 

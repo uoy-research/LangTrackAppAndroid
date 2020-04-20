@@ -35,7 +35,6 @@ class MultipleChoiceFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //return super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.multiple_choice_fragment, container,false)
         binding.lifecycleOwner = this
         binding.executePendingBindings()
@@ -43,11 +42,6 @@ class MultipleChoiceFragment : Fragment(){
         v.multipleChoiseFragmentNextButton.setOnClickListener {
             theAnswer = null
             listener?.nextQuestion(theQuestion)
-            /*if (question.skip != null){
-                if (question.skip?.ifChosen == getChoiceIfOnlyOneSelected() ?: -1){
-                    //listener?.goToNextItemWithSkipLogic(question)
-                }else listener?.nextQuestion(current = question)
-            }else listener?.nextQuestion(current = question)*/
         }
         v.multipleChoiseFragmentBackButton.setOnClickListener {
             theAnswer = null
@@ -61,7 +55,6 @@ class MultipleChoiceFragment : Fragment(){
         if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
-                //load survey
                 setQuestion()
             }
         }else {
@@ -73,24 +66,6 @@ class MultipleChoiceFragment : Fragment(){
         if (::binding.isInitialized) {
             binding.multipleTextTextView.text = theQuestion.text
             showChoices()
-        }
-    }
-
-    fun getChoiceIfOnlyOneSelected(): Int?{
-        var choise = 0
-        var number = 0
-        for (view in binding.multipleRadioButtonContainer.children){
-            if (view is CheckBox){
-                if (view.isChecked ){
-                    choise = view.tag as Int
-                    number += 1
-                }
-            }
-        }
-        if (number == 1){
-            return choise
-        }else{
-            return null
         }
     }
 
@@ -132,19 +107,6 @@ class MultipleChoiceFragment : Fragment(){
                                 listener?.setMultipleAnswersAnswer(theAnswer?.multipleChoiceAnswer)
                             }
                         }
-                        /*var saveChoices = mutableListOf<Int>()
-                        for (selected in selectedChoices){
-                            if (selected.value == true){
-                                saveChoices.add(selected.key)
-                            }
-                        }
-                        if (saveChoices.isEmpty()){
-                            listener?.setMultipleAnswersAnswer(null)
-                            println("saveChoices: null")
-                        }else {
-                            listener?.setMultipleAnswersAnswer(saveChoices)
-                            println("saveChoices: $saveChoices")
-                        }*/
                     }
                 }
                 binding.multipleRadioButtonContainer.addView(checkBox)
@@ -155,7 +117,6 @@ class MultipleChoiceFragment : Fragment(){
 
     override fun onResume() {
         super.onResume()
-        //update question
         if (::binding.isInitialized) {
             setQuestion()
         }
