@@ -37,24 +37,17 @@ class LikertScaleFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //return super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.likert_scale_fragment, container,false)
         binding.setLifecycleOwner(this)
         binding.executePendingBindings()
         val v = binding.root
         v.likertScaleNextButton.setOnClickListener {
-
-            listener?.nextQuestion(question)
             theAnswer = null
-            /*if (question.skip != null){
-                if (question.skip?.ifChosen == selectedRadioButton){
-                    listener?.goToNextItemWithSkipLogic(question)
-                }else listener?.nextItem(current = question)
-            }else listener?.nextItem(current = question)*/
+            listener?.nextQuestion(question)
         }
         v.likertScaleBackButton.setOnClickListener {
-            listener?.prevoiusQuestion(current = question)
             theAnswer = null
+            listener?.prevoiusQuestion(current = question)
         }
         v.likertScaleRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId != -1) {
@@ -71,7 +64,6 @@ class LikertScaleFragment : Fragment(){
         if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
-                //load survey
                 setQuestion()
             }
         }else {
@@ -106,7 +98,6 @@ class LikertScaleFragment : Fragment(){
 
     override fun onResume() {
         super.onResume()
-        //update question
         setQuestion()
     }
 

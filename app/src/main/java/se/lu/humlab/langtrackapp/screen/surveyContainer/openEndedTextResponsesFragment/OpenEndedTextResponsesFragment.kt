@@ -58,7 +58,6 @@ class OpenEndedTextResponsesFragment : Fragment(){
                 hideKeyboard()
                 return@setOnKeyListener true
             }
-
             false
         }
         return v
@@ -97,7 +96,6 @@ class OpenEndedTextResponsesFragment : Fragment(){
     }
 
     private fun hideKeyboard() {
-
         if (activity != null) {
             val imm =
                 activity!!.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager

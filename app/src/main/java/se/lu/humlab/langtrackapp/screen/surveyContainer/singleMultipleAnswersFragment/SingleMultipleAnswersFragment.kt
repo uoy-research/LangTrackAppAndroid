@@ -38,23 +38,17 @@ class SingleMultipleAnswersFragment : Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //return super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.single_multiple_answers_fragment, container,false)
         binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
         v.singleMultipleAnswerNextButton.setOnClickListener {
-            listener?.nextQuestion(theQuestion)
             theAnswer = null
-            /*if (question.skip != null){
-                if (question.skip?.ifChosen == selectedRadioButton){
-                    //listener?.goToNextItemWithSkipLogic(question)
-                }else listener?.nextQuestion(current = question)
-            }else listener?.nextQuestion(current = question)*/
+            listener?.nextQuestion(theQuestion)
         }
         v.singleMultipleAnswerBackButton.setOnClickListener {
-            listener?.prevoiusQuestion(current = theQuestion)
             theAnswer = null
+            listener?.prevoiusQuestion(current = theQuestion)
         }
         v.singleMultipleAnswerContainer.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId != -1 ) {
@@ -74,7 +68,6 @@ class SingleMultipleAnswersFragment : Fragment(){
         if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
-                //load survey
                 setQuestion()
             }
         }else {
@@ -90,7 +83,6 @@ class SingleMultipleAnswersFragment : Fragment(){
     }
 
     fun presentChoices(){
-        binding.singleMultipleAnswerContainer.removeAllViews()
         if (theQuestion.singleMultipleAnswers != null) {
             binding.singleMultipleAnswerContainer.removeAllViews()
             for ((index, choice) in theQuestion.singleMultipleAnswers!!.withIndex()) {
@@ -111,7 +103,6 @@ class SingleMultipleAnswersFragment : Fragment(){
 
     override fun onResume() {
         super.onResume()
-        //update question
         setQuestion()
     }
 

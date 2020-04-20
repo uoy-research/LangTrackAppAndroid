@@ -29,30 +29,23 @@ class MultipleChoiceFragment : Fragment(){
     lateinit var binding: MultipleChoiceFragmentBinding
     lateinit var theQuestion: Question
     var theAnswer: Answer? = null
-    var selectedChoices = mutableMapOf<Int, Boolean>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //return super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.multiple_choice_fragment, container,false)
         binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
         v.multipleChoiseFragmentNextButton.setOnClickListener {
-            listener?.nextQuestion(theQuestion)
             theAnswer = null
-            /*if (question.skip != null){
-                if (question.skip?.ifChosen == getChoiceIfOnlyOneSelected() ?: -1){
-                    //listener?.goToNextItemWithSkipLogic(question)
-                }else listener?.nextQuestion(current = question)
-            }else listener?.nextQuestion(current = question)*/
+            listener?.nextQuestion(theQuestion)
         }
         v.multipleChoiseFragmentBackButton.setOnClickListener {
-            listener?.prevoiusQuestion(current = theQuestion)
             theAnswer = null
+            listener?.prevoiusQuestion(current = theQuestion)
         }
         return v
     }
@@ -62,7 +55,6 @@ class MultipleChoiceFragment : Fragment(){
         if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
-                //load survey
                 setQuestion()
             }
         }else {
@@ -77,26 +69,9 @@ class MultipleChoiceFragment : Fragment(){
         }
     }
 
-    fun getChoiceIfOnlyOneSelected(): Int?{
-        var choise = 0
-        var number = 0
-        for (view in binding.multipleRadioButtonContainer.children){
-            if (view is CheckBox){
-                if (view.isChecked ){
-                    choise = view.tag as Int
-                    number += 1
-                }
-            }
-        }
-        if (number == 1){
-            return choise
-        }else{
-            return null
-        }
-    }
-
     fun showChoices(){
         if (theQuestion.multipleChoisesAnswers != null) {
+            binding.multipleRadioButtonContainer.removeAllViews()
             for ((index,choice) in theQuestion.multipleChoisesAnswers!!.withIndex()) {
                 val checkBox = CheckBox(binding.multipleRadioButtonContainer.context)
                 checkBox.tag = index
@@ -106,18 +81,31 @@ class MultipleChoiceFragment : Fragment(){
                     val theCheckbox = it as? CheckBox
                     if (theCheckbox != null){
                         if (theCheckbox.tag is Int) {
-                            selectedChoices[theCheckbox.tag as? Int ?: -99] = theCheckbox.isChecked
-                        }
-                        var saveChoices = mutableListOf<Int>()
-                        for (selected in selectedChoices){
-                            if (selected.value == true){
-                                saveChoices.add(selected.key)
+                            val theTag = theCheckbox.tag as? Int ?: -99
+                            if (theTag != -99){
+                                if (theCheckbox.isChecked){
+                                    if (theAnswer == null){
+                                        theAnswer = Answer()
+                                    }
+                                    if (theAnswer?.multipleChoiceAnswer.isNullOrEmpty()) {
+                                        if (theAnswer!!.multipleChoiceAnswer == null) {
+                                            theAnswer!!.multipleChoiceAnswer = mutableListOf()
+                                        }
+                                        theAnswer!!.multipleChoiceAnswer!!.add(theTag)
+                                    }else{
+                                        if (theAnswer?.multipleChoiceAnswer != null) {
+                                            if (!theAnswer!!.multipleChoiceAnswer!!.contains(theTag)) {
+                                                theAnswer!!.multipleChoiceAnswer!!.add(theTag)
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    if (theAnswer?.multipleChoiceAnswer != null) {
+                                        theAnswer!!.multipleChoiceAnswer!!.remove(theTag)
+                                    }
+                                }
+                                listener?.setMultipleAnswersAnswer(theAnswer?.multipleChoiceAnswer)
                             }
-                        }
-                        if (saveChoices.isEmpty()){
-                            listener?.setMultipleAnswersAnswer(null)
-                        }else {
-                            listener?.setMultipleAnswersAnswer(saveChoices)
                         }
                     }
                 }
@@ -129,7 +117,6 @@ class MultipleChoiceFragment : Fragment(){
 
     override fun onResume() {
         super.onResume()
-        //update question
         if (::binding.isInitialized) {
             setQuestion()
         }

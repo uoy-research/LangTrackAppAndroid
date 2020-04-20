@@ -48,10 +48,11 @@
 
         <LinearLayout
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="1dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="1dp"
-            android:layout_marginBottom="1dp"
+            android:layout_marginBottom="5dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/singleMultipleAnswerNextButton"
             app:layout_constraintEnd_toEndOf="parent"
@@ -64,7 +65,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="15dp"
-                android:layout_marginTop="40dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="15dp"
                 android:text="Har du kommit i kontakt med något främmande språk den senaste timmen"
                 android:textAlignment="center"
@@ -75,28 +76,35 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:paddingStart="25dp"
+                android:paddingEnd="15dp">
 
-                <RadioGroup
-                    android:id="@+id/singleMultipleAnswerContainer"
+                <ScrollView
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="20dp"
-                    android:paddingEnd="20dp">
+                    android:layout_height="wrap_content">
 
-                    <RadioButton
-                        android:id="@+id/radioButton6"
-                        android:layout_width="match_parent"
+                    <RadioGroup
+                        android:id="@+id/singleMultipleAnswerContainer"
+                        android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="RadioButton" />
+                        android:orientation="vertical"
+                        android:paddingTop="20dp"
+                        android:paddingEnd="20dp">
 
-                    <RadioButton
-                        android:id="@+id/radioButton7"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:text="RadioButton" />
-                </RadioGroup>
+                        <RadioButton
+                            android:id="@+id/radioButton6"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="RadioButton" />
+
+                        <RadioButton
+                            android:id="@+id/radioButton7"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="RadioButton" />
+                    </RadioGroup>
+                </ScrollView>
             </LinearLayout>
         </LinearLayout>
 
