@@ -54,6 +54,7 @@ class LikertScaleFragment : Fragment(){
                 val radio: RadioButton = v.findViewById(checkedId)
                 selectedRadioButton = (radio.tag as String).toInt()
                 listener?.setLikertAnswer(selectedRadioButton)
+                binding.likertScaleNextButton.isEnabled = true
             }
         }
         return v
@@ -76,6 +77,7 @@ class LikertScaleFragment : Fragment(){
             binding.likertScaleRadioGroup.clearCheck()
             binding.likertScaleDescriptionTextView.text = question.description
             binding.likertScaleTextTextView.text = question.text
+            binding.likertScaleNextButton.isEnabled = false
             if (theAnswer != null) {
                 if (theAnswer!!.likertAnswer != null){
                     if (theAnswer!!.index == question.index){
@@ -89,6 +91,7 @@ class LikertScaleFragment : Fragment(){
                         }
                         if (theRadioButton != null) {
                             binding.likertScaleRadioGroup.check(theRadioButton)
+                            binding.likertScaleNextButton.isEnabled = true
                         }
                     }
                 }

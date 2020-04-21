@@ -105,6 +105,7 @@ class MultipleChoiceFragment : Fragment(){
                                     }
                                 }
                                 listener?.setMultipleAnswersAnswer(theAnswer?.multipleChoiceAnswer)
+                                setNextButton()
                             }
                         }
                     }
@@ -113,6 +114,12 @@ class MultipleChoiceFragment : Fragment(){
                 checkBox.isChecked = theAnswer?.multipleChoiceAnswer?.contains(index) == true
             }
         }
+        setNextButton()
+    }
+
+    private fun setNextButton(){
+        binding.multipleChoiseFragmentNextButton.isEnabled =
+            !theAnswer?.multipleChoiceAnswer.isNullOrEmpty()
     }
 
     override fun onResume() {

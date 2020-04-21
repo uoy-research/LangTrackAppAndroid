@@ -169,13 +169,13 @@ class FillInTheBlankFragment : Fragment(){
             tempListWithWords[theSentence!!.indexForMissingWord] = theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: ""
             binding.fillInTheBlankTextView.text = underlineSelectedWord(tempListWithWords,
                 theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: "")
-            binding.fillInTheBlankNextButton.isEnabled = true
+            binding.fillInTheBlankNextButton.isEnabled = theChosenWordIndex != 0
         }else{
             val tempListWithWords = theSentence!!.listWithWords.toMutableList()
             tempListWithWords[theSentence!!.indexForMissingWord] = theQuestion.fillBlanksChoises?.get(indexOfWord) ?: ""
             binding.fillInTheBlankTextView.text = underlineSelectedWord(tempListWithWords,
                 theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: "")
-            binding.fillInTheBlankNextButton.isEnabled = true
+            binding.fillInTheBlankNextButton.isEnabled = theChosenWordIndex != 0
         }
     }
 
