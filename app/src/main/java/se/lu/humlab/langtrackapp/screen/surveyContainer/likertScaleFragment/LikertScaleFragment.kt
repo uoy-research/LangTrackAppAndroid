@@ -76,6 +76,8 @@ class LikertScaleFragment : Fragment(){
         if (::binding.isInitialized) {
             binding.likertScaleRadioGroup.clearCheck()
             binding.likertScaleDescriptionTextView.text = question.description
+            binding.likertScaleMin.text = question.likertMin
+            binding.likertScaleMax.text = question.likertMax
             binding.likertScaleTextTextView.text = question.text
             binding.likertScaleNextButton.isEnabled = false
             if (theAnswer != null) {
