@@ -339,6 +339,14 @@ class Repository(val context: Context) {
             }catch (e: Exception){ println("e: ${e.localizedMessage}")}
 
             try {
+                tempQuestion.likertMax = question.get("maxAnnotation") as? String ?: ""
+            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+
+            try {
+                tempQuestion.likertMin = question.get("minAnnotation") as? String ?: ""
+            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+
+            try {
                 tempQuestion.id = question.get("id") as? String ?: ""
             }catch (e: Exception){ println("e: ${e.localizedMessage}")}
 
