@@ -31,7 +31,7 @@ class SingleMultipleAnswersFragment : Fragment(){
     lateinit var binding: SingleMultipleAnswersFragmentBinding
     lateinit var theQuestion: Question
     var theAnswer: Answer? = null
-    var selectedRadioButton = 0
+    var selectedRadioButton = -99
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,6 +57,7 @@ class SingleMultipleAnswersFragment : Fragment(){
                     selectedRadioButton = radio.tag as Int
                     listener?.setSingleMultipleAnswer(selectedRadioButton)
                     println("selectedRadioButton: $selectedRadioButton")
+                    setNextButton()
                 }
             }
         }
@@ -83,6 +84,7 @@ class SingleMultipleAnswersFragment : Fragment(){
     }
 
     fun presentChoices(){
+        selectedRadioButton = -99
         if (theQuestion.singleMultipleAnswers != null) {
             binding.singleMultipleAnswerContainer.removeAllViews()
             for ((index, choice) in theQuestion.singleMultipleAnswers!!.withIndex()) {
@@ -99,6 +101,13 @@ class SingleMultipleAnswersFragment : Fragment(){
                 }
             }
         }
+        setNextButton()
+    }
+
+    private fun setNextButton(){
+        binding.singleMultipleAnswerNextButton.isEnabled =
+            selectedRadioButton != -99
+
     }
 
     override fun onResume() {

@@ -163,16 +163,19 @@ class FillInTheBlankFragment : Fragment(){
         if (indexOfWord == null){
             binding.fillInTheBlankTextView.text = theSentence!!.listWithWords.joinToString(separator = " ")
             binding.fillInTheBlankSpinnerTitle
+            binding.fillInTheBlankNextButton.isEnabled = false
         }else if (theChosenWordIndex != null){
             val tempListWithWords = theSentence!!.listWithWords.toMutableList()
             tempListWithWords[theSentence!!.indexForMissingWord] = theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: ""
             binding.fillInTheBlankTextView.text = underlineSelectedWord(tempListWithWords,
                 theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: "")
+            binding.fillInTheBlankNextButton.isEnabled = theChosenWordIndex != 0
         }else{
             val tempListWithWords = theSentence!!.listWithWords.toMutableList()
             tempListWithWords[theSentence!!.indexForMissingWord] = theQuestion.fillBlanksChoises?.get(indexOfWord) ?: ""
             binding.fillInTheBlankTextView.text = underlineSelectedWord(tempListWithWords,
                 theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: "")
+            binding.fillInTheBlankNextButton.isEnabled = theChosenWordIndex != 0
         }
     }
 
