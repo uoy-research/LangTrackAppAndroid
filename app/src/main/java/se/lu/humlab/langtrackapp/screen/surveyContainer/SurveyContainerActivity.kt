@@ -198,10 +198,53 @@ class SurveyContainerActivity : AppCompatActivity(),
         }
     }
 
+    fun skipIsExecuted(current: Question) : Question?{
+        current.skip?.also { skip ->
+            val answerObj = answer[current.index]
+            if (answerObj != null){
+                when (answerObj.type){
+                    LIKERT_SCALES -> {
+                        return if (skip.ifChosen == answerObj.likertAnswer){
+                            theAssignment?.survey?.questions?.first { it.index == skip.goto }
+                        }else null
+                    }
+                    SINGLE_MULTIPLE_ANSWERS -> {
+                        return if (skip.ifChosen == answerObj.singleMultipleAnswer){
+                            theAssignment?.survey?.questions?.first { it.index == skip.goto }
+                        }else null
+                    }
+                    FILL_IN_THE_BLANK -> {
+                        return if (skip.ifChosen == answerObj.fillBlankAnswer){
+                            theAssignment?.survey?.questions?.first { it.index == skip.goto }
+                        }else null
+                    }
+                    MULTIPLE_CHOICE -> {
+                        return if (answerObj.multipleChoiceAnswer?.contains(skip.ifChosen) == true){
+                            theAssignment?.survey?.questions?.first { it.index == skip.goto }
+                        }else null
+                    }
+                    else -> return null
+                }
+            }else return null
+        } ?: run {
+            return null
+        }
+        return null
+    }
+
     // OnQuestionInteractionListener
 
     override fun nextQuestion(current: Question) {
-        showQuestion(index = current.next)
+        if(theAssignment != null){
+            theAssignment!!.survey.questions?.sortedBy { it.index }
+            skipIsExecuted(current)?.also { skipToQuestion ->
+                skipToQuestion.previous = currentPage.index
+                showQuestion(skipToQuestion.index)
+            } ?: run {
+                //checkNext(current: current)
+                showQuestion(index = current.next)//REMOVE
+            }
+        }
     }
 
     override fun prevoiusQuestion(current: Question) {
@@ -214,15 +257,6 @@ class SurveyContainerActivity : AppCompatActivity(),
     override fun closeSurvey() {
         onBackPressed()
     }
-
-    /*override fun goToNextItemWithSkipLogic(currentQuestion: Question) {
-        for (question in questionList){
-            if (question.index == currentQuestion.skip!!.goto){
-                question.previous = currentQuestion.index
-            }
-        }
-        showQuestion(index = currentQuestion.skip!!.goto)
-    }*/
 
     override fun sendInSurvey() {
         if (answer.isNotEmpty()){
