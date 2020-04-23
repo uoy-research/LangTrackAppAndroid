@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="300dp"
     android:layout_height="wrap_content"
-    android:background="@drawable/popup_alert_background"
+    android:background="@drawable/overview_top_background"
     android:clipChildren="true"
     android:clipToPadding="true">
 
@@ -15,8 +15,9 @@
         android:layout_marginStart="10dp"
         android:layout_marginTop="15dp"
         android:layout_marginEnd="10dp"
-        android:text="Utgången enkät"
+        android:text="Obesvarad enkät"
         android:textAlignment="center"
+        android:textColor="@color/lta_light_grey"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -33,7 +34,7 @@
         android:paddingBottom="3dp"
         android:text="texten"
         android:textAlignment="center"
-        android:textColor="@android:color/black"
+        android:textColor="@android:color/white"
         android:textSize="17sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -41,22 +42,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/popupExpiredTitleTextView" />
 
-    <Button
+    <ImageButton
         android:id="@+id/popupExpiredOkButton"
-        android:layout_width="0dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="5dp"
-        android:layout_marginEnd="5dp"
-        android:layout_marginBottom="5dp"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="10dp"
         android:background="@android:color/transparent"
         android:elevation="5dp"
+        android:scaleType="centerInside"
+        android:src="@drawable/close_icon"
         android:text="Ok"
         android:textAllCaps="false"
         android:textColor="@color/lta_blue"
         android:textSize="21sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintBottom_toBottomOf="@+id/popupExpiredTitleTextView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/popupExpiredTitleTextView" />
 
     <TextView
         android:id="@+id/textView15"
@@ -64,6 +65,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:text="Antal frågor:"
+        android:textColor="@color/lta_light_grey"
         android:textStyle="italic"
         app:layout_constraintStart_toStartOf="@+id/popupExpiredInfoTextView"
         app:layout_constraintTop_toBottomOf="@+id/popupExpiredInfoTextView" />
@@ -73,6 +75,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="0"
+        android:textColor="@color/lta_light_grey"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView15"
         app:layout_constraintEnd_toEndOf="parent"
@@ -84,6 +87,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="2020-04-13 11:58"
+        android:textColor="@color/lta_light_grey"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView17"
         app:layout_constraintEnd_toEndOf="parent"
@@ -96,6 +100,7 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="2020-04-13 12:58"
+        android:textColor="@color/lta_light_grey"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="@+id/textView19"
         app:layout_constraintEnd_toEndOf="parent"
@@ -109,6 +114,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:text="Publicerad:"
+        android:textColor="@color/lta_light_grey"
         android:textStyle="italic"
         app:layout_constraintStart_toStartOf="@+id/textView15"
         app:layout_constraintTop_toBottomOf="@+id/textView15" />
@@ -118,10 +124,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:layout_marginBottom="20dp"
+        android:layout_marginBottom="15dp"
         android:text="Utgången:"
+        android:textColor="@color/lta_light_grey"
         android:textStyle="italic"
-        app:layout_constraintBottom_toTopOf="@+id/popupExpiredOkButton"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/textView17"
         app:layout_constraintTop_toBottomOf="@+id/textView17" />
 

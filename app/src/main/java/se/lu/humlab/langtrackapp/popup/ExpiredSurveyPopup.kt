@@ -6,6 +6,7 @@ import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.*
 import android.widget.Button
+import android.widget.ImageButton
 import android.widget.TextView
 import androidx.fragment.app.DialogFragment
 import kotlinx.android.synthetic.main.popup_expired_survey.view.*
@@ -29,7 +30,7 @@ class ExpiredSurveyPopup: DialogFragment() {
         val numberTextView = rootView.findViewById<TextView>(R.id.popupExpiredNumberOfQuestionTextView)
         val publishedTextView = rootView.findViewById<TextView>(R.id.popupExpiredPublishedTextView)
         val expiredTextView = rootView.findViewById<TextView>(R.id.popupExpiredExpiredTextView)
-        val okButton = rootView.findViewById<Button>(R.id.popupExpiredOkButton)
+        val okButton = rootView.findViewById<ImageButton>(R.id.popupExpiredOkButton)
 
         popupWidth = arguments?.getInt(WIDTH)
         val infoText = arguments?.getString(TEXT_VIEW_TEXT)
@@ -38,7 +39,7 @@ class ExpiredSurveyPopup: DialogFragment() {
         val questionNumber = arguments?.getInt(NUMBER_OF_QUESTIONS, 0)
         val placeCenter = arguments?.getBoolean(PLACE_CENTER) ?: false
 
-        okButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
+        //okButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
         titleView.text = "Utgången enkät"
         infoView.text = infoText
