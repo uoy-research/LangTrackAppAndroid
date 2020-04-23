@@ -118,8 +118,7 @@ class Repository(val context: Context) {
         Fuel.get(assigmnentUrl)
             .header(mapOf("token" to idToken))
             .response { request, response, result ->
-                println(request)
-                println(response)
+
                 val (bytes, error) = result
                 if (error == null) {
                     if (bytes != null) {

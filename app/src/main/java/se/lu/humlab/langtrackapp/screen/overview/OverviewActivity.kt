@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Assignment
+import se.lu.humlab.langtrackapp.data.model.OverviewListItem
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.OverviewActivityBinding
 import se.lu.humlab.langtrackapp.screen.overview.overviewQuestionViews.*
@@ -31,6 +32,7 @@ class OverviewActivity : AppCompatActivity() {
     private lateinit var viewModel :OverviewViewModel
     var topViewIsShowing = false
     var theAssignment: Assignment? = null
+    var questionsWithAnswers = mutableListOf<OverviewListItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -43,12 +45,13 @@ class OverviewActivity : AppCompatActivity() {
         theAssignment = intent.getParcelableExtra(ASSIGNMENT)
 
         if (theAssignment != null) {
+            filterList()
             presentQuestionsInScrollview()
         }
 
         binding.overviewTopTitleTextView.text = "Besvarad enkät"
         binding.overviewTopInfoTextView.text = theAssignment?.survey?.title ?: "noTitle"
-        binding.overviewTopNumberOfQuestionTextView.text = "${theAssignment?.survey?.questions?.size ?: 0} st"
+        //binding.overviewTopNumberOfQuestionTextView.text = "${theAssignment?.survey?.questions?.size ?: 0} st"
         binding.overviewTopPublishedTextView.text = theAssignment?.publishAt?.toDate()?.formatToReadable() ?: "noDate"
         binding.overviewTopExpiredTextView.text = theAssignment?.dataset?.updatedAt?.toDate()?.formatToReadable() ?: "noDate"
         binding.overviewTopOkButton.setOnClickListener {
@@ -56,29 +59,58 @@ class OverviewActivity : AppCompatActivity() {
         }
     }
 
+    private fun filterList(){
+        if (theAssignment != null){
+            val header = theAssignment!!.survey.questions?.find { it.type == HEADER_VIEW }
+            if (header != null){
+                val answer = Answer(type = HEADER_VIEW, index = header.index)
+                questionsWithAnswers.add(OverviewListItem(header,answer))
+            }
+            for (que in theAssignment!!.survey.questions!!){
+
+                val answers = theAssignment!!.dataset?.answers
+                if (answers != null) {
+                    if (que.type != HEADER_VIEW && que.type != FOOTER_VIEW) {
+                        val answer = answers.find { it.index == que.index }
+                        if (answer != null){
+                            questionsWithAnswers.add(
+                                OverviewListItem(
+                                    question = que,
+                                    answer = answer
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+            //MARK: add footer too?
+        }
+        questionsWithAnswers.sortedBy { it.question.index }
+        binding.overviewTopNumberOfQuestionTextView.text = "Totalt ${(theAssignment!!.survey.questions?.size ?: 0) - 2}, besvarade ${questionsWithAnswers.size - 1}"
+
+
+    }
+
     private fun presentQuestionsInScrollview(){
         if (!theAssignment!!.survey.questions.isNullOrEmpty()) {
-            val questionsWithoutHeaderAndFooter = theAssignment!!.survey.questions!!
-                .filter { it.type != HEADER_VIEW &&
-                    it.type != FOOTER_VIEW
-            }
-            for (question in questionsWithoutHeaderAndFooter) {
+
+            for (listItem in questionsWithAnswers) {
 
                 val selectedAnswerIndex = if(!theAssignment!!.dataset?.answers.isNullOrEmpty())
-                    theAssignment!!.dataset!!.answers.indexOfFirst { it.index == question.index } else null
+                    theAssignment!!.dataset!!.answers.indexOfFirst { it.index == listItem.question.index } else null
                 var selectedAnswer: Answer? = null
                 try {
                     selectedAnswer = theAssignment!!.dataset!!.answers[selectedAnswerIndex!!]
                 } catch (e: Exception){
                     println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
 
-                when (question.type) {
+                when (listItem.question.type) {
                     LIKERT_SCALES -> {
                         val likert = OverviewLikertView(this)
                         if (selectedAnswer?.likertAnswer ?: -1 != -1 &&
                                 selectedAnswer?.likertAnswer ?: -1 >= 0 &&
                                 selectedAnswer?.likertAnswer ?: -1 < 5){
-                            likert.setText(question, selectedAnswer?.likertAnswer!!)
+                            likert.setText(listItem.question, selectedAnswer?.likertAnswer!!)
                         }
                         binding.overviewQuestionContainer.addView(likert)
                     }
@@ -87,10 +119,10 @@ class OverviewActivity : AppCompatActivity() {
                         val selectedWord =
                             if (selectedAnswer != null){
                                 try {
-                                    question.fillBlanksChoises?.get(selectedAnswer.fillBlankAnswer!!)
+                                    listItem.question.fillBlanksChoises?.get(selectedAnswer.fillBlankAnswer!!)
                                 }catch (e: Exception){null}
                             }  else null
-                        likert.setText(question, selectedWord)
+                        likert.setText(listItem.question, selectedWord)
                         binding.overviewQuestionContainer.addView(likert)
                     }
                     MULTIPLE_CHOICE -> {
@@ -99,27 +131,27 @@ class OverviewActivity : AppCompatActivity() {
                         if (selectedAnswer?.multipleChoiceAnswer != null){
                             for (wordIndex in selectedAnswer.multipleChoiceAnswer!!) {
                                 try {
-                                    templist.add(question.multipleChoisesAnswers?.get(wordIndex)!!)
+                                    templist.add(listItem.question.multipleChoisesAnswers?.get(wordIndex)!!)
                                 } catch (e: Exception) {
                                     println("presentQuestionsInScrollview, e: ${e.localizedMessage}")
                                 }
                             }
                         }
-                        likert.setText(question, templist)
+                        likert.setText(listItem.question, templist)
                         binding.overviewQuestionContainer.addView(likert)
                     }
                     SINGLE_MULTIPLE_ANSWERS -> {
                         val likert = OverviewSingleMultipleView(this)
                         var theChoice: String? = null
                         if (selectedAnswer?.singleMultipleAnswer != null &&
-                            question.singleMultipleAnswers != null) {
+                            listItem.question.singleMultipleAnswers != null) {
                             try {
                                 theChoice =
-                                    question.singleMultipleAnswers!!.get(selectedAnswer.singleMultipleAnswer!!)
+                                    listItem.question.singleMultipleAnswers!!.get(selectedAnswer.singleMultipleAnswer!!)
                             }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
 
                         }
-                        likert.setText(question, theChoice)
+                        likert.setText(listItem.question, theChoice)
                         binding.overviewQuestionContainer.addView(likert)
                     }
                     OPEN_ENDED_TEXT_RESPONSES -> {
@@ -130,7 +162,7 @@ class OverviewActivity : AppCompatActivity() {
                                 theText = selectedAnswer.openEndedAnswer ?: ""
                             }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
                         }
-                        likert.setText(question, theText)
+                        likert.setText(listItem.question, theText)
                         binding.overviewQuestionContainer.addView(likert)
                     }
                 }
