@@ -137,7 +137,8 @@ class FillInTheBlankFragment : Fragment(){
     fun setQuestion(){
         if (::binding.isInitialized) {
             check = 0
-            getTextAsList(theQuestion.text)
+            theSentence = null
+            theSentence = getTextAsList(theQuestion.text)
             setAdapter()
             if (theSentence != null){
                 if (theChosenWordIndex != null){
@@ -150,14 +151,7 @@ class FillInTheBlankFragment : Fragment(){
         }
     }
 
-    fun underlineSelectedWord(list: List<String>, selectedWord: String): SpannableString{
-        val theOrgSentence = list.joinToString(separator = " ")
-        val start = theOrgSentence.indexOf(selectedWord)
-        val end = start + selectedWord.length
-        val returnString = SpannableString(theOrgSentence)
-        returnString.setSpan(UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        return returnString
-    }
+
 
     fun setSentence(indexOfWord: Int?){
         if (indexOfWord == null){
@@ -179,23 +173,7 @@ class FillInTheBlankFragment : Fragment(){
         }
     }
 
-    fun getTextAsList(theText: String){
-        theSentence = null
-        val listWithWords = theText.split(" ")
 
-        var ind = -99
-        for ((i,word) in listWithWords.withIndex()){
-            if (word == "_____"){
-                ind = i
-            }
-
-        }
-        val theSentence = FillInWordSentence(
-            listWithWords = listWithWords,
-            indexForMissingWord = ind
-        )
-        this.theSentence = theSentence
-    }
 
     override fun onDetach() {
         println("FillInTheBlankFragment onDetach")
@@ -210,6 +188,32 @@ class FillInTheBlankFragment : Fragment(){
 
             }
     }
+}
+
+fun underlineSelectedWord(list: List<String>, selectedWord: String): SpannableString{
+    val theOrgSentence = list.joinToString(separator = " ")
+    val start = theOrgSentence.indexOf(selectedWord)
+    val end = start + selectedWord.length
+    val returnString = SpannableString(theOrgSentence)
+    returnString.setSpan(UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    return returnString
+}
+
+fun getTextAsList(theText: String): FillInWordSentence{
+    val listWithWords = theText.split(" ")
+
+    var ind = -99
+    for ((i,word) in listWithWords.withIndex()){
+        if (word == "_____"){
+            ind = i
+        }
+
+    }
+    val theSentence = FillInWordSentence(
+        listWithWords = listWithWords,
+        indexForMissingWord = ind
+    )
+    return theSentence
 }
 
 data class FillInWordSentence (

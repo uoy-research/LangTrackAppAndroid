@@ -8,24 +8,6 @@
     android:layout_height="match_parent"
     tools:context=".screen.overview.OverviewActivity">
 
-    <TextView
-        android:id="@+id/overviewText"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:background="@color/lta_light_grey"
-        android:paddingStart="20dp"
-        android:paddingTop="20dp"
-        android:paddingEnd="20dp"
-        android:paddingBottom="10dp"
-        android:text="TextView"
-        android:textAlignment="center"
-        android:textColor="@color/lta_text"
-        android:textSize="20sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
     <ScrollView
         android:id="@+id/overviewQuestionScrollview"
         android:layout_width="0dp"
@@ -33,40 +15,155 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/overviewText">
+        app:layout_constraintTop_toBottomOf="@+id/constraintLayout">
 
         <LinearLayout
             android:id="@+id/overviewQuestionContainer"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:background="@android:color/white"
             android:orientation="vertical" />
 
     </ScrollView>
 
-    <View
-        android:id="@+id/dimBackgroundView"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@android:color/black"
-        android:onClick="dimBackgroundClicked"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/overviewText" />
-
-    <LinearLayout
-        android:animateLayoutChanges="true"
-        android:id="@+id/topView"
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraintLayout"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@color/lta_light_grey"
-        android:gravity="center"
-        android:orientation="vertical"
+        android:layout_marginStart="1dp"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="1dp"
+        android:background="@drawable/overview_top_background"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/overviewText">
+        app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
+        <TextView
+            android:id="@+id/overviewTopTitleTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:layout_marginEnd="10dp"
+            android:text="Besvarad enkät"
+            android:textAlignment="center"
+            android:textColor="@color/lta_light_grey"
+            android:textSize="16sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/overviewTopInfoTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="12dp"
+            android:layout_marginEnd="15dp"
+            android:minLines="1"
+            android:paddingBottom="3dp"
+            android:text="texten"
+            android:textAlignment="center"
+            android:textColor="@android:color/white"
+            android:textSize="17sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/overviewTopTitleTextView" />
+
+        <ImageButton
+            android:id="@+id/overviewTopOkButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:background="@android:color/transparent"
+            android:elevation="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/close_icon"
+            android:text="Ok"
+            android:textAllCaps="false"
+            android:textColor="@color/lta_blue"
+            android:textSize="21sp"
+            app:layout_constraintBottom_toBottomOf="@+id/overviewTopTitleTextView"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/overviewTopTitleTextView" />
+
+        <TextView
+            android:id="@+id/textView15"
+            android:layout_width="90dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="20dp"
+            android:text="Antal frågor:"
+            android:textColor="@color/lta_light_grey"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/overviewTopInfoTextView"
+            app:layout_constraintTop_toBottomOf="@+id/overviewTopInfoTextView" />
+
+        <TextView
+            android:id="@+id/overviewTopNumberOfQuestionTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="0"
+            android:textColor="@color/lta_light_grey"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView15"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/textView15"
+            app:layout_constraintTop_toTopOf="@+id/textView15" />
+
+        <TextView
+            android:id="@+id/overviewTopPublishedTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="2020-04-13 11:58"
+            android:textColor="@color/lta_light_grey"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView17"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textView15"
+            app:layout_constraintTop_toTopOf="@+id/textView17" />
+
+        <TextView
+            android:id="@+id/overviewTopExpiredTextView"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:text="2020-04-13 12:58"
+            android:textColor="@color/lta_light_grey"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@+id/textView19"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toEndOf="@+id/textView15"
+            app:layout_constraintTop_toTopOf="@+id/textView19" />
+
+        <TextView
+            android:id="@+id/textView17"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="Publicerad:"
+            android:textColor="@color/lta_light_grey"
+            android:textStyle="italic"
+            app:layout_constraintStart_toStartOf="@+id/textView15"
+            app:layout_constraintTop_toBottomOf="@+id/textView15" />
+
+        <TextView
+            android:id="@+id/textView19"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="15dp"
+            android:text="Besvarad:"
+            android:textColor="@color/lta_light_grey"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/textView17"
+            app:layout_constraintTop_toBottomOf="@+id/textView17" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

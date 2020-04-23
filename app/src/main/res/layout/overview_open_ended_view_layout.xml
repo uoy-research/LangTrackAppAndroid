@@ -27,7 +27,7 @@
         android:text="Fritext från deltagaren"
         android:textAlignment="textStart"
         android:textColor="@color/lta_text"
-        android:textSize="20sp"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/overviewOpenViewIcon"
         app:layout_constraintTop_toTopOf="parent" />
@@ -43,7 +43,7 @@
         android:paddingStart="5dp"
         android:textAlignment="textStart"
         android:textColor="@color/lta_blue"
-        android:textSize="20sp"
+        android:textSize="17sp"
         app:layout_constraintBottom_toTopOf="@+id/textView13"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.4"

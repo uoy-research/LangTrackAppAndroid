@@ -190,7 +190,7 @@ class MainActivity : AppCompatActivity() {
 
     fun showPopupSurveyInfo(item: Assignment){
         val alertFm = supportFragmentManager.beginTransaction()
-        val width = (main_layout.measuredWidth * 0.8).toInt()
+        val width = (main_layout.measuredWidth * 0.85).toInt()
 
         val alertPopup = ExpiredSurveyPopup.show(
             width = width,
