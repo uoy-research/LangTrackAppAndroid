@@ -9,18 +9,30 @@ import android.widget.TextView
 import kotlinx.android.synthetic.main.overview_fill_in_blank_view_layout.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Question
+import se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment.FillInWordSentence
+import se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment.getTextAsList
+import se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment.underlineSelectedWord
 
 class OverviewFillInBlankView @JvmOverloads constructor(
 
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr)  {
 
+    var theSentence: FillInWordSentence? = null
+
     init {
         LayoutInflater.from(context).inflate(R.layout.overview_fill_in_blank_view_layout, this, true)
     }
 
     fun setText(question: Question, selectedchoice: String?){
-        overviewFillBlankTextView.text = question.text
+        theSentence = getTextAsList(question.text)
+
+        val tempListWithWords = theSentence!!.listWithWords.toMutableList()
+        tempListWithWords[theSentence!!.indexForMissingWord] = selectedchoice ?: ""
+        overviewFillBlankTextView.text = underlineSelectedWord(tempListWithWords,
+            selectedchoice ?: "")
+
+        //overviewFillBlankTextView.text = question.text
         if (question.fillBlanksChoises != null){
             for (choice in question.fillBlanksChoises!!){
                 val textview = TextView(overviewFillBlankChoicesLayout.context)
