@@ -45,6 +45,10 @@ class MainViewModel(repo: Repository): ViewModel() {
         }*/
     }
 
+    fun setSelectedAssignment(assignment: Assignment?){
+        mRepository.selectedAssignment = assignment
+    }
+
     fun setIdToken(token: String){
         mRepository.idToken = token
     }

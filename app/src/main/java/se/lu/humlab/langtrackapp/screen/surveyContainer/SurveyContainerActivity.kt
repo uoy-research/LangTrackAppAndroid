@@ -111,6 +111,7 @@ class SurveyContainerActivity : AppCompatActivity(),
     }
 
     private fun showQuestion(index: Int){
+        println("showQuestion: $index")
         if (questionList.size > index) {
 
             for (question in questionList) {
@@ -232,6 +233,80 @@ class SurveyContainerActivity : AppCompatActivity(),
         return null
     }
 
+    private fun checkNext(current: Question){
+
+        if (current.index + 1 < theAssignment!!.survey.questions?.size ?: 0){
+            val next = theAssignment!!.survey.questions!![current.index + 1]
+            if (next.includeIf != null){
+                val includeIfIndexQuestion = theAssignment!!.survey.questions!![next.includeIf!!.ifIndex]
+                if (next.includeIf!!.ifIndex == includeIfIndexQuestion.index){
+                    val answer = answer[includeIfIndexQuestion.index] ?: Answer(type = includeIfIndexQuestion.type,index = includeIfIndexQuestion.index)
+                    when (includeIfIndexQuestion.type) {
+                        LIKERT_SCALES -> {
+                            if (next.includeIf?.ifValue ?: -99 == answer.likertAnswer) {
+                                next.previous = currentPage.index
+                                showQuestion(next.index)
+                            }else {
+                                // dont show next - check following question
+                                this.answer.remove(next.index)
+                                checkNext(next)
+                            }
+                        }
+                        SINGLE_MULTIPLE_ANSWERS -> {
+                            if (next.includeIf?.ifValue ?: -99 == answer.singleMultipleAnswer){
+                                next.previous = currentPage.index
+                                showQuestion(next.index)
+                            }else{
+                                // dont show next - check following question
+                                this.answer.remove(next.index)
+                                checkNext(next)
+                            }
+
+                        }
+                        FILL_IN_THE_BLANK -> {
+                            if (next.includeIf?.ifValue ?: -99 == answer.fillBlankAnswer){
+                                next.previous = currentPage.index
+                                showQuestion(next.index)
+                            }else{
+                                // dont show next - check following question
+                                this.answer.remove(next.index)
+                                checkNext(next)
+                            }
+                        }
+
+                        MULTIPLE_CHOICE -> {
+                            if (answer.multipleChoiceAnswer?.contains(next.includeIf?.ifValue ?: -99) == true){
+                                next.previous = currentPage.index
+                                showQuestion(next.index)
+                            }else{
+                                // dont show next - check following question
+                                this.answer.remove(next.index)
+                                checkNext(next)
+                            }
+                        }
+                        else -> {
+                            next.previous = currentPage.index
+                            showQuestion(next.index)
+                        }
+                    }
+                }else{
+                    //next includeIf:ifIndex is not current index - show next
+                    next.previous = currentPage.index
+                    showQuestion(next.index)
+                }
+            }else{
+                //next does not hanve includeIf - show next
+                next.previous = currentPage.index
+                showQuestion(next.index)
+            }
+        }else if (current.index + 1 == theAssignment!!.survey.questions?.size){
+            //next is last (footer) - dont check, show direct
+            if (theAssignment!!.survey.questions?.size ?: 0 > current.index + 1){
+                theAssignment!!.survey.questions!![current.index + 1].previous = currentPage.index
+                showQuestion(theAssignment!!.survey.questions!![current.index + 1].index)
+            }
+        }
+    }
     // OnQuestionInteractionListener
 
     override fun nextQuestion(current: Question) {
@@ -241,16 +316,18 @@ class SurveyContainerActivity : AppCompatActivity(),
                 skipToQuestion.previous = currentPage.index
                 showQuestion(skipToQuestion.index)
             } ?: run {
-                //checkNext(current: current)
-                showQuestion(index = current.next)//REMOVE
+                checkNext(current = current)
             }
         }
     }
 
     override fun prevoiusQuestion(current: Question) {
-        showQuestion(index = current.previous)
-        if (current.previous < current.index - 1) {
-            resetPreviousOfQuestions()
+        if (theAssignment != null){
+            for (q in theAssignment!!.survey.questions!!) {
+            if (q.index == current.previous){
+                showQuestion(q.index)
+            }
+        }
         }
     }
 
@@ -263,7 +340,7 @@ class SurveyContainerActivity : AppCompatActivity(),
             val tempList = theAssignment?.survey?.questions?.sortedBy {it.index }
             val answersToInclude = mutableListOf<Int>()
 
-            var counter = tempList?.get(0)?.index ?: -99
+            var counter = tempList?.last()?.index ?: -99
             if (counter != -99){
                 while (counter > 0) {
                     val currentQuestion = tempList?.first { it.index == counter }
@@ -284,7 +361,7 @@ class SurveyContainerActivity : AppCompatActivity(),
                 }
             }
             println("tempAnswers: $tempAnswers")
-            //SurveyRepository.postAnswer(answerDict: tempAnswers)
+            viewModel.postAnswer(tempAnswers)
         }
         onBackPressed()
     }

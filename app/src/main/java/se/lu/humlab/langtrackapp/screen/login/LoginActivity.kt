@@ -93,7 +93,7 @@ class LoginActivity : AppCompatActivity() {
                 if (it.isSuccessful){
                     val userEmail = mAuth.currentUser!!.email
                     val userName = userEmail?.substringBefore('@')
-                    viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))
+                    viewModel.setCurrentUser(User(userName ?: "",userName ?: "", userEmail ?: ""))
                     onBackPressed()
                 }else{
                     Toast.makeText(this@LoginActivity,

@@ -10,12 +10,12 @@ package se.lu.humlab.langtrackapp.data
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
+import com.google.gson.Gson
 import org.json.JSONArray
 import org.json.JSONObject
 import se.lu.humlab.langtrackapp.data.model.*
-import se.lu.humlab.langtrackapp.util.toDate
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
 import java.lang.Exception
-import java.util.*
 
 
 class Repository(val context: Context) {
@@ -42,6 +42,75 @@ class Repository(val context: Context) {
     }
     fun getCurrentUser(): User{
         return currentUser
+    }
+
+    fun postAnswer(answerDict: Map<Int,Answer>){
+        if (currentUser.id.isNotEmpty()){
+            val answers = mutableListOf<AnswerBody>()
+            var stringValue: String? = null
+            var intValue: Int? = null
+            var multiValue: MutableList<Int>? = null
+            for (answer in answerDict.values){
+                when(answer.type){
+                    SurveyContainerActivity.LIKERT_SCALES ->
+                        intValue = answer.likertAnswer
+                    SurveyContainerActivity.SINGLE_MULTIPLE_ANSWERS ->
+                        intValue = answer.singleMultipleAnswer
+                    SurveyContainerActivity.FILL_IN_THE_BLANK ->
+                        intValue = answer.fillBlankAnswer
+                    SurveyContainerActivity.MULTIPLE_CHOICE ->
+                        multiValue = answer.multipleChoiceAnswer
+                    SurveyContainerActivity.OPEN_ENDED_TEXT_RESPONSES ->
+                        stringValue = answer.openEndedAnswer
+                    SurveyContainerActivity.TIME_DURATION ->
+                        intValue = answer.timeDurationAnswer
+                }
+                val body = AnswerBody(
+                    index = answer.index,
+                    type = answer.type,
+                    intValue = intValue,
+                    multiValue = multiValue,
+                    stringValue = stringValue
+                )
+                if (body.index != -99){
+                    answers.add(body)
+                }
+
+            }
+            val answerUrl = "${ltaUrl}users/${currentUser.id}/assignments/${selectedAssignment!!.id}/datasets"
+            val gson = Gson()
+            val jsonAnswer: String = gson.toJson(answers)
+            println("postA answerUrl: ${answerUrl}")
+            println("postA jsonAnswer list: ${listOf("answers" to jsonAnswer)}")
+            println("postA jsonAnswer map: ${mapOf("answers" to jsonAnswer)}")
+
+            if (selectedAssignment?.id?.isNotEmpty() == true){
+
+                /*Fuel.post(answerUrl, listOf("answers" to jsonTut)).response {
+                        request, response, result ->
+                    println("postA result: $result")
+                }*/
+
+                //{"answers":"[AnswerBody(index=1, type=single, intValue=1, multiValue=null, stringValue=null)]"}
+                // "answers":[{"multiValue":[],"index":1,"type":"single","intValue":1}]
+            }
+            /* iOS:
+            * if selectedAssignment?.id ?? "" != ""{
+                let headers: HTTPHeaders = [
+                    "token": idToken,
+                    "Content-Type":"application/json"
+                ]
+                let answerUrl = "\(ltaUrl)users/\(userId)/assignments/\(selectedAssignment!.id)/datasets"
+                AF.request(answerUrl,
+                           method: .post,
+                           parameters: theBody,
+                           encoder: JSONParameterEncoder.default,
+                           headers: headers).response { response in
+
+                            //debugPrint(response)
+                }
+            }*/
+        }
     }
 
     fun getAssignments(){
