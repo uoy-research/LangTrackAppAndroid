@@ -20,6 +20,7 @@ import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.SurveyContainerActivityBinding
 import se.lu.humlab.langtrackapp.interfaces.*
+import se.lu.humlab.langtrackapp.popup.OneChoicePopup
 import se.lu.humlab.langtrackapp.popup.PopupAlert
 import se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment.FillInTheBlankFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.footerFragment.FooterFragment
@@ -79,6 +80,31 @@ class SurveyContainerActivity : AppCompatActivity(),
         }else{
             showErrorPopup()
         }
+    }
+
+    override fun onBackPressed() {
+        val alertFm = supportFragmentManager.beginTransaction()
+        val width = (surveyContainer_layout.measuredWidth * 0.75).toInt()
+        val oneChoicePopup = OneChoicePopup.show(
+            width = width,
+            title = "Avsluta enkät",
+            infoText = "Vill du stänga enkäten och gå tillbaka till startsidan?\nSvaren kommer inte att sparas.",
+            okButtonText = "Avsluta enkät",
+            placecenter = true,
+            cancelable = true
+        )
+        oneChoicePopup.setCompleteListener(object : OnBoolPopupReturnListener {
+            override fun popupReturn(value: Boolean) {
+                if (value){
+                    closeTheSurvey()
+                }
+            }
+        })
+        oneChoicePopup.show(alertFm, "oneChoicePopup")
+    }
+
+    private fun closeTheSurvey(){
+        super.onBackPressed()
     }
 
     private fun setSurvey(assignment: Assignment){
@@ -332,7 +358,7 @@ class SurveyContainerActivity : AppCompatActivity(),
     }
 
     override fun closeSurvey() {
-        onBackPressed()
+        closeTheSurvey()
     }
 
     override fun sendInSurvey() {
