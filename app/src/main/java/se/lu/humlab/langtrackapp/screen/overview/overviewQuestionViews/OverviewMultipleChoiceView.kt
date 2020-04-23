@@ -26,7 +26,7 @@ class OverviewMultipleChoiceView @JvmOverloads constructor(
                 checkbox.text = answer
                 checkbox.isClickable = false
                 if (choices.contains(answer)){
-                    checkbox.textSize = 19F
+                    checkbox.textSize = 17F
                     checkbox.setTextColor(resources.getColor(R.color.lta_blue,null))
                     checkbox.isChecked = true
                 }else{

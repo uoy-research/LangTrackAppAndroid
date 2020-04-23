@@ -27,7 +27,7 @@ class OverviewSingleMultipleView @JvmOverloads constructor(
                 val  textView = RadioButton(overviewSingleViewChoices.context)
                 textView.text = choice
                 if (choice == answer){
-                    textView.textSize = 19F
+                    textView.textSize = 17F
                     textView.setTextColor(resources.getColor(R.color.lta_blue,null))
                     textView.isChecked = true
                 }else{

@@ -41,7 +41,7 @@ class ExpiredSurveyPopup: DialogFragment() {
 
         //okButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
-        titleView.text = "Utgången enkät"
+        titleView.text = "Obesvarad enkät"
         infoView.text = infoText
         numberTextView.text = "$questionNumber st"
         publishedTextView.text = publishedText.toDate()?.formatToReadable() ?: "noDate"

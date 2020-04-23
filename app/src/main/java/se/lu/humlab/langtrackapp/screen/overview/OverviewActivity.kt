@@ -70,7 +70,7 @@ class OverviewActivity : AppCompatActivity() {
 
                 val answers = theAssignment!!.dataset?.answers
                 if (answers != null) {
-                    if (que.type != HEADER_VIEW && que.type != FOOTER_VIEW) {
+                    if (que.type != FOOTER_VIEW) {
                         val answer = answers.find { it.index == que.index }
                         if (answer != null){
                             questionsWithAnswers.add(
@@ -105,6 +105,11 @@ class OverviewActivity : AppCompatActivity() {
                     println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
 
                 when (listItem.question.type) {
+                    HEADER_VIEW -> {
+                        val header = OverviewHeaderView(this)
+                        header.setText(listItem.question)
+                        binding.overviewQuestionContainer.addView(header)
+                    }
                     LIKERT_SCALES -> {
                         val likert = OverviewLikertView(this)
                         if (selectedAnswer?.likertAnswer ?: -1 != -1 &&
