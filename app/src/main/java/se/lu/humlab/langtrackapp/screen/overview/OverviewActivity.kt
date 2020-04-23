@@ -21,6 +21,8 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.MULTIPLE_CHOICE
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.OPEN_ENDED_TEXT_RESPONSES
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.SINGLE_MULTIPLE_ANSWERS
+import se.lu.humlab.langtrackapp.util.formatToReadable
+import se.lu.humlab.langtrackapp.util.toDate
 import java.lang.Exception
 
 class OverviewActivity : AppCompatActivity() {
@@ -39,24 +41,18 @@ class OverviewActivity : AppCompatActivity() {
             OverviewViewModelFactory(this)
         ).get(OverviewViewModel::class.java)
         theAssignment = intent.getParcelableExtra(ASSIGNMENT)
-        binding.overviewText.text = theAssignment?.survey?.title ?: "hej"
-
-        binding.overviewText.setOnClickListener {
-            //changeSizeOfTopView()
-            if (topViewIsShowing) {
-                binding.topView.removeAllViews()
-                unDimBackground()
-            }else{
-                addTextToTopView()
-            }
-            topViewIsShowing = !topViewIsShowing
-        }
-
-        binding.dimBackgroundView.alpha = 0F
-        binding.dimBackgroundView.isClickable = false
 
         if (theAssignment != null) {
             presentQuestionsInScrollview()
+        }
+
+        binding.overviewTopTitleTextView.text = "Besvarad enkät"
+        binding.overviewTopInfoTextView.text = theAssignment?.survey?.title ?: "noTitle"
+        binding.overviewTopNumberOfQuestionTextView.text = "${theAssignment?.survey?.questions?.size ?: 0} st"
+        binding.overviewTopPublishedTextView.text = theAssignment?.publishAt?.toDate()?.formatToReadable() ?: "noDate"
+        binding.overviewTopExpiredTextView.text = theAssignment?.dataset?.updatedAt?.toDate()?.formatToReadable() ?: "noDate"
+        binding.overviewTopOkButton.setOnClickListener {
+            onBackPressed()
         }
     }
 
@@ -140,38 +136,6 @@ class OverviewActivity : AppCompatActivity() {
                 }
             }
         }
-    }
-
-    fun dimBackgroundClicked(view: View) {
-        binding.topView.removeAllViews()
-        unDimBackground()
-        binding.dimBackgroundView.isClickable = false
-        topViewIsShowing = false
-    }
-
-    private fun addTextToTopView() {
-        val topView1 = TopViewItem(this)
-        if (theAssignment != null) {
-            topView1.setText(theAssignment!!)
-        }
-        binding.topView.addView(topView1)
-        dimBackground()
-        binding.dimBackgroundView.isClickable = true
-    }
-
-
-    fun dimBackground(){
-        val anim = ObjectAnimator.ofFloat(binding.dimBackgroundView,
-            "alpha",0.75F)
-        anim.duration = 300L
-        anim.start()
-    }
-
-    fun unDimBackground(){
-        val anim = ObjectAnimator.ofFloat(binding.dimBackgroundView,
-            "alpha",0F)
-        anim.duration = 450L
-        anim.start()
     }
 
 
