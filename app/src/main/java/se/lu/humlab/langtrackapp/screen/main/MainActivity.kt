@@ -82,6 +82,7 @@ class MainActivity : AppCompatActivity() {
         mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Assignment) {
+                viewModel.setSelectedAssignment(item)
                 if (inTestMode) {
                     // in testMode, always show survey
                     SurveyContainerActivity.start(this@MainActivity, item)
@@ -152,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         }else{
             val userEmail = mAuth.currentUser!!.email
             val userName = userEmail?.substringBefore('@')
-            viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))
+            viewModel.setCurrentUser(User(userName ?: "",userName ?: "", userEmail ?: ""))
             menuUserNameTextView.text = userName ?: "noName"
             viewModel.getAssignments()
             mAuth.currentUser!!.getIdToken(true).addOnSuccessListener{
