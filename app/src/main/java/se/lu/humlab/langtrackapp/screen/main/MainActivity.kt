@@ -21,12 +21,13 @@ stephan.bjorck@humlab.lu.se
 
 import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Rect
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
@@ -50,6 +51,7 @@ import se.lu.humlab.langtrackapp.screen.instructions.InstructionsActivity
 import se.lu.humlab.langtrackapp.screen.login.LoginActivity
 import se.lu.humlab.langtrackapp.screen.overview.OverviewActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -157,6 +159,18 @@ class MainActivity : AppCompatActivity() {
     }
 
 
+    private fun getVersionNumber(): String{
+        var version = ""
+        try {
+            val pInfo =
+                packageManager.getPackageInfo(packageName, 0)
+            version = pInfo.versionName
+
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return "Version: $version"
+    }
 
     override fun onStart() {
         super.onStart()
@@ -168,6 +182,7 @@ class MainActivity : AppCompatActivity() {
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User(userName ?: "",userName ?: "", userEmail ?: ""))
             menuUserNameTextView.text = userName ?: "noName"
+            menuVersionTextView.text = getVersionNumber()
             viewModel.getAssignments()
             mAuth.currentUser!!.getIdToken(true).addOnSuccessListener{
                 val idToken = it.token
