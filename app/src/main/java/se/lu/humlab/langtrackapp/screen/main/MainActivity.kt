@@ -21,11 +21,13 @@ stephan.bjorck@humlab.lu.se
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Rect
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
@@ -78,6 +80,17 @@ class MainActivity : AppCompatActivity() {
         recycler.layoutManager = linearLayoutManager
         adapter = SurveyAdapter()
         recycler.adapter = adapter
+
+        //swipeRefresh
+        mBind.surveyRecyclerRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.lta_blue))
+        mBind.surveyRecyclerRefreshLayout.setColorSchemeColors(Color.WHITE)
+
+        mBind.surveyRecyclerRefreshLayout.setOnRefreshListener {
+            if (mAuth.currentUser != null){
+                viewModel.getAssignments()
+            }
+            mBind.surveyRecyclerRefreshLayout.isRefreshing = false
+        }
 
         mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
