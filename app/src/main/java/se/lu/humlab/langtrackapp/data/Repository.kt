@@ -11,11 +11,13 @@ import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
 import com.google.gson.Gson
+import okhttp3.*
 import org.json.JSONArray
 import org.json.JSONObject
 import se.lu.humlab.langtrackapp.data.model.*
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
-import java.lang.Exception
+import se.lu.humlab.langtrackapp.util.IO
+import java.util.*
 
 
 class Repository(val context: Context) {
@@ -34,6 +36,7 @@ class Repository(val context: Context) {
     //private val mockUrl = "https://e3777de6-509b-46a9-a996-ea2708cc0192.mock.pstmn.io/"
     private val ltaUrl = "http://ht-lang-track.ht.lu.se/api/"
     //private val ltaUrl = "http://ht-lang-track.ht.lu.se:443/"
+    var client = OkHttpClient()
 
 
     fun setCurrentUser(user: User){
@@ -42,6 +45,33 @@ class Repository(val context: Context) {
     }
     fun getCurrentUser(): User{
         return currentUser
+    }
+
+    fun putDeviceToken(deviceToken: String, versionNumber: String){
+
+        val localTimeZoneIdentifier = TimeZone.getDefault().id
+        val deviceTokenUrl = "${ltaUrl}users/${currentUser.id}"
+        if (deviceToken != "" && localTimeZoneIdentifier != ""){
+
+            val formBody: RequestBody = FormBody.Builder()
+                .add("timezone", localTimeZoneIdentifier)
+                .add("deviceToken", deviceToken)
+                .build()
+
+            IO.execute {
+                val request = Request.Builder()
+                    .header("token", idToken)
+                    .url(deviceTokenUrl)
+                    .put(formBody)
+                    .build()
+
+                client.newCall(request).execute().use { response ->
+                    if (!response.isSuccessful) {
+                        println("putDeviceToken ERROR: ${response?.body()?.string()}")
+                    }
+                }
+            }
+        }
     }
 
     fun postAnswer(answerDict: Map<Int,Answer>){
