@@ -80,7 +80,7 @@ class MainActivity : AppCompatActivity() {
 
         // only gets this if app is in foreground...
         val theMessageText = intent.getStringExtra(MyFirebaseInstanceIDService.MESSAGE_TEXT)
-        if (theMessageText.isNullOrBlank()) {
+        if (!theMessageText.isNullOrBlank()) {
             println("messaging MainActivity onCreate theMessageText: $theMessageText")
         }
 
