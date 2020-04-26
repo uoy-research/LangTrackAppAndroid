@@ -104,7 +104,7 @@ class SurveyContainerActivity : AppCompatActivity(),
     }
 
     private fun closeTheSurvey(){
-        super.onBackPressed()
+        finish()
     }
 
     private fun setSurvey(assignment: Assignment){
@@ -389,7 +389,7 @@ class SurveyContainerActivity : AppCompatActivity(),
             println("tempAnswers: $tempAnswers")
             viewModel.postAnswer(tempAnswers)
         }
-        onBackPressed()
+        finish()
     }
 
     override fun setSingleMultipleAnswer(selected: Int) {

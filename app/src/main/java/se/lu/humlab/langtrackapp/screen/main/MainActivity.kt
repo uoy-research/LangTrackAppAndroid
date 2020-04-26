@@ -51,6 +51,7 @@ import se.lu.humlab.langtrackapp.screen.instructions.InstructionsActivity
 import se.lu.humlab.langtrackapp.screen.login.LoginActivity
 import se.lu.humlab.langtrackapp.screen.overview.OverviewActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
+import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
 
 
 class MainActivity : AppCompatActivity() {
@@ -76,6 +77,12 @@ class MainActivity : AppCompatActivity() {
             MainViewModelFactory(this)
         ).get(MainViewModel::class.java)
         mBind.viewModel = viewModel
+
+        // only gets this if app is in foreground...
+        val theMessageText = intent.getStringExtra(MyFirebaseInstanceIDService.MESSAGE_TEXT)
+        if (!theMessageText.isNullOrBlank()) {
+            println("messaging MainActivity onCreate theMessageText: $theMessageText")
+        }
 
         recycler = mBind.surveyRecycler
         linearLayoutManager = LinearLayoutManager(this)
@@ -158,20 +165,6 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-
-    private fun getVersionNumber(): String{
-        var version = ""
-        try {
-            val pInfo =
-                packageManager.getPackageInfo(packageName, 0)
-            version = pInfo.versionName
-
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-        return "Version: $version"
-    }
-
     override fun onStart() {
         super.onStart()
 
@@ -189,9 +182,30 @@ class MainActivity : AppCompatActivity() {
                 if (!idToken.isNullOrBlank()){
                     viewModel.setIdToken(idToken)
                     println("idToken: $idToken")
+                    MyFirebaseInstanceIDService.getDeviceTokengetDeviceToken(object: (String?) -> Unit {
+                        override fun invoke(deviceToken: String?) {
+                            if (deviceToken != null) {
+                                viewModel.postDeviceToken(deviceToken, getVersionNumber())
+                            }
+                        }
+                    })
                 }
             }
         }
+    }
+
+
+    private fun getVersionNumber(): String{
+        var version = ""
+        try {
+            val pInfo =
+                packageManager.getPackageInfo(packageName, 0)
+            version = pInfo.versionName
+
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+        return "Version: $version"
     }
 
     private fun showLogOutPopup(){
