@@ -394,7 +394,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setSingleMultipleAnswer(selected: Int) {
         answer[currentPage.index] = Answer(
-            type = "single",
+            type = SINGLE_MULTIPLE_ANSWERS,
             index = currentPage.index,
             likertAnswer = null,
             fillBlankAnswer = null,
@@ -407,7 +407,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setMultipleAnswersAnswer(selected: List<Int>?) {
         answer[currentPage.index] = Answer(
-            type = "multi",
+            type = MULTIPLE_CHOICE,
             index = currentPage.index,
             likertAnswer = null,
             fillBlankAnswer = null,
@@ -420,7 +420,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setLikertAnswer(selected: Int) {
         answer[currentPage.index] = Answer(
-            type = "likert",
+            type = LIKERT_SCALES,
             index = currentPage.index,
             likertAnswer = selected,
             fillBlankAnswer = null,
@@ -433,7 +433,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setOpenEndedAnswer(text: String?) {
         answer[currentPage.index] = Answer(
-            type = "open",
+            type = OPEN_ENDED_TEXT_RESPONSES,
             index = currentPage.index,
             likertAnswer = null,
             fillBlankAnswer = null,
@@ -446,7 +446,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setFillBlankAnswer(selected: Int?) {
         answer[currentPage.index] = Answer(
-            type = "blanks",
+            type = FILL_IN_THE_BLANK,
             index = currentPage.index,
             likertAnswer = null,
             fillBlankAnswer = selected,
@@ -459,7 +459,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setTimeDurationAnswer(selected: Int) {
         answer[currentPage.index] = Answer(
-            type = "duration",
+            type = TIME_DURATION,
             index = currentPage.index,
             likertAnswer = null,
             fillBlankAnswer = null,
