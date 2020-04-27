@@ -29,16 +29,12 @@ class Repository(val context: Context) {
 
 
 
-    var surveyList = mutableListOf<Survey>()
-    var surveyListLiveData = MutableLiveData<MutableList<Survey>>()
     private var currentUser = User()
     var currentUserLiveData = MutableLiveData<User>()
     var selectedAssignment: Assignment? = null
     var idToken = ""
-    var assignmentList = mutableListOf<Assignment>()
+    private var assignmentList = mutableListOf<Assignment>()
     var assignmentListLiveData = MutableLiveData<MutableList<Assignment>>()
-    //private val dropboxUrl = "https://www.dropbox.com/s/n2l1vssqm2pfaqp/survey_json.txt?dl=1"
-    //private val mockUrl = "https://e3777de6-509b-46a9-a996-ea2708cc0192.mock.pstmn.io/"
     private val ltaUrl = "http://ht-lang-track.ht.lu.se/api/"
     //private val ltaUrl = "http://ht-lang-track.ht.lu.se:443/"
     var client = OkHttpClient()
@@ -156,13 +152,16 @@ class Repository(val context: Context) {
         val assigmnentUrl = "${ltaUrl}users/${currentUser.userName}/assignments"
         Fuel.get(assigmnentUrl)
             .header(mapOf("token" to idToken))
-            .response { request, response, result ->
+            .response { _, _, result ->
 
                 val (bytes, error) = result
                 if (error == null) {
                     if (bytes != null) {
-                        assignmentList = sortList(getAssignmentsFromJson(String(bytes))).toMutableList()
-                        assignmentListLiveData.value = assignmentList
+                        val templist = sortList(getAssignmentsFromJson(String(bytes))).toMutableList()
+                        if (!templist.isNullOrEmpty()) {
+                            assignmentList = templist
+                            assignmentListLiveData.value = assignmentList
+                        }
                     }
                 }else{
                     println("Repository getAssignmens ERROR: ${error.localizedMessage}")
@@ -170,7 +169,7 @@ class Repository(val context: Context) {
             }
     }
 
-    fun sortList(theListWithSurveys: List<Assignment>): List<Assignment>{
+    private fun sortList(theListWithSurveys: List<Assignment>): List<Assignment>{
 
         //if no dataset and not expired
         val activeList = theListWithSurveys.filter {
@@ -187,7 +186,7 @@ class Repository(val context: Context) {
         return returnlist
     }
 
-    fun getAssignmentsFromJson(json: String): List<Assignment>{
+    private fun getAssignmentsFromJson(json: String): List<Assignment>{
         val theListWithSurveys = mutableListOf<Assignment>()
         val jsonObj = JSONArray(json.substring(json.indexOf("["), json.lastIndexOf("]") + 1))
         for (i in 0 until jsonObj.length()) {
@@ -249,11 +248,11 @@ class Repository(val context: Context) {
         return theListWithSurveys
     }
 
-    fun getDatasetFromJsonObj(jsonObj: JSONObject): Dataset?{
-        var id: String = ""
-        var createdAt: String = ""
-        var updatedAt: String = ""
-        var answers = mutableListOf<Answer>()
+    private fun getDatasetFromJsonObj(jsonObj: JSONObject): Dataset?{
+        var id = ""
+        var createdAt = ""
+        var updatedAt = ""
+        val answers = mutableListOf<Answer>()
 
         try {
             id = jsonObj.get("_id") as? String ?: ""
@@ -381,18 +380,18 @@ class Repository(val context: Context) {
                 }
             }
         }catch (e: Exception){ }
-        if (id != "" && answers.isNotEmpty()) {
-            return Dataset(
+        return if (id != "" && answers.isNotEmpty()) {
+            Dataset(
                 id = id,
                 createdAt = createdAt,
                 updatedAt = updatedAt,
                 answers = answers
             )
         }else{
-            return null
+            null
         }
     }
-    fun getSurveyFromJsonObj(jsonObj: JSONObject): Survey{
+    private fun getSurveyFromJsonObj(jsonObj: JSONObject): Survey{
         val tempSurvey = Survey()
         try {
             tempSurvey.id = jsonObj.get("id") as? String ?: ""
@@ -417,22 +416,26 @@ class Repository(val context: Context) {
         }catch (e: Exception){ }
         if (tempSurvey.questions != null) {
             for (question in tempSurvey.questions!!) {
-                if (question.index == 0){
-                    question.previous = 0
-                    question.next = question.index + 1
-                }else if (question.index < tempSurvey.questions!!.size - 1){
-                    question.next = question.index + 1
-                    question.previous = question.index - 1
-                }else{
-                    question.next = 0
-                    question.previous = question.index - 1
+                when {
+                    question.index == 0 -> {
+                        question.previous = 0
+                        question.next = question.index + 1
+                    }
+                    question.index < tempSurvey.questions!!.size - 1 -> {
+                        question.next = question.index + 1
+                        question.previous = question.index - 1
+                    }
+                    else -> {
+                        question.next = 0
+                        question.previous = question.index - 1
+                    }
                 }
             }
         }
         return tempSurvey
     }
 
-    fun getQuestionsFromJsonArray(questionsObj: JSONArray): List<Question>{
+    private fun getQuestionsFromJsonArray(questionsObj: JSONArray): List<Question>{
         val thequestions = mutableListOf<Question>()
         for (q in 0 until questionsObj.length()){
             val values = mutableListOf<String>()
