@@ -170,6 +170,7 @@ class OverviewActivity : AppCompatActivity() {
                         likert.setText(listItem.question, theText)
                         binding.overviewQuestionContainer.addView(likert)
                     }
+                    //TODO: Add duration
                 }
             }
         }

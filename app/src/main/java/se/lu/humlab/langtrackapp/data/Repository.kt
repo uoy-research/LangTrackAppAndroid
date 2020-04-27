@@ -12,6 +12,9 @@ import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
 import com.google.gson.Gson
 import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import se.lu.humlab.langtrackapp.data.model.*
@@ -48,7 +51,7 @@ class Repository(val context: Context) {
     }
 
     fun putDeviceToken(deviceToken: String, versionNumber: String){
-
+        //TODO: Fix as postAnswer
         val localTimeZoneIdentifier = TimeZone.getDefault().id
         val deviceTokenUrl = "${ltaUrl}users/${currentUser.id}"
         if (deviceToken != "" && localTimeZoneIdentifier != ""){
@@ -67,7 +70,7 @@ class Repository(val context: Context) {
 
                 client.newCall(request).execute().use { response ->
                     if (!response.isSuccessful) {
-                        println("putDeviceToken ERROR: ${response?.body()?.string()}")
+                        println("putDeviceToken ERROR: ${response.body}")
                     }
                 }
             }
@@ -110,36 +113,25 @@ class Repository(val context: Context) {
             val answerUrl = "${ltaUrl}users/${currentUser.id}/assignments/${selectedAssignment!!.id}/datasets"
             val gson = Gson()
             val jsonAnswer: String = gson.toJson(answers)
-            println("postA answerUrl: ${answerUrl}")
-            println("postA jsonAnswer list: ${listOf("answers" to jsonAnswer)}")
-            println("postA jsonAnswer map: ${mapOf("answers" to jsonAnswer)}")
+            val jsonAnswer2 = "{\"answers\":${jsonAnswer}}"
 
-            if (selectedAssignment?.id?.isNotEmpty() == true){
-
-                /*Fuel.post(answerUrl, listOf("answers" to jsonTut)).response {
-                        request, response, result ->
-                    println("postA result: $result")
-                }*/
-
-                //{"answers":"[AnswerBody(index=1, type=single, intValue=1, multiValue=null, stringValue=null)]"}
-                // "answers":[{"multiValue":[],"index":1,"type":"single","intValue":1}]
-            }
-            /* iOS:
-            * if selectedAssignment?.id ?? "" != ""{
-                let headers: HTTPHeaders = [
-                    "token": idToken,
-                    "Content-Type":"application/json"
-                ]
-                let answerUrl = "\(ltaUrl)users/\(userId)/assignments/\(selectedAssignment!.id)/datasets"
-                AF.request(answerUrl,
-                           method: .post,
-                           parameters: theBody,
-                           encoder: JSONParameterEncoder.default,
-                           headers: headers).response { response in
-
-                            //debugPrint(response)
+            IO.execute {
+                val httpUrl = answerUrl.toHttpUrl()
+                val httpUrlBuilder = httpUrl.newBuilder()
+                val requestBuilder = Request.Builder().url(httpUrlBuilder.build())
+                val mediaTypeJson = "application/json; charset=utf-8".toMediaType()
+                requestBuilder.post(
+                    jsonAnswer2.toRequestBody(mediaTypeJson)
+                )
+                val call = client.newCall(requestBuilder.build())
+                call.execute().use {
+                    if (it.isSuccessful){
+                        println("postAnswer SUCCESS: ${it.body}")
+                    }else{
+                        println("postAnswer ERROR: ${it.body}")
+                    }
                 }
-            }*/
+            }
         }
     }
 
