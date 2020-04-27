@@ -109,11 +109,12 @@ class LoginActivity : AppCompatActivity() {
                     if (!userName.isNullOrEmpty()) {
                         viewModel.setCurrentUser(
                             User(
-                                userName,
-                                userName,
-                                userEmail
+                                id = userName,
+                                name = userName,
+                                mail = userEmail
                             )
                         )
+                        viewModel.putDeviceToken()
                         subscribeToTopic(userName)
                     }
                     onBackPressed()

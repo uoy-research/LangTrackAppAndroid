@@ -35,6 +35,7 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.left_drawer_menu.*
 import se.lu.humlab.langtrackapp.R
@@ -52,6 +53,7 @@ import se.lu.humlab.langtrackapp.screen.login.LoginActivity
 import se.lu.humlab.langtrackapp.screen.overview.OverviewActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
 import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
+import se.lu.humlab.langtrackapp.util.getVersionNumber
 
 
 class MainActivity : AppCompatActivity() {
@@ -175,37 +177,30 @@ class MainActivity : AppCompatActivity() {
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User(userName ?: "",userName ?: "", userEmail ?: ""))
             menuUserNameTextView.text = userName ?: "noName"
-            menuVersionTextView.text = getVersionNumber()
+            menuVersionTextView.text = getVersionNumber(this)
             viewModel.getAssignments()
             mAuth.currentUser!!.getIdToken(true).addOnSuccessListener{
                 val idToken = it.token
                 if (!idToken.isNullOrBlank()){
                     viewModel.setIdToken(idToken)
                     println("idToken: $idToken")
-                    MyFirebaseInstanceIDService.getDeviceTokengetDeviceToken(object: (String?) -> Unit {
-                        override fun invoke(deviceToken: String?) {
-                            if (deviceToken != null) {
-                                //viewModel.postDeviceToken(deviceToken, getVersionNumber())
-                            }
-                        }
-                    })
                 }
             }
         }
     }
 
-
-    private fun getVersionNumber(): String{
-        var version = ""
-        try {
-            val pInfo =
-                packageManager.getPackageInfo(packageName, 0)
-            version = pInfo.versionName
-
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
+    fun unsubscribeToTopic(){
+        val topic = viewModel.getCurrentUser().userName
+        if (topic != "") {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
+                .addOnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        println("unsubscribeToTopic ERROR: ${task.exception?.localizedMessage}")
+                    } else {
+                        println("unsubscribeToTopic, subscribed to topic: $topic")
+                    }
+                }
         }
-        return "Version: $version"
     }
 
     private fun showLogOutPopup(){
@@ -223,6 +218,7 @@ class MainActivity : AppCompatActivity() {
             override fun popupReturn(value: Boolean) {
                 if (value){
                     mAuth.signOut()
+                    unsubscribeToTopic()
                     LoginActivity.start(this@MainActivity)
                 }
             }
