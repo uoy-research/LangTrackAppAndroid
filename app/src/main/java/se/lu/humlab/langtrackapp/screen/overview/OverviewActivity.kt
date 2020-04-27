@@ -22,6 +22,7 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.MULTIPLE_CHOICE
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.OPEN_ENDED_TEXT_RESPONSES
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.SINGLE_MULTIPLE_ANSWERS
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.TIME_DURATION
 import se.lu.humlab.langtrackapp.util.formatToReadable
 import se.lu.humlab.langtrackapp.util.toDate
 import java.lang.Exception
@@ -170,7 +171,17 @@ class OverviewActivity : AppCompatActivity() {
                         likert.setText(listItem.question, theText)
                         binding.overviewQuestionContainer.addView(likert)
                     }
-                    //TODO: Add duration
+                    TIME_DURATION -> {
+                        var selectedTime = -99
+                        val duration = OverviewTimDurationView(this)
+                        if (selectedAnswer?.timeDurationAnswer != null){
+                            try {
+                                selectedTime = selectedAnswer.timeDurationAnswer ?: -99
+                            }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
+                        }
+                        duration.setText(listItem.question, selectedAnswer)
+                        binding.overviewQuestionContainer.addView(duration)
+                    }
                 }
             }
         }
