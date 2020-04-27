@@ -185,7 +185,7 @@ class MainActivity : AppCompatActivity() {
                     MyFirebaseInstanceIDService.getDeviceTokengetDeviceToken(object: (String?) -> Unit {
                         override fun invoke(deviceToken: String?) {
                             if (deviceToken != null) {
-                                viewModel.postDeviceToken(deviceToken, getVersionNumber())
+                                //viewModel.postDeviceToken(deviceToken, getVersionNumber())
                             }
                         }
                     })

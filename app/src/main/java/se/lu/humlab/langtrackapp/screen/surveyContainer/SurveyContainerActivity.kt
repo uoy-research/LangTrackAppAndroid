@@ -199,24 +199,6 @@ class SurveyContainerActivity : AppCompatActivity(),
         }
     }
 
-    companion object {
-        const val ASSIGNMENT = "assignment"
-        const val HEADER_VIEW = "header"
-        const val LIKERT_SCALES = "likert"
-        const val FILL_IN_THE_BLANK = "blanks"
-        const val MULTIPLE_CHOICE = "multi"
-        const val SINGLE_MULTIPLE_ANSWERS = "single"
-        const val OPEN_ENDED_TEXT_RESPONSES = "open"
-        const val TIME_DURATION = "duration"
-        const val FOOTER_VIEW = "footer"
-
-        fun start(context: Context, assignment: Assignment){
-            context.startActivity(Intent(context, SurveyContainerActivity::class.java).apply {
-                this.putExtra(ASSIGNMENT,assignment)
-            })
-        }
-    }
-
     private fun resetPreviousOfQuestions(){
         for ((index, question) in questionList.withIndex()){
             if (index == 0){
@@ -247,6 +229,11 @@ class SurveyContainerActivity : AppCompatActivity(),
                     }
                     MULTIPLE_CHOICE -> {
                         return if (answerObj.multipleChoiceAnswer?.contains(skip.ifChosen) == true){
+                            theAssignment?.survey?.questions?.first { it.index == skip.goto }
+                        }else null
+                    }
+                    TIME_DURATION -> {
+                        return if (skip.ifChosen == answerObj.timeDurationAnswer){
                             theAssignment?.survey?.questions?.first { it.index == skip.goto }
                         }else null
                     }
@@ -394,7 +381,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setSingleMultipleAnswer(selected: Int) {
         answer[currentPage.index] = Answer(
-            type = "single",
+            type = SINGLE_MULTIPLE_ANSWERS,
             index = currentPage.index,
             likertAnswer = null,
             fillBlankAnswer = null,
@@ -407,7 +394,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setMultipleAnswersAnswer(selected: List<Int>?) {
         answer[currentPage.index] = Answer(
-            type = "multi",
+            type = MULTIPLE_CHOICE,
             index = currentPage.index,
             likertAnswer = null,
             fillBlankAnswer = null,
@@ -420,7 +407,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setLikertAnswer(selected: Int) {
         answer[currentPage.index] = Answer(
-            type = "likert",
+            type = LIKERT_SCALES,
             index = currentPage.index,
             likertAnswer = selected,
             fillBlankAnswer = null,
@@ -433,7 +420,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setOpenEndedAnswer(text: String?) {
         answer[currentPage.index] = Answer(
-            type = "open",
+            type = OPEN_ENDED_TEXT_RESPONSES,
             index = currentPage.index,
             likertAnswer = null,
             fillBlankAnswer = null,
@@ -446,7 +433,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setFillBlankAnswer(selected: Int?) {
         answer[currentPage.index] = Answer(
-            type = "blanks",
+            type = FILL_IN_THE_BLANK,
             index = currentPage.index,
             likertAnswer = null,
             fillBlankAnswer = selected,
@@ -459,7 +446,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun setTimeDurationAnswer(selected: Int) {
         answer[currentPage.index] = Answer(
-            type = "duration",
+            type = TIME_DURATION,
             index = currentPage.index,
             likertAnswer = null,
             fillBlankAnswer = null,
@@ -468,5 +455,23 @@ class SurveyContainerActivity : AppCompatActivity(),
             openEndedAnswer = null,
             timeDurationAnswer = selected
         )
+    }
+
+    companion object {
+        const val ASSIGNMENT = "assignment"
+        const val HEADER_VIEW = "header"
+        const val LIKERT_SCALES = "likert"
+        const val FILL_IN_THE_BLANK = "blanks"
+        const val MULTIPLE_CHOICE = "multi"
+        const val SINGLE_MULTIPLE_ANSWERS = "single"
+        const val OPEN_ENDED_TEXT_RESPONSES = "open"
+        const val TIME_DURATION = "duration"
+        const val FOOTER_VIEW = "footer"
+
+        fun start(context: Context, assignment: Assignment){
+            context.startActivity(Intent(context, SurveyContainerActivity::class.java).apply {
+                this.putExtra(ASSIGNMENT,assignment)
+            })
+        }
     }
 }
