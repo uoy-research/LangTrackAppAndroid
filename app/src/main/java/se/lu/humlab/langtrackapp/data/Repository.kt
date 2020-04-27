@@ -20,6 +20,8 @@ import org.json.JSONObject
 import se.lu.humlab.langtrackapp.data.model.*
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
 import se.lu.humlab.langtrackapp.util.IO
+import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
+import se.lu.humlab.langtrackapp.util.getVersionNumber
 import java.util.*
 
 
@@ -50,29 +52,44 @@ class Repository(val context: Context) {
         return currentUser
     }
 
-    fun putDeviceToken(deviceToken: String, versionNumber: String){
-        //TODO: Fix as postAnswer
-        val localTimeZoneIdentifier = TimeZone.getDefault().id
-        val deviceTokenUrl = "${ltaUrl}users/${currentUser.id}"
-        if (deviceToken != "" && localTimeZoneIdentifier != ""){
+    fun putDeviceToken(){
 
-            val formBody: RequestBody = FormBody.Builder()
-                .add("timezone", localTimeZoneIdentifier)
-                .add("deviceToken", deviceToken)
-                .build()
+        if (currentUser.id != "") {
+            val verNr = getVersionNumber(context)
+            println("putDeviceToken version number: $verNr")
+            //TODO: add versionNumber
 
-            IO.execute {
-                val request = Request.Builder()
-                    .header("token", idToken)
-                    .url(deviceTokenUrl)
-                    .put(formBody)
-                    .build()
+            val localTimeZoneIdentifier = TimeZone.getDefault().id
+            println("putDeviceToken localTimeZoneIdentifier: $localTimeZoneIdentifier")
+            val deviceTokenUrl = "${ltaUrl}users/${currentUser.id}"
 
-                client.newCall(request).execute().use { response ->
-                    if (!response.isSuccessful) {
-                        println("putDeviceToken ERROR: ${response.body}")
+            if (localTimeZoneIdentifier != "") {
+                MyFirebaseInstanceIDService.getDeviceTokengetDeviceToken(object :
+                        (String?) -> Unit {
+                    override fun invoke(deviceToken: String?) {
+                        if (deviceToken != null) {
+                            val jsonAnswer =
+                                "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\"}"
+                            IO.execute {
+                                val httpUrl = deviceTokenUrl.toHttpUrl()
+                                val httpUrlBuilder = httpUrl.newBuilder()
+                                val requestBuilder = Request.Builder().url(httpUrlBuilder.build())
+                                val mediaTypeJson = "application/json; charset=utf-8".toMediaType()
+                                requestBuilder.put(
+                                    jsonAnswer.toRequestBody(mediaTypeJson)
+                                )
+                                val call = client.newCall(requestBuilder.build())
+                                call.execute().use {
+                                    if (it.isSuccessful) {
+                                        println("putDeviceToken SUCCESS: ${it.body}")
+                                    } else {
+                                        println("putDeviceToken ERROR: ${it.body}")
+                                    }
+                                }
+                            }
+                        }
                     }
-                }
+                })
             }
         }
     }

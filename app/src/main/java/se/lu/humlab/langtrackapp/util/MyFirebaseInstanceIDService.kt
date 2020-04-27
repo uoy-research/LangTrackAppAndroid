@@ -34,11 +34,8 @@ class MyFirebaseInstanceIDService: FirebaseMessagingService() {
 
     override fun onNewToken(p0: String) {
         super.onNewToken(p0)
+        RepositoryFactory.getRepository(this@MyFirebaseInstanceIDService).putDeviceToken()
         println("messaging MyFirebaseInstanceIDService, onNewToken: $p0")
-    }
-    fun getToken(context: Context): String? {
-        return context.getSharedPreferences("_", Context.MODE_PRIVATE)
-            .getString("fb", "empty")
     }
 
     override fun onMessageReceived(p0: RemoteMessage) {

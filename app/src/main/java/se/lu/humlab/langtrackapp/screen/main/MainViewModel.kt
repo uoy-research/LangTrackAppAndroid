@@ -46,7 +46,7 @@ class MainViewModel(repo: Repository): ViewModel() {
     }
 
     fun postDeviceToken(token: String, versionNumber: String){
-        mRepository.putDeviceToken(token, versionNumber)
+        mRepository.putDeviceToken()
     }
 
     fun setSelectedAssignment(assignment: Assignment?){

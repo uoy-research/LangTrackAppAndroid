@@ -114,6 +114,7 @@ class LoginActivity : AppCompatActivity() {
                                 userEmail
                             )
                         )
+                        viewModel.putDeviceToken()
                         subscribeToTopic(userName)
                     }
                     onBackPressed()
