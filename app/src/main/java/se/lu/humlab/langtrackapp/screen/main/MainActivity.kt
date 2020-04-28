@@ -186,7 +186,17 @@ class MainActivity : AppCompatActivity() {
                     println("idToken: $idToken")
                 }
             }
+            setTestModeIfTeam(userName ?: "")
         }
+    }
+
+    private fun setTestModeIfTeam(userName: String){
+        testView.visibility = if (
+            userName == "stephan" ||
+            userName == "josef" ||
+            userName == "marianne" ||
+            userName == "jonas" ||
+            userName == "henriette") View.VISIBLE else View.GONE
     }
 
     fun unsubscribeToTopic(){

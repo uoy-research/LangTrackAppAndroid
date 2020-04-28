@@ -83,24 +83,28 @@ class SurveyContainerActivity : AppCompatActivity(),
     }
 
     override fun onBackPressed() {
-        val alertFm = supportFragmentManager.beginTransaction()
-        val width = (surveyContainer_layout.measuredWidth * 0.75).toInt()
-        val oneChoicePopup = OneChoicePopup.show(
-            width = width,
-            title = "Avsluta enkät",
-            infoText = "Vill du stänga enkäten och gå tillbaka till startsidan?\nSvaren kommer inte att sparas.",
-            okButtonText = "Avsluta enkät",
-            placecenter = true,
-            cancelable = true
-        )
-        oneChoicePopup.setCompleteListener(object : OnBoolPopupReturnListener {
-            override fun popupReturn(value: Boolean) {
-                if (value){
-                    closeTheSurvey()
+        if (currentPage.type == HEADER_VIEW){
+            closeTheSurvey()
+        }else {
+            val alertFm = supportFragmentManager.beginTransaction()
+            val width = (surveyContainer_layout.measuredWidth * 0.75).toInt()
+            val oneChoicePopup = OneChoicePopup.show(
+                width = width,
+                title = "Avsluta enkät",
+                infoText = "Vill du stänga enkäten och gå tillbaka till startsidan?\nSvaren kommer inte att sparas.",
+                okButtonText = "Avsluta enkät",
+                placecenter = true,
+                cancelable = true
+            )
+            oneChoicePopup.setCompleteListener(object : OnBoolPopupReturnListener {
+                override fun popupReturn(value: Boolean) {
+                    if (value) {
+                        closeTheSurvey()
+                    }
                 }
-            }
-        })
-        oneChoicePopup.show(alertFm, "oneChoicePopup")
+            })
+            oneChoicePopup.show(alertFm, "oneChoicePopup")
+        }
     }
 
     private fun closeTheSurvey(){
