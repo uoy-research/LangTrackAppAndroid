@@ -47,8 +47,8 @@ class LoginActivity : AppCompatActivity() {
             val width = (loginLayout.measuredWidth * 0.75).toInt()
             val alertPopup = PopupAlert.show(
                 width = width,
-                title = "THE LANG-TRACK-APP",
-                textViewText = "Studera exponering för och användning av ett nytt språk med smartphone-teknik.\n\n",
+                title = "Info",
+                textViewText = "The Lang Track App är en app som utvecklats av humanistlaboratoriet på Lunds Universitet i forskningssyfte.\n\nLogga in med det användarnamn och lösenord som du tilldelats från Humlab Lunds Universitet",
                 placecenter = true
             )
             alertPopup.show(alertFm, "alertPopup")
