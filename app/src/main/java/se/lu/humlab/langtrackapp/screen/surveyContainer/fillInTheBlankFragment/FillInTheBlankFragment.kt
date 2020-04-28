@@ -60,7 +60,7 @@ class FillInTheBlankFragment : Fragment(){
                 ) {
                     if(++check > 1) {
                         theChosenWordIndex = position
-                        listener?.setFillBlankAnswer(theChosenWordIndex)
+                        listener?.setFillBlankAnswer(if(theChosenWordIndex != null) (theChosenWordIndex!! - 1) else theChosenWordIndex ) // -1 for blank first place
                         if (theSentence != null) {
                             setSentence(theChosenWordIndex)
                         }
