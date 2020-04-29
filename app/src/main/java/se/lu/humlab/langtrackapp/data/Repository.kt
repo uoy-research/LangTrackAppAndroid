@@ -22,6 +22,7 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
 import se.lu.humlab.langtrackapp.util.IO
 import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
 import se.lu.humlab.langtrackapp.util.getVersionNumber
+import se.lu.humlab.langtrackapp.util.showApiFailInfo
 import java.util.*
 
 
@@ -148,6 +149,13 @@ class Repository(val context: Context) {
         }
     }
 
+    fun apiIsAlive(listener: (result: Boolean) -> Unit) {
+        val apiPingUrl = "${ltaUrl}ping"
+        Fuel.get(apiPingUrl).response{_,response,_ ->
+            listener(response.statusCode == 200)
+        }
+    }
+
     fun emptyAssignmentsList(){
         assignmentList.clear()
         assignmentListLiveData.value = assignmentList
@@ -170,6 +178,7 @@ class Repository(val context: Context) {
                     }
                 }else{
                     println("Repository getAssignmens ERROR: ${error.localizedMessage}")
+                    showApiFailInfo(context)
                 }
             }
     }

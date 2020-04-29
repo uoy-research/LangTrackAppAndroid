@@ -45,6 +45,10 @@ class MainViewModel(repo: Repository): ViewModel() {
         }*/
     }
 
+    fun apiIsAlive(listener: (result: Boolean) -> Unit) {
+        mRepository.apiIsAlive(listener)
+    }
+
     fun clearAssignmentsList(){
         mRepository.emptyAssignmentsList()
     }

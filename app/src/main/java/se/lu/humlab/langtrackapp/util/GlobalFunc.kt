@@ -2,6 +2,8 @@ package se.lu.humlab.langtrackapp.util
 
 import android.content.Context
 import android.content.pm.PackageManager
+import android.widget.Toast
+import se.lu.humlab.langtrackapp.R
 
 fun getVersionNumber(context: Context): String{
     var version = ""
@@ -14,4 +16,8 @@ fun getVersionNumber(context: Context): String{
         e.printStackTrace()
     }
     return "Version: $version"
+}
+
+fun showApiFailInfo(context: Context){
+    Toast.makeText(context, context.getString(R.string.server_fail_info), Toast.LENGTH_SHORT).show()
 }
