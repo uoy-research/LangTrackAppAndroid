@@ -148,6 +148,11 @@ class Repository(val context: Context) {
         }
     }
 
+    fun emptyAssignmentsList(){
+        assignmentList.clear()
+        assignmentListLiveData.value = assignmentList
+    }
+
     fun getAssignments(){
         val assigmnentUrl = "${ltaUrl}users/${currentUser.userName}/assignments"
         Fuel.get(assigmnentUrl)
