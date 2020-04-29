@@ -7,4 +7,5 @@
     <string name="Open">Open</string>
     <string name="Close">Close</string>
     <string name="empty_list_info">Här var det tomt…\nNär humlab tilldelar dig en enkät kommer den att hamna här</string>
+    <string name="server_fail_info">Ingen kontakt med server</string>
 </resources>

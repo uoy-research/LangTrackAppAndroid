@@ -21,7 +21,6 @@ stephan.bjorck@humlab.lu.se
 
 import android.content.Context
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
@@ -54,6 +53,7 @@ import se.lu.humlab.langtrackapp.screen.overview.OverviewActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
 import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
 import se.lu.humlab.langtrackapp.util.getVersionNumber
+import se.lu.humlab.langtrackapp.util.showApiFailInfo
 
 
 class MainActivity : AppCompatActivity() {
@@ -106,14 +106,22 @@ class MainActivity : AppCompatActivity() {
         mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Assignment) {
+
                 viewModel.setSelectedAssignment(item)
                 if (inTestMode) {
                     // in testMode, always show survey
                     SurveyContainerActivity.start(this@MainActivity, item)
                 } else {
                     if (item.isActive()) {
-                        // show survey
-                        SurveyContainerActivity.start(this@MainActivity, item)
+                        // show survey - if api is responding
+                        viewModel.apiIsAlive() { alive ->
+                            if (alive){
+                                SurveyContainerActivity.start(this@MainActivity, item)
+                            }else{
+                                showApiFailInfo(this@MainActivity)
+                            }
+                        }
+
                     } else {
                         if (item.dataset != null) {
                             // show overview
