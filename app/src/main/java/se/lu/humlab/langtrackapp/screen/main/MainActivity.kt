@@ -131,6 +131,13 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.assignmentListLiveData.observeForever {
             adapter.setAssignments(it)
+            if (it.isNullOrEmpty()){
+                mBind.surveyRecyclerRefreshLayout.visibility = View.GONE
+                mBind.mainEmptyListInfoTextView.visibility = View.VISIBLE
+            }else{
+                mBind.surveyRecyclerRefreshLayout.visibility = View.VISIBLE
+                mBind.mainEmptyListInfoTextView.visibility = View.GONE
+            }
         }
 
         setSupportActionBar(mBind.toolbar)
@@ -227,6 +234,7 @@ class MainActivity : AppCompatActivity() {
         oneChoicePopup.setCompleteListener(object : OnBoolPopupReturnListener {
             override fun popupReturn(value: Boolean) {
                 if (value){
+                    viewModel.clearAssignmentsList()
                     mAuth.signOut()
                     unsubscribeToTopic()
                     LoginActivity.start(this@MainActivity)
