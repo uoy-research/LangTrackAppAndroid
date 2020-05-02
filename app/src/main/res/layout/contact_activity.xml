@@ -41,7 +41,7 @@
 
                 <androidx.cardview.widget.CardView
                     android:layout_width="match_parent"
-                    android:layout_height="200dp"
+                    android:layout_height="wrap_content"
                     android:layout_rowWeight="1"
                     android:layout_columnWeight="1"
                     android:layout_marginTop="4dp"
@@ -74,6 +74,55 @@
                             android:textColor="@color/lta_blue"
                             android:textSize="18sp"
                             android:textStyle="bold"
+                            tools:ignore="HardcodedText" />
+
+
+                        <TextView
+                            android:id="@+id/contactLtaLinkTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@android:color/transparent"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:text="The Lang-Track-App project"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/lta_blue"
+                            android:textSize="16sp"
+                            tools:ignore="HardcodedText" />
+                        <TextView
+                            android:id="@+id/contactHumLinkTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@android:color/transparent"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:text="Humanistlaboratoriet"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/lta_blue"
+                            android:textSize="16sp"
+                            tools:ignore="HardcodedText" />
+
+                        <TextView
+                            android:id="@+id/contactLuLinkTextView"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="15dp"
+                            android:background="@android:color/transparent"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:text="Lunds Universitet"
+                            android:textAlignment="textStart"
+                            android:textColor="@color/lta_blue"
+                            android:textSize="16sp"
                             tools:ignore="HardcodedText" />
 
 
