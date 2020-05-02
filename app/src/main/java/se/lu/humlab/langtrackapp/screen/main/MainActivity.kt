@@ -166,15 +166,15 @@ class MainActivity : AppCompatActivity() {
         }
         menuAboutButton.setOnClickListener {
             AboutActivity.start(this)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            //drawerLayout.closeDrawer(GravityCompat.START)
         }
         menuInstructionsButton.setOnClickListener {
             InstructionsActivity.start(this)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            //drawerLayout.closeDrawer(GravityCompat.START)
         }
         menuContactButton.setOnClickListener {
             ContactActivity.start(this)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            //drawerLayout.closeDrawer(GravityCompat.START)
         }
 
         menuTestSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
