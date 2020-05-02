@@ -2,6 +2,7 @@ package se.lu.humlab.langtrackapp.screen.about
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Paint
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -24,6 +25,7 @@ class AboutActivity : AppCompatActivity() {
         mBind.aboutScroll.setOnScrollChangeListener { _, _, _, _, _ ->
             mBind.aboutTopView.isSelected = mBind.aboutScroll.canScrollVertically(-1)
         }
+
     }
 
     companion object{
