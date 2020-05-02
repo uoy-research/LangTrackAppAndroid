@@ -45,6 +45,22 @@ class MainViewModel(repo: Repository): ViewModel() {
         }*/
     }
 
+    fun apiIsAlive(listener: (result: Boolean) -> Unit) {
+        mRepository.apiIsAlive(listener)
+    }
+
+    fun clearAssignmentsList(){
+        mRepository.emptyAssignmentsList()
+    }
+
+    fun postDeviceToken(token: String, versionNumber: String){
+        mRepository.putDeviceToken()
+    }
+
+    fun setSelectedAssignment(assignment: Assignment?){
+        mRepository.selectedAssignment = assignment
+    }
+
     fun setIdToken(token: String){
         mRepository.idToken = token
     }

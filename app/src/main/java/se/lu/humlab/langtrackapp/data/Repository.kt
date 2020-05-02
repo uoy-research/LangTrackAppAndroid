@@ -10,28 +10,35 @@ package se.lu.humlab.langtrackapp.data
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
+import com.google.gson.Gson
+import okhttp3.*
+import okhttp3.HttpUrl.Companion.toHttpUrl
+import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
 import se.lu.humlab.langtrackapp.data.model.*
-import java.lang.Exception
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
+import se.lu.humlab.langtrackapp.util.IO
+import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
+import se.lu.humlab.langtrackapp.util.getVersionNumber
+import se.lu.humlab.langtrackapp.util.showApiFailInfo
+import java.util.*
 
 
 class Repository(val context: Context) {
 
 
 
-    var surveyList = mutableListOf<Survey>()
-    var surveyListLiveData = MutableLiveData<MutableList<Survey>>()
-
     private var currentUser = User()
     var currentUserLiveData = MutableLiveData<User>()
     var selectedAssignment: Assignment? = null
     var idToken = ""
-    var assignmentList = mutableListOf<Assignment>()
+    private var assignmentList = mutableListOf<Assignment>()
     var assignmentListLiveData = MutableLiveData<MutableList<Assignment>>()
-    //private val dropboxUrl = "https://www.dropbox.com/s/n2l1vssqm2pfaqp/survey_json.txt?dl=1"
-    //private val mockUrl = "https://e3777de6-509b-46a9-a996-ea2708cc0192.mock.pstmn.io/"
     private val ltaUrl = "http://ht-lang-track.ht.lu.se/api/"
+    //private val ltaUrl = "http://ht-lang-track.ht.lu.se:443/"
+    var client = OkHttpClient()
 
 
     fun setCurrentUser(user: User){
@@ -42,31 +49,158 @@ class Repository(val context: Context) {
         return currentUser
     }
 
+    fun putDeviceToken(){
+
+        if (currentUser.id != "") {
+            val verNr = getVersionNumber(context)
+            println("putDeviceToken version number: $verNr")
+            //TODO: add versionNumber
+
+            val localTimeZoneIdentifier = TimeZone.getDefault().id
+            println("putDeviceToken localTimeZoneIdentifier: $localTimeZoneIdentifier")
+            val deviceTokenUrl = "${ltaUrl}users/${currentUser.id}"
+
+            if (localTimeZoneIdentifier != "") {
+                MyFirebaseInstanceIDService.getDeviceTokengetDeviceToken(object :
+                        (String?) -> Unit {
+                    override fun invoke(deviceToken: String?) {
+                        if (deviceToken != null) {
+                            val jsonAnswer =
+                                "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\"}"
+                            IO.execute {
+                                val httpUrl = deviceTokenUrl.toHttpUrl()
+                                val httpUrlBuilder = httpUrl.newBuilder()
+                                val requestBuilder = Request.Builder().url(httpUrlBuilder.build())
+                                val mediaTypeJson = "application/json; charset=utf-8".toMediaType()
+                                requestBuilder.put(
+                                    jsonAnswer.toRequestBody(mediaTypeJson)
+                                )
+                                val call = client.newCall(requestBuilder.build())
+                                call.execute().use {
+                                    if (it.isSuccessful) {
+                                        println("putDeviceToken SUCCESS: ${it.body}")
+                                    } else {
+                                        println("putDeviceToken ERROR: ${it.body}")
+                                    }
+                                }
+                            }
+                        }
+                    }
+                })
+            }
+        }
+    }
+
+    fun postAnswer(answerDict: Map<Int,Answer>){
+        if (currentUser.id.isNotEmpty()){
+            val answers = mutableListOf<AnswerBody>()
+            var stringValue: String? = null
+            var intValue: Int? = null
+            var multiValue: MutableList<Int>? = null
+            for (answer in answerDict.values){
+                when(answer.type){
+                    SurveyContainerActivity.LIKERT_SCALES ->
+                        intValue = answer.likertAnswer
+                    SurveyContainerActivity.SINGLE_MULTIPLE_ANSWERS ->
+                        intValue = answer.singleMultipleAnswer
+                    SurveyContainerActivity.FILL_IN_THE_BLANK ->
+                        intValue = answer.fillBlankAnswer
+                    SurveyContainerActivity.MULTIPLE_CHOICE ->
+                        multiValue = answer.multipleChoiceAnswer
+                    SurveyContainerActivity.OPEN_ENDED_TEXT_RESPONSES ->
+                        stringValue = answer.openEndedAnswer
+                    SurveyContainerActivity.TIME_DURATION ->
+                        intValue = answer.timeDurationAnswer
+                }
+                val body = AnswerBody(
+                    index = answer.index,
+                    type = answer.type,
+                    intValue = intValue,
+                    multiValue = multiValue,
+                    stringValue = stringValue
+                )
+                if (body.index != -99){
+                    answers.add(body)
+                }
+
+            }
+            val answerUrl = "${ltaUrl}users/${currentUser.id}/assignments/${selectedAssignment!!.id}/datasets"
+            val gson = Gson()
+            val jsonAnswer: String = gson.toJson(answers)
+            val jsonAnswer2 = "{\"answers\":${jsonAnswer}}"
+
+            IO.execute {
+                val httpUrl = answerUrl.toHttpUrl()
+                val httpUrlBuilder = httpUrl.newBuilder()
+                val requestBuilder = Request.Builder().url(httpUrlBuilder.build())
+                val mediaTypeJson = "application/json; charset=utf-8".toMediaType()
+                requestBuilder.post(
+                    jsonAnswer2.toRequestBody(mediaTypeJson)
+                )
+                val call = client.newCall(requestBuilder.build())
+                call.execute().use {
+                    if (it.isSuccessful){
+                        println("postAnswer SUCCESS: ${it.body}")
+                    }else{
+                        println("postAnswer ERROR: ${it.body}")
+                    }
+                }
+            }
+        }
+    }
+
+    fun apiIsAlive(listener: (result: Boolean) -> Unit) {
+        val apiPingUrl = "${ltaUrl}ping"
+        Fuel.get(apiPingUrl).response{_,response,_ ->
+            listener(response.statusCode == 200)
+        }
+    }
+
+    fun emptyAssignmentsList(){
+        assignmentList.clear()
+        assignmentListLiveData.value = assignmentList
+    }
+
     fun getAssignments(){
         val assigmnentUrl = "${ltaUrl}users/${currentUser.userName}/assignments"
         Fuel.get(assigmnentUrl)
             .header(mapOf("token" to idToken))
-            .response { request, response, result ->
-                println(request)
-                println(response)
+            .response { _, _, result ->
+
                 val (bytes, error) = result
                 if (error == null) {
                     if (bytes != null) {
-                        /*val gson = Gson()
-                        val itemType = object : TypeToken<List<Assignment>>() {}.type
-                        val itemList = gson.fromJson<List<Assignment>>(String(bytes), itemType)*/
-
-                        //TODO: sort and set livedata...
-                        assignmentList = getAssignmentsFromJson(String(bytes)).toMutableList()
-                        assignmentListLiveData.value = assignmentList
+                        val templist = sortList(getAssignmentsFromJson(String(bytes))).toMutableList()
+                        if (!templist.isNullOrEmpty()) {
+                            assignmentList = templist
+                            assignmentListLiveData.value = assignmentList
+                        }
                     }
                 }else{
                     println("Repository getAssignmens ERROR: ${error.localizedMessage}")
+                    showApiFailInfo(context)
                 }
             }
     }
 
-    fun getAssignmentsFromJson(json: String): List<Assignment>{
+    private fun sortList(theListWithSurveys: List<Assignment>): List<Assignment>{
+
+        //if no dataset and not expired
+        val activeList = theListWithSurveys.filter {
+            it.isActive()
+        }.sortedByDescending { it.publishAt }
+
+        //if dataset or expired
+        val inactiveList = theListWithSurveys.filter {
+            !it.isActive()
+        }.sortedByDescending { it.publishAt }
+
+        val returnlist = activeList.toMutableList()
+        returnlist.addAll(inactiveList)
+        return returnlist
+    }
+
+    private fun getAssignmentsFromJson(json: String): List<Assignment>{
         val theListWithSurveys = mutableListOf<Assignment>()
         val jsonObj = JSONArray(json.substring(json.indexOf("["), json.lastIndexOf("]") + 1))
         for (i in 0 until jsonObj.length()) {
@@ -84,31 +218,31 @@ class Repository(val context: Context) {
                 if (tempSurveyObj != null) {
                     newsurvey = getSurveyFromJsonObj(tempSurveyObj)
                 }
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
             try {
                 newupdatedAt = assignment.get("updatedAt") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
             try {
                 newcreatedAt = assignment.get("createdAt") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
             try {
                 newuserId = assignment.get("userId") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
             try {
                 val datasetObj = assignment.get("dataset") as? JSONObject
                 if (datasetObj != null){
                     newdataset = getDatasetFromJsonObj(datasetObj)
                 }
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
             try {
                 newpublishAt = assignment.get("publishAt") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
             try {
                 newexpireAt = assignment.get("expireAt") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
             try {
                 newid = assignment.get("_id") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
 
             if (newsurvey != null){
                 theListWithSurveys.add(
@@ -128,21 +262,21 @@ class Repository(val context: Context) {
         return theListWithSurveys
     }
 
-    fun getDatasetFromJsonObj(jsonObj: JSONObject): Dataset?{
-        var id: String = ""
-        var createdAt: String = ""
-        var updatedAt: String = ""
-        var answers = mutableListOf<Answer>()
+    private fun getDatasetFromJsonObj(jsonObj: JSONObject): Dataset?{
+        var id = ""
+        var createdAt = ""
+        var updatedAt = ""
+        val answers = mutableListOf<Answer>()
 
         try {
             id = jsonObj.get("_id") as? String ?: ""
-        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+        }catch (e: Exception){ }
         try {
             createdAt = jsonObj.get("createdAt") as? String ?: ""
-        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+        }catch (e: Exception){ }
         try {
             updatedAt = jsonObj.get("updatedAt") as? String ?: ""
-        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+        }catch (e: Exception){ }
         try {
             val answersArray = jsonObj.get("answers") as? JSONArray
             if (answersArray != null){
@@ -157,16 +291,16 @@ class Repository(val context: Context) {
                         val multiValue = mutableListOf<Int>()
                         try {
                             index = answerObj.get("index") as? Int ?: -99
-                        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+                        }catch (e: Exception){ }
                         try {
                             type = answerObj.get("type") as? String ?: ""
-                        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+                        }catch (e: Exception){ }
                         try {
                             intValue = answerObj.get("intValue") as? Int
-                        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+                        }catch (e: Exception){ }
                         try {
                             stringValue = answerObj.get("stringValue") as? String
-                        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+                        }catch (e: Exception){ }
                         try {
                             val multiArray = answerObj.get("multiValue") as? JSONArray
                             if (multiArray != null){
@@ -174,9 +308,9 @@ class Repository(val context: Context) {
                                     multiValue.add(multiArray.getInt(m))
                                 }
                             }
-                        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+                        }catch (e: Exception){ }
                         when(type){
-                            "single" -> {
+                            SurveyContainerActivity.SINGLE_MULTIPLE_ANSWERS -> {
                                 answers.add(
                                     Answer(
                                         type = type,
@@ -189,7 +323,7 @@ class Repository(val context: Context) {
                                     )
                                 )
                             }
-                            "multi" -> {
+                            SurveyContainerActivity.MULTIPLE_CHOICE -> {
                                 answers.add(
                                     Answer(
                                         type = type,
@@ -202,7 +336,7 @@ class Repository(val context: Context) {
                                     )
                                 )
                             }
-                            "likert" -> {
+                            SurveyContainerActivity.LIKERT_SCALES -> {
                                 answers.add(
                                     Answer(
                                         type = type,
@@ -215,7 +349,7 @@ class Repository(val context: Context) {
                                     )
                                 )
                             }
-                            "blanks" -> {
+                            SurveyContainerActivity.FILL_IN_THE_BLANK -> {
                                 answers.add(
                                     Answer(
                                         type = type,
@@ -228,7 +362,7 @@ class Repository(val context: Context) {
                                     )
                                 )
                             }
-                            "open" -> {
+                            SurveyContainerActivity.OPEN_ENDED_TEXT_RESPONSES -> {
                                 answers.add(
                                     Answer(
                                         type = type,
@@ -241,63 +375,81 @@ class Repository(val context: Context) {
                                     )
                                 )
                             }
+                            SurveyContainerActivity.TIME_DURATION -> {
+                                answers.add(
+                                    Answer(
+                                        type = type,
+                                        index = index,
+                                        likertAnswer = null,
+                                        fillBlankAnswer = null,
+                                        multipleChoiceAnswer = null,
+                                        singleMultipleAnswer = null,
+                                        openEndedAnswer = null,
+                                        timeDurationAnswer = intValue
+                                    )
+                                )
+                            }
                         }
-                    }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+                    }catch (e: Exception){ }
                 }
             }
-        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-        if (id != "" && answers.isNotEmpty()) {
-            return Dataset(
+        }catch (e: Exception){ }
+        return if (id != "" && answers.isNotEmpty()) {
+            Dataset(
                 id = id,
                 createdAt = createdAt,
                 updatedAt = updatedAt,
                 answers = answers
             )
         }else{
-            return null
+            null
         }
     }
-    fun getSurveyFromJsonObj(jsonObj: JSONObject): Survey{
+    private fun getSurveyFromJsonObj(jsonObj: JSONObject): Survey{
         val tempSurvey = Survey()
         try {
             tempSurvey.id = jsonObj.get("id") as? String ?: ""
-        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+        }catch (e: Exception){ }
         try {
             tempSurvey.name = jsonObj.get("name") as? String ?: ""
-        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+        }catch (e: Exception){ }
         try {
             tempSurvey.title = jsonObj.get("title") as? String ?: ""
-        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+        }catch (e: Exception){ }
         try {
             val tempquestions = jsonObj.get("questions") as? JSONArray
             if (tempquestions != null) {
                 tempSurvey.questions = getQuestionsFromJsonArray(tempquestions)
             }
-        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+        }catch (e: Exception){ }
         try {
             tempSurvey.createdAt = jsonObj.get("createdAt") as? String ?: ""
-        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+        }catch (e: Exception){ }
         try {
             tempSurvey.updatedAt = jsonObj.get("updatedAt") as? String ?: ""
-        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+        }catch (e: Exception){ }
         if (tempSurvey.questions != null) {
             for (question in tempSurvey.questions!!) {
-                if (question.index == 0){
-                    question.previous = 0
-                    question.next = question.index + 1
-                }else if (question.index < tempSurvey.questions!!.size - 1){
-                    question.next = question.index + 1
-                    question.previous = question.index - 1
-                }else{
-                    question.next = 0
-                    question.previous = question.index - 1
+                when {
+                    question.index == 0 -> {
+                        question.previous = 0
+                        question.next = question.index + 1
+                    }
+                    question.index < tempSurvey.questions!!.size - 1 -> {
+                        question.next = question.index + 1
+                        question.previous = question.index - 1
+                    }
+                    else -> {
+                        question.next = 0
+                        question.previous = question.index - 1
+                    }
                 }
             }
         }
         return tempSurvey
     }
 
-    fun getQuestionsFromJsonArray(questionsObj: JSONArray): List<Question>{
+    private fun getQuestionsFromJsonArray(questionsObj: JSONArray): List<Question>{
         val thequestions = mutableListOf<Question>()
         for (q in 0 until questionsObj.length()){
             val values = mutableListOf<String>()
@@ -306,27 +458,35 @@ class Repository(val context: Context) {
 
             try {
                 tempQuestion.type = question.get("type") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
 
             try {
                 tempQuestion.index = question.get("index") as? Int ?: 0
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
 
             try {
                 tempQuestion.text = question.get("text") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
 
             try {
                 tempQuestion.title = question.get("title") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
 
             try {
                 tempQuestion.description = question.get("description") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
+
+            try {
+                tempQuestion.likertMax = question.get("maxAnnotation") as? String ?: ""
+            }catch (e: Exception){ }
+
+            try {
+                tempQuestion.likertMin = question.get("minAnnotation") as? String ?: ""
+            }catch (e: Exception){ }
 
             try {
                 tempQuestion.id = question.get("id") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
 
             try {
                 val tempskip = question.getJSONObject("skip")
@@ -336,7 +496,7 @@ class Repository(val context: Context) {
                     theSkip.goto = tempskip.getInt("goto")
                 }
                 tempQuestion.skip = theSkip
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
             try {
                 val includeIfObject = question.getJSONObject("includeIf")
                 val tempIncludeIf = IncludeIf()
@@ -345,7 +505,7 @@ class Repository(val context: Context) {
                     tempIncludeIf.ifValue = includeIfObject.getInt("ifValue")
                 }
                 tempQuestion.includeIf = tempIncludeIf
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
 
             try {
                 val valuesArray = question.get("values") as? JSONArray
@@ -353,19 +513,19 @@ class Repository(val context: Context) {
                     for (v in 0 until valuesArray.length()){
                         try{
                             values.add(valuesArray.getString(v))
-                        }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+                        }catch (e: Exception){ }
                     }
                 }
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
+            }catch (e: Exception){ }
 
             when (tempQuestion.type){
-                "single" -> {
+                SurveyContainerActivity.SINGLE_MULTIPLE_ANSWERS -> {
                     tempQuestion.singleMultipleAnswers = values
                 }
-                "multi" -> {
+                SurveyContainerActivity.MULTIPLE_CHOICE -> {
                     tempQuestion.multipleChoisesAnswers = values
                 }
-                "blanks" -> {
+                SurveyContainerActivity.FILL_IN_THE_BLANK -> {
                     tempQuestion.fillBlanksChoises = values
                 }
             }
@@ -373,247 +533,4 @@ class Repository(val context: Context) {
         }
         return thequestions
     }
-
-    //***************'gammalt!**************
-
-    /*fun getSurveysFromDropbox(){
-        Fuel.get(dropboxUrl)
-            .header(mapOf("token" to "nil"))// skicka med firebase token
-            .response { request, response, result ->
-                println(request)
-                println(response)
-                val (bytes, error) = result
-                if (error == null) {
-                    if (bytes != null) {
-                        surveyList = convertJsonToSurveyList(String(bytes)).toMutableList()
-                        surveyListLiveData.value = surveyList
-                    }
-                }else{
-                    println("Repository getSurveysFromDropbox ERROR: ${error.localizedMessage}")
-                }
-            }
-    }*/
-
-    /*private fun convertJsonToSurveyList(jsonString: String): List<Survey>{
-        //val gson = Gson()
-        //val listType = object : TypeToken<List<Survey>>() { }.type
-        //return gson.fromJson(jsonString, listType))
-
-        return setOrder(setSurveyObjectsManually(jsonString))
-    }*/
-
-
-    private fun tryGetBoolean(id: String, item: JSONObject, aDefault: Boolean = false
-    ) : Boolean {
-
-        var result: Boolean = aDefault
-
-        try {
-            result = item.get(id) as? Boolean ?: aDefault
-        } catch (e: Exception) {
-            println("e: ${e.localizedMessage}")
-        }
-
-        return result//optBoolean
-    }
-
-    /*private fun setSurveyObjectsManually(json: String): List<Survey>{
-
-        val theListWithSurveys = mutableListOf<Survey>()
-        val jsonObj = JSONArray(json.substring(json.indexOf("["), json.lastIndexOf("]") + 1))
-
-        for (i in 0 until jsonObj.length()) {
-            val item = jsonObj.getJSONObject(i)
-            val tempSurvey = Survey()
-
-            //tempSurvey.active = tryGetBoolean("active", item)
-
-            try {
-                tempSurvey.title = item.get("title") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-            try {
-                tempSurvey.id = item.get("id") as? String ?: ""
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-            try {
-                tempSurvey.date = item.get("date") as? Long ?: 0
-            }catch (e: Exception){
-                try {
-                    tempSurvey.date = (item.get("date") as? Int ?: 0).toLong()
-                }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-            }
-
-            try {
-                tempSurvey.respondeddate = item.get("respondeddate") as? Long ?: 0
-            }catch (e: Exception){ try {
-                tempSurvey.respondeddate = (item.get("respondeddate") as? Int ?: 0).toLong()
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}}
-
-            try {
-                tempSurvey.expiry = item.get("expiry") as? Long ?: 0
-            }catch (e: Exception){
-                try {
-                    tempSurvey.expiry = (item.get("expiry") as? Int ?: 0).toLong()
-                }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-            }
-
-            try {
-                tempSurvey.published = item.get("published") as? Long ?: 0
-            }catch (e: Exception){
-                try {
-                    tempSurvey.published = (item.get("published") as? Int ?: 0).toLong()
-                }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-            }
-
-            try {
-                val answer = item.getJSONObject("answer")
-                tempSurvey.answer = getAnswer(answer).toMutableList()
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-            try {
-                val questions = item.getJSONArray("questions")
-                val thequestions = mutableListOf<Question>()
-                for (q in 0 until questions.length()){
-                    val tempQuestion = Question()
-                    val question = questions.getJSONObject(q)
-
-                    try {
-                        tempQuestion.type = question.get("type") as? String ?: ""
-                    }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-                    try {
-                        tempQuestion.index = question.get("index") as? Int ?: 0
-                    }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-                    try {
-                        tempQuestion.text = question.get("text") as? String ?: ""
-                    }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-                    try {
-                        tempQuestion.title = question.get("title") as? String ?: ""
-                    }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-                    try {
-                        tempQuestion.description = question.get("description") as? String ?: ""
-                    }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-                    try {
-                        tempQuestion.id = question.get("id") as? String ?: ""
-                    }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-                    try {
-                        val tempskip = question.getJSONObject("skip")
-                        val theSkip = SkipLogic()
-                        for (s in tempskip.keys()){
-                            theSkip.ifChosen = tempskip.getInt("ifChosen")
-                            theSkip.goto = tempskip.getInt("goto")
-                        }
-                        tempQuestion.skip = theSkip
-                    }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-                    try {
-                        val tempsingleMultipleAnswers = question.getJSONArray("singleMultipleAnswers")
-                        val thesingleMultipleAnswers = mutableListOf<String>()
-                        for (singleMultipleAnswerIndex in 0 until tempsingleMultipleAnswers.length()){
-                            thesingleMultipleAnswers.add(tempsingleMultipleAnswers.getString(singleMultipleAnswerIndex))
-                        }
-                        tempQuestion.singleMultipleAnswers = thesingleMultipleAnswers
-                    }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-                    try {
-                        val tempfillBlanksChoises = question.getJSONArray("fillBlanksChoises")
-                        val thefillBlanks = mutableListOf<String>()
-                        for (fillBlanksIndex in 0 until tempfillBlanksChoises.length()){
-                            thefillBlanks.add(tempfillBlanksChoises.getString(fillBlanksIndex))
-                        }
-                        tempQuestion.fillBlanksChoises = thefillBlanks
-                    }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-                    try {
-                        val tempmultipleChoisesAnswers = question.getJSONArray("multipleChoisesAnswers")
-                        val multipleChoisesAnswers = mutableListOf<String>()
-                        for (multipleChoisesAnswersIndex in 0 until tempmultipleChoisesAnswers.length()){
-                            multipleChoisesAnswers.add(tempmultipleChoisesAnswers.getString(multipleChoisesAnswersIndex))
-                        }
-                        tempQuestion.multipleChoisesAnswers = multipleChoisesAnswers
-                    }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-                    thequestions.add(tempQuestion)
-                }
-                tempSurvey.questions = thequestions
-                println("")
-            }catch (e: Exception){ println("e: ${e.localizedMessage}")}
-
-            theListWithSurveys.add(tempSurvey)
-        }
-        return theListWithSurveys
-    }*/
-
-    /*private fun getAnswer(jObj: JSONObject): List<Answer>{
-
-        val tempListWithAnswers = mutableListOf<Answer>()
-        for (a in jObj.keys()) {
-            val theObject = jObj.getJSONObject(a)
-            val tempAnswer = Answer()
-            tempAnswer.index = a.toInt()
-            try {
-                tempAnswer.likertAnswer = theObject.get("likertAnswer") as? Int
-            }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
-            try {
-                tempAnswer.fillBlankAnswer = theObject.get("fillBlankAnswer") as? Int
-            }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
-            try {
-                val tempMultipleObj = theObject.get("multipleChoiceAnswer") as? JSONArray
-                if (tempMultipleObj != null) {
-                    val tempMultipleArray = mutableListOf<Int>()
-                    for (m in 0 until tempMultipleObj.length()) {
-                        tempMultipleArray.add(tempMultipleObj.getInt(m))
-                    }
-                    tempAnswer.multipleChoiceAnswer = tempMultipleArray
-                }
-            }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
-            try {
-                tempAnswer.singleMultipleAnswer = theObject.get("singleMultipleAnswer") as? Int
-            }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
-            try {
-                tempAnswer.openEndedAnswer = theObject.get("OpenEndedAnswer") as? String
-            }catch (e: Exception){ println("getAnswer, e: ${e.localizedMessage}")}
-            tempListWithAnswers.add(tempAnswer)
-        }
-
-        return tempListWithAnswers
-    }*/
-
-
-
-    /*private fun setOrder(inList: List<Survey>): List<Survey>{
-        val sortedList = inList.sortedBy { it.date }
-        for (survey in sortedList){
-            if (survey.questions != null) {
-                val sortedQuestionList = survey.questions!!.sortedBy { it.index }
-                for ((index, question) in sortedQuestionList.withIndex()) {
-                    when {
-                        index == sortedQuestionList.last().index -> {
-                            //last question
-                            question.next = -1
-                            question.previous = index - 1
-                        }
-                        question.index == 0 -> {
-                            //first question
-                            question.previous = 0
-                            question.next = 1
-                        }
-                        else -> {
-                            //every other question
-                            question.next = question.index + 1
-                            question.previous = question.index - 1
-                        }
-                    }
-                }
-            }
-        }
-        return sortedList
-    }*/
-
 }

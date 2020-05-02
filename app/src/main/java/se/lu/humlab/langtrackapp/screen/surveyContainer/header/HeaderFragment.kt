@@ -51,10 +51,10 @@ class HeaderFragment : Fragment(){
         ).get(SurveyContainerViewModel::class.java)
         val v = binding.root
         v.headerCancelButton.setOnClickListener {
-            listener?.cancelSurvey()
+            listener?.closeSurvey()
         }
         v.headerStartButton.setOnClickListener {
-            listener?.goToNextItem(currentQuestion = question)
+            listener?.nextQuestion(current = question)
         }
         return v
     }
@@ -64,11 +64,10 @@ class HeaderFragment : Fragment(){
         if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
-                //load survey
                 setText()
             }
         }else {
-            throw RuntimeException(context.toString() + " must implement OnHeaderInteractionListener")
+            throw RuntimeException("$context must implement OnHeaderInteractionListener")
         }
     }
 
@@ -76,20 +75,13 @@ class HeaderFragment : Fragment(){
         if (context is OnQuestionInteractionListener) {
             if (::binding.isInitialized) {
                 binding.headerTitleTextView.text = question.title
-                binding.headerTextTextView.setText(
-                    getString(
-                        R.string.headerGreetingText,
-                        viewModel.getCurrentUser().userName,
-                        question.text
-                    )
-                )
+                binding.headerTextTextView.text = question.text
             }
         }
     }
 
     override fun onResume() {
         super.onResume()
-        //update question
         setText()
     }
 

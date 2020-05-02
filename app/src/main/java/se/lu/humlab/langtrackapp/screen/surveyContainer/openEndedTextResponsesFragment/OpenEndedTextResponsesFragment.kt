@@ -10,6 +10,7 @@ package se.lu.humlab.langtrackapp.screen.surveyContainer.openEndedTextResponsesF
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.text.Editable
 import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
@@ -17,9 +18,9 @@ import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.open_ended_text_responses_fragment.*
 import kotlinx.android.synthetic.main.open_ended_text_responses_fragment.view.*
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.OpenEndedTextResponsesFragmentBinding
 import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
@@ -29,33 +30,34 @@ class OpenEndedTextResponsesFragment : Fragment(){
     private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: OpenEndedTextResponsesFragmentBinding
     lateinit var question: Question
+    var theAnswer: Answer? = null
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //return super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.open_ended_text_responses_fragment, container,false)
         binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
         v.openEndedTextNextButton.setOnClickListener {
-            listener?.goToNextItem(currentQuestion = question)
+            saveAnswer()
+            listener?.nextQuestion(current = question)
         }
         v.openEndedTextBackButton.setOnClickListener {
-            listener?.goToPrevoiusItem(currentQuestion = question)
+            saveAnswer()
+            listener?.prevoiusQuestion(current = question)
         }
         v.openLayout.setOnClickListener {
             hideKeyboard()
         }
-        v.openEditText.setOnKeyListener { v, keyCode, event ->
+        v.openEditText.setOnKeyListener { _, _, event ->
             if((event.action == KeyEvent.ACTION_DOWN)
                 && (event.keyCode == KeyEvent.KEYCODE_ENTER)){
                 hideKeyboard()
                 return@setOnKeyListener true
             }
-
             false
         }
         return v
@@ -66,7 +68,6 @@ class OpenEndedTextResponsesFragment : Fragment(){
         if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
-                //load survey
                 setQuestion()
             }
         }else {
@@ -74,26 +75,31 @@ class OpenEndedTextResponsesFragment : Fragment(){
         }
     }
 
+    private fun saveAnswer(){
+        if (binding.openEditText.text.isNullOrBlank()){
+            listener?.setOpenEndedAnswer(null)
+        }else {
+            listener?.setOpenEndedAnswer(binding.openEditText.text.toString())
+        }
+    }
+
     fun setQuestion(){
         if (::binding.isInitialized) {
             binding.openTextTextView.text = question.text
+            binding.openEditText.setText(theAnswer?.openEndedAnswer ?: "")
         }
     }
 
     override fun onResume() {
         super.onResume()
-        //update question
         setQuestion()
     }
 
-    fun hideKeyboard() {
-
+    private fun hideKeyboard() {
         if (activity != null) {
             val imm =
                 activity!!.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-            var view = binding.openEditText
-            //If no view currently has focus, create a new one, just so we can grab a window token from it
-
+            val view = binding.openEditText
             imm.hideSoftInputFromWindow(view.windowToken, 0)
         }
     }

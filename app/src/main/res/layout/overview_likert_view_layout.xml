@@ -26,9 +26,9 @@
         android:minLines="1"
         android:padding="5dp"
         android:text="Jag är idag säkrare på att delta i samtal än igår"
-        android:textAlignment="center"
+        android:textAlignment="textStart"
         android:textColor="@color/lta_text"
-        android:textSize="20sp"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/overviewLikertViewIcon"
         app:layout_constraintTop_toTopOf="parent" />

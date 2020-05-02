@@ -9,6 +9,9 @@ package se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment
 
 import android.content.Context
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.style.UnderlineSpan
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -19,40 +22,35 @@ import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.fill_in_the_blanks_fragment.view.*
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.FillInTheBlanksFragmentBinding
 import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
+
 
 class FillInTheBlankFragment : Fragment(){
 
     private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: FillInTheBlanksFragmentBinding
     lateinit var spinner: Spinner
-    lateinit var question: Question
+    lateinit var theQuestion: Question
     var theSentence: FillInWordSentence? = null
     var theChosenWordIndex : Int? = null
+    var theAnswer: Answer? = null
+    var check = 1
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //return super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.fill_in_the_blanks_fragment, container,false)
         binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
         spinner = binding.choiceSpinner
-        if (question.fillBlanksChoises != null && ::binding.isInitialized) {
-            addEmptyWordToTopOfList()
-            val adapter =
-                ArrayAdapter(
-                    spinner.context,
-                    R.layout.choice_spinner_item,
-                    question.fillBlanksChoises!!
-                )
-            adapter.setDropDownViewResource(R.layout.choice_spinner_dropdown_item)
-            spinner.adapter = adapter
+        if (theQuestion.fillBlanksChoises != null && ::binding.isInitialized) {
+            setAdapter()
             spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onItemSelected(
                     parent: AdapterView<*>,
@@ -60,8 +58,13 @@ class FillInTheBlankFragment : Fragment(){
                     position: Int,
                     id: Long
                 ) {
-                    theChosenWordIndex = position
-                    setSentence(theChosenWordIndex)
+                    if(++check > 1) {
+                        theChosenWordIndex = position
+                        listener?.setFillBlankAnswer(if(theChosenWordIndex != null) (theChosenWordIndex!! - 1) else theChosenWordIndex ) // -1 for blank first place
+                        if (theSentence != null) {
+                            setSentence(theChosenWordIndex)
+                        }
+                    }
                 }
 
                 override fun onNothingSelected(parent: AdapterView<*>) {
@@ -69,21 +72,56 @@ class FillInTheBlankFragment : Fragment(){
             }
         }
         v.fillInTheBlankNextButton.setOnClickListener {
-            if (question.skip != null){
-                if (question.skip?.ifChosen == theChosenWordIndex){
-                    listener?.goToNextItemWithSkipLogic(question)
-                }else listener?.goToNextItem(currentQuestion = question)
-            }else listener?.goToNextItem(currentQuestion = question)
+            theAnswer = null
+            theChosenWordIndex = null
+            theSentence = null
+            listener?.nextQuestion(theQuestion)
         }
         v.fillInTheBlankBackButton.setOnClickListener {
-            listener?.goToPrevoiusItem(currentQuestion = question)
+            theAnswer = null
+            theChosenWordIndex = null
+            theSentence = null
+            listener?.prevoiusQuestion(current = theQuestion)
         }
         return v
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        setQuestion()
+    }
+
+    fun setAdapter(){
+        addEmptyWordToTopOfList()
+        val adapter =
+            ArrayAdapter(
+                spinner.context,
+                R.layout.choice_spinner_item,
+                theQuestion.fillBlanksChoises!!
+            )
+        adapter.setDropDownViewResource(R.layout.choice_spinner_dropdown_item)
+        spinner.adapter = adapter
+    }
+
+    private fun setInitAnswer(){
+        val answerIndex = theAnswer?.fillBlankAnswer ?: -99
+        theChosenWordIndex = null
+        if (answerIndex >= 0){
+            val answerWord = theQuestion.fillBlanksChoises?.get(answerIndex)
+            if (answerWord != null){
+                if (theSentence != null){
+                    theChosenWordIndex = answerIndex
+                    check++
+                    spinner.setSelection(answerIndex,false)
+                }
+            }
+        }
+    }
+
+
     private fun addEmptyWordToTopOfList(){
-        if (question.fillBlanksChoises?.first() != "_____") {
-            question.fillBlanksChoises!!.add(0, "_____")
+        if (theQuestion.fillBlanksChoises?.first() != "_____") {
+            theQuestion.fillBlanksChoises!!.add(0, "_____")
         }
     }
 
@@ -91,10 +129,6 @@ class FillInTheBlankFragment : Fragment(){
         super.onAttach(context)
         if (context is OnQuestionInteractionListener) {
             listener = context
-            if (::binding.isInitialized) {
-                //load survey
-                setQuestion()
-            }
         }else {
             throw RuntimeException(context.toString() + " must implement OnFillInBlankInteractionListener")
         }
@@ -102,54 +136,47 @@ class FillInTheBlankFragment : Fragment(){
 
     fun setQuestion(){
         if (::binding.isInitialized) {
-            getTextAsList(question.text)
+            check = 0
+            theSentence = null
+            theSentence = getTextAsList(theQuestion.text)
+            setAdapter()
             if (theSentence != null){
-                setSentence(null)
-                //setButtons()
+                if (theChosenWordIndex != null){
+                    setSentence(theChosenWordIndex)
+                }else {
+                    setSentence(null)
+                }
             }
+            setInitAnswer()
         }
     }
+
 
 
     fun setSentence(indexOfWord: Int?){
         if (indexOfWord == null){
             binding.fillInTheBlankTextView.text = theSentence!!.listWithWords.joinToString(separator = " ")
+            binding.fillInTheBlankSpinnerTitle
+            binding.fillInTheBlankNextButton.isEnabled = false
         }else if (theChosenWordIndex != null){
             val tempListWithWords = theSentence!!.listWithWords.toMutableList()
-            tempListWithWords[theSentence!!.indexForMissingWord] = question.fillBlanksChoises?.get(theChosenWordIndex!!) ?: ""
-            binding.fillInTheBlankTextView.text = tempListWithWords.joinToString(separator = " ")
+            tempListWithWords[theSentence!!.indexForMissingWord] = theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: ""
+            binding.fillInTheBlankTextView.text = underlineSelectedWord(tempListWithWords,
+                theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: "")
+            binding.fillInTheBlankNextButton.isEnabled = theChosenWordIndex != 0
         }else{
             val tempListWithWords = theSentence!!.listWithWords.toMutableList()
-            tempListWithWords[theSentence!!.indexForMissingWord] = question.fillBlanksChoises?.get(indexOfWord) ?: ""
-            binding.fillInTheBlankTextView.text = tempListWithWords.joinToString(separator = " ")
+            tempListWithWords[theSentence!!.indexForMissingWord] = theQuestion.fillBlanksChoises?.get(indexOfWord) ?: ""
+            binding.fillInTheBlankTextView.text = underlineSelectedWord(tempListWithWords,
+                theQuestion.fillBlanksChoises?.get(theChosenWordIndex!!) ?: "")
+            binding.fillInTheBlankNextButton.isEnabled = theChosenWordIndex != 0
         }
     }
 
-    fun getTextAsList(theText: String){
-        val listWithWords = theText.split(" ")
 
-        var ind = -99
-        for ((i,word) in listWithWords.withIndex()){
-            if (word == "_____"){
-                ind = i
-            }
-
-        }
-        val theSentence = FillInWordSentence(
-            listWithWords = listWithWords,
-            indexForMissingWord = ind
-        )
-        this.theSentence = theSentence
-    }
-
-
-    override fun onResume() {
-        super.onResume()
-        //update question
-        setQuestion()
-    }
 
     override fun onDetach() {
+        println("FillInTheBlankFragment onDetach")
         super.onDetach()
         listener = null
     }
@@ -161,6 +188,32 @@ class FillInTheBlankFragment : Fragment(){
 
             }
     }
+}
+
+fun underlineSelectedWord(list: List<String>, selectedWord: String): SpannableString{
+    val theOrgSentence = list.joinToString(separator = " ")
+    val start = theOrgSentence.indexOf(selectedWord)
+    val end = start + selectedWord.length
+    val returnString = SpannableString(theOrgSentence)
+    returnString.setSpan(UnderlineSpan(), start, end, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+    return returnString
+}
+
+fun getTextAsList(theText: String): FillInWordSentence{
+    val listWithWords = theText.split(" ")
+
+    var ind = -99
+    for ((i,word) in listWithWords.withIndex()){
+        if (word == "_____"){
+            ind = i
+        }
+
+    }
+    val theSentence = FillInWordSentence(
+        listWithWords = listWithWords,
+        indexForMissingWord = ind
+    )
+    return theSentence
 }
 
 data class FillInWordSentence (

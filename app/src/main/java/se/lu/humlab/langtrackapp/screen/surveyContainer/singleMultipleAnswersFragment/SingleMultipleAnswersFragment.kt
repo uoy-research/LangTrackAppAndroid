@@ -9,17 +9,17 @@ package se.lu.humlab.langtrackapp.screen.surveyContainer.singleMultipleAnswersFr
 
 import android.content.Context
 import android.os.Bundle
-import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
 import android.widget.RadioButton
+import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import kotlinx.android.synthetic.main.single_multiple_answer_item.view.singleMultipleAnswerNextButton
 import kotlinx.android.synthetic.main.single_multiple_answers_fragment.view.*
 import se.lu.humlab.langtrackapp.R
+import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.SingleMultipleAnswersFragmentBinding
 import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
@@ -29,32 +29,37 @@ class SingleMultipleAnswersFragment : Fragment(){
 
     private var listener: OnQuestionInteractionListener? = null
     lateinit var binding: SingleMultipleAnswersFragmentBinding
-    lateinit var question: Question
-    var selectedRadioButton = 0
+    lateinit var theQuestion: Question
+    var theAnswer: Answer? = null
+    var selectedRadioButton = -99
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        //return super.onCreateView(inflater, container, savedInstanceState)
         binding = DataBindingUtil.inflate(inflater, R.layout.single_multiple_answers_fragment, container,false)
         binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
         v.singleMultipleAnswerNextButton.setOnClickListener {
-            if (question.skip != null){
-                if (question.skip?.ifChosen == selectedRadioButton){
-                    listener?.goToNextItemWithSkipLogic(question)
-                }else listener?.goToNextItem(currentQuestion = question)
-            }else listener?.goToNextItem(currentQuestion = question)
+            theAnswer = null
+            listener?.nextQuestion(theQuestion)
         }
         v.singleMultipleAnswerBackButton.setOnClickListener {
-            listener?.goToPrevoiusItem(currentQuestion = question)
+            theAnswer = null
+            listener?.prevoiusQuestion(current = theQuestion)
         }
         v.singleMultipleAnswerContainer.setOnCheckedChangeListener { group, checkedId ->
-            val radio: RadioButton = v.findViewById(checkedId)
-            selectedRadioButton = radio.tag as Int
+            if (checkedId != -1 ) {
+                val radio: RadioButton? = group.findViewById(group.checkedRadioButtonId)
+                if (radio != null) {
+                    selectedRadioButton = radio.tag as Int
+                    listener?.setSingleMultipleAnswer(selectedRadioButton)
+                    println("selectedRadioButton: $selectedRadioButton")
+                    setNextButton()
+                }
+            }
         }
         return v
     }
@@ -64,39 +69,50 @@ class SingleMultipleAnswersFragment : Fragment(){
         if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
-                //load survey
-                setQuestion(context)
+                setQuestion()
             }
         }else {
             throw RuntimeException(context.toString() + " must implement OnLikertScaleInteraktionListener")
         }
     }
 
-    fun setQuestion(context: Context){
+    fun setQuestion(){
         if (::binding.isInitialized) {
-            binding.singleMultipleAnswerTextTextView.text = question.text
-            presentChoices(context)
+            binding.singleMultipleAnswerTextTextView.text = theQuestion.text
+            presentChoices()
         }
     }
 
-    fun presentChoices(context: Context){
-        if (question.singleMultipleAnswers != null) {
+    fun presentChoices(){
+        selectedRadioButton = -99
+        if (theQuestion.singleMultipleAnswers != null) {
             binding.singleMultipleAnswerContainer.removeAllViews()
-            for ((index, choice) in question.singleMultipleAnswers!!.withIndex()) {
-                println("presentChoices")
-                val radioButton = RadioButton(context)
+            for ((index, choice) in theQuestion.singleMultipleAnswers!!.withIndex()) {
+                val radioButton = RadioButton(binding.singleMultipleAnswerContainer.context)
                 radioButton.text = choice
                 radioButton.tag = index
                 radioButton.textSize = 17f
                 binding.singleMultipleAnswerContainer.addView(radioButton)
+                if (theAnswer?.singleMultipleAnswer ?: -99 == index) {
+                    radioButton.isChecked = true
+                    selectedRadioButton = index
+                }else{
+                    radioButton.isChecked = false
+                }
             }
         }
+        setNextButton()
+    }
+
+    private fun setNextButton(){
+        binding.singleMultipleAnswerNextButton.isEnabled =
+            selectedRadioButton != -99
+
     }
 
     override fun onResume() {
         super.onResume()
-        //update question
-        setQuestion(binding.singleMultipleAnswerContainer.context)
+        setQuestion()
     }
 
     override fun onDetach() {

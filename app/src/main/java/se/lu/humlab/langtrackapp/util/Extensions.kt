@@ -1,8 +1,6 @@
 package se.lu.humlab.langtrackapp.util
 
 import android.content.Context
-import android.view.View
-import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import se.lu.humlab.langtrackapp.R

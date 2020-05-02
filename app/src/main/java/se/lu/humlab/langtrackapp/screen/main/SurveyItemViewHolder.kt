@@ -26,7 +26,7 @@ class SurveyItemViewHolder(theItemView: View,
 
     private var task: TextView = itemView.findViewById(R.id.surveyRecyclerTitleTextView)
     private var date: TextView = itemView.findViewById(R.id.surveyRecyclerDateTextView)
-    private var activeIndicator: ImageView = itemView.findViewById(R.id.activeIndicator)
+    private var answeredTextView: TextView = itemView.findViewById(R.id.surveyRecyclerAnsweredTextView)
     private var cellLayout: ConstraintLayout = itemView.findViewById(R.id.surveyCellLayout)
     private lateinit var item: Assignment
 
@@ -37,9 +37,9 @@ class SurveyItemViewHolder(theItemView: View,
     fun bind(item: Assignment, pos: Int){
         this.item = item
         task.text = this.item.survey.title
-        activeIndicator.visibility = View.GONE
         date.text = "Inaktiv, ${if (item.dataset != null) "besvarad" else "obesvarad"}"
         date.text = item.publishAt.toDate()?.formatToReadable() ?: "noDate"
+        answeredTextView.text = if (item.dataset != null) "besvarad" else "obesvarad"
     }
 
     fun getItem(): Assignment {

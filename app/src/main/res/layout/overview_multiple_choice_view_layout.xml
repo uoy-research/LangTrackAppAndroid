@@ -27,7 +27,7 @@
         android:text="Deltagaren kan markera flera val"
         android:textAlignment="textStart"
         android:textColor="@color/lta_text"
-        android:textSize="20sp"
+        android:textSize="17sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/overviewMultipleViewIcon"
         app:layout_constraintTop_toTopOf="parent" />

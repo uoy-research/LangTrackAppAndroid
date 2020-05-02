@@ -21,27 +21,29 @@ stephan.bjorck@humlab.lu.se
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Rect
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.left_drawer_menu.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Assignment
-import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.data.model.User
 import se.lu.humlab.langtrackapp.databinding.ActivityMainBinding
 import se.lu.humlab.langtrackapp.interfaces.OnBoolPopupReturnListener
 import se.lu.humlab.langtrackapp.interfaces.OnSurveyRowClickedListener
+import se.lu.humlab.langtrackapp.popup.ExpiredSurveyPopup
 import se.lu.humlab.langtrackapp.popup.OneChoicePopup
 import se.lu.humlab.langtrackapp.screen.about.AboutActivity
 import se.lu.humlab.langtrackapp.screen.contact.ContactActivity
@@ -49,6 +51,10 @@ import se.lu.humlab.langtrackapp.screen.instructions.InstructionsActivity
 import se.lu.humlab.langtrackapp.screen.login.LoginActivity
 import se.lu.humlab.langtrackapp.screen.overview.OverviewActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
+import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
+import se.lu.humlab.langtrackapp.util.getVersionNumber
+import se.lu.humlab.langtrackapp.util.showApiFailInfo
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -59,6 +65,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var recycler: RecyclerView
     private lateinit var adapter: SurveyAdapter
     lateinit var drawerToggle: ActionBarDrawerToggle
+    private var inTestMode = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -73,19 +80,57 @@ class MainActivity : AppCompatActivity() {
         ).get(MainViewModel::class.java)
         mBind.viewModel = viewModel
 
+        // only gets this if app is in foreground...
+        val theMessageText = intent.getStringExtra(MyFirebaseInstanceIDService.MESSAGE_TEXT)
+        if (!theMessageText.isNullOrBlank()) {
+            println("messaging MainActivity onCreate theMessageText: $theMessageText")
+        }
+
         recycler = mBind.surveyRecycler
         linearLayoutManager = LinearLayoutManager(this)
         recycler.layoutManager = linearLayoutManager
         adapter = SurveyAdapter()
         recycler.adapter = adapter
 
+        //swipeRefresh
+        mBind.surveyRecyclerRefreshLayout.setProgressBackgroundColorSchemeColor(ContextCompat.getColor(this, R.color.lta_blue))
+        mBind.surveyRecyclerRefreshLayout.setColorSchemeColors(Color.WHITE)
+
+        mBind.surveyRecyclerRefreshLayout.setOnRefreshListener {
+            if (mAuth.currentUser != null){
+                viewModel.getAssignments()
+            }
+            mBind.surveyRecyclerRefreshLayout.isRefreshing = false
+        }
+
         mBind.surveyRecycler.addItemDecoration(MyItemDecorator(4,28))
         adapter.setOnRowClickedListener(object: OnSurveyRowClickedListener {
             override fun rowClicked(item: Assignment) {
-                if (item.dataset != null){//TODO: check expiary
-                    OverviewActivity.start(this@MainActivity, item)
-                }else{
+
+                viewModel.setSelectedAssignment(item)
+                if (inTestMode) {
+                    // in testMode, always show survey
                     SurveyContainerActivity.start(this@MainActivity, item)
+                } else {
+                    if (item.isActive()) {
+                        // show survey - if api is responding
+                        viewModel.apiIsAlive() { alive ->
+                            if (alive){
+                                SurveyContainerActivity.start(this@MainActivity, item)
+                            }else{
+                                showApiFailInfo(this@MainActivity)
+                            }
+                        }
+
+                    } else {
+                        if (item.dataset != null) {
+                            // show overview
+                            OverviewActivity.start(this@MainActivity, item)
+                        } else {
+                            // show popup
+                            showPopupSurveyInfo(item = item)
+                        }
+                    }
                 }
             }
         })
@@ -94,6 +139,13 @@ class MainActivity : AppCompatActivity() {
 
         viewModel.assignmentListLiveData.observeForever {
             adapter.setAssignments(it)
+            if (it.isNullOrEmpty()){
+                mBind.surveyRecyclerRefreshLayout.visibility = View.GONE
+                mBind.mainEmptyListInfoTextView.visibility = View.VISIBLE
+            }else{
+                mBind.surveyRecyclerRefreshLayout.visibility = View.VISIBLE
+                mBind.mainEmptyListInfoTextView.visibility = View.GONE
+            }
         }
 
         setSupportActionBar(mBind.toolbar)
@@ -105,7 +157,7 @@ class MainActivity : AppCompatActivity() {
             R.string.Close
         )
         supportActionBar?.apply {
-            title = "Lunds Universitet"
+            title = ""
             setDisplayHomeAsUpEnabled(true)
         }
 
@@ -114,19 +166,21 @@ class MainActivity : AppCompatActivity() {
         }
         menuAboutButton.setOnClickListener {
             AboutActivity.start(this)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            //drawerLayout.closeDrawer(GravityCompat.START)
         }
         menuInstructionsButton.setOnClickListener {
             InstructionsActivity.start(this)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            //drawerLayout.closeDrawer(GravityCompat.START)
         }
         menuContactButton.setOnClickListener {
             ContactActivity.start(this)
-            drawerLayout.closeDrawer(GravityCompat.START)
+            //drawerLayout.closeDrawer(GravityCompat.START)
+        }
+
+        menuTestSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            inTestMode = isChecked
         }
     }
-
-
 
     override fun onStart() {
         super.onStart()
@@ -136,8 +190,9 @@ class MainActivity : AppCompatActivity() {
         }else{
             val userEmail = mAuth.currentUser!!.email
             val userName = userEmail?.substringBefore('@')
-            viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))
+            viewModel.setCurrentUser(User(userName ?: "",userName ?: "", userEmail ?: ""))
             menuUserNameTextView.text = userName ?: "noName"
+            menuVersionTextView.text = getVersionNumber(this)
             viewModel.getAssignments()
             mAuth.currentUser!!.getIdToken(true).addOnSuccessListener{
                 val idToken = it.token
@@ -146,6 +201,30 @@ class MainActivity : AppCompatActivity() {
                     println("idToken: $idToken")
                 }
             }
+            setTestModeIfTeam(userName ?: "")
+        }
+    }
+
+    private fun setTestModeIfTeam(userName: String){
+        testView.visibility = if (
+            userName == "stephan" ||
+            userName == "josef" ||
+            userName == "marianne" ||
+            userName == "jonas" ||
+            userName == "henriette") View.VISIBLE else View.GONE
+    }
+
+    fun unsubscribeToTopic(){
+        val topic = viewModel.getCurrentUser().userName
+        if (topic != "") {
+            FirebaseMessaging.getInstance().unsubscribeFromTopic(topic)
+                .addOnCompleteListener { task ->
+                    if (!task.isSuccessful) {
+                        println("unsubscribeToTopic ERROR: ${task.exception?.localizedMessage}")
+                    } else {
+                        println("unsubscribeToTopic, subscribed to topic: $topic")
+                    }
+                }
         }
     }
 
@@ -163,12 +242,34 @@ class MainActivity : AppCompatActivity() {
         oneChoicePopup.setCompleteListener(object : OnBoolPopupReturnListener {
             override fun popupReturn(value: Boolean) {
                 if (value){
+                    viewModel.clearAssignmentsList()
                     mAuth.signOut()
+                    unsubscribeToTopic()
                     LoginActivity.start(this@MainActivity)
                 }
             }
         })
         oneChoicePopup.show(alertFm, "oneChoicePopup")
+    }
+
+    fun showPopupSurveyInfo(item: Assignment){
+        val alertFm = supportFragmentManager.beginTransaction()
+        val width = (main_layout.measuredWidth * 0.85).toInt()
+
+        val alertPopup = ExpiredSurveyPopup.show(
+            width = width,
+            published = item.publishAt,
+            expired = item.expireAt,
+            numberOfQuestions = item.survey.questions?.size ?: 0,
+            textViewText = item.survey.title,
+            placecenter = true
+        )
+        alertPopup.setCompleteListener(object : OnBoolPopupReturnListener{
+            override fun popupReturn(value: Boolean) {
+                onBackPressed()
+            }
+        })
+        alertPopup.show(alertFm, "surveyInfoPopup")
     }
 
     companion object {

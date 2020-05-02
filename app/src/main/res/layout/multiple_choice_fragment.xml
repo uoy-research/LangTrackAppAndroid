@@ -5,21 +5,24 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:id="@+id/multipleMainLayout">
 
 
         <LinearLayout
             android:id="@+id/multipleLayout"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginStart="40dp"
+            android:layout_marginTop="5dp"
             android:layout_marginEnd="40dp"
+            android:layout_marginBottom="5dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/multipleChoiseFragmentBackButton"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/multipleIcon"
-            app:layout_constraintVertical_bias="0.3" >
+            app:layout_constraintVertical_bias="0.3">
 
             <TextView
                 android:id="@+id/multipleTextTextView"
@@ -27,7 +30,7 @@
                 android:layout_height="wrap_content"
                 android:textAlignment="center"
                 android:textColor="@color/lta_text"
-                android:textSize="18sp" />
+                android:textSize="19sp" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -36,11 +39,17 @@
                 android:gravity="center"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/multipleRadioButtonContainer"
+                <ScrollView
+                    android:id="@+id/multipleScroll"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical" />
+                    android:layout_height="wrap_content">
+
+                    <LinearLayout
+                        android:id="@+id/multipleRadioButtonContainer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+                </ScrollView>
             </LinearLayout>
 
         </LinearLayout>
@@ -52,7 +61,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="25dp"
-            android:background="@drawable/rounded_button_white_blue"
+            android:background="@drawable/disabled_button"
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
@@ -71,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="25dp"
-            android:background="@drawable/rounded_button_white_blue"
+            android:background="@drawable/disabled_button"
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"

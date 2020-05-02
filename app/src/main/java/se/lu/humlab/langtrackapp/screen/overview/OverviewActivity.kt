@@ -11,6 +11,7 @@ import androidx.lifecycle.ViewModelProviders
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Assignment
+import se.lu.humlab.langtrackapp.data.model.OverviewListItem
 import se.lu.humlab.langtrackapp.data.model.Survey
 import se.lu.humlab.langtrackapp.databinding.OverviewActivityBinding
 import se.lu.humlab.langtrackapp.screen.overview.overviewQuestionViews.*
@@ -21,6 +22,9 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.MULTIPLE_CHOICE
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.OPEN_ENDED_TEXT_RESPONSES
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.SINGLE_MULTIPLE_ANSWERS
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.TIME_DURATION
+import se.lu.humlab.langtrackapp.util.formatToReadable
+import se.lu.humlab.langtrackapp.util.toDate
 import java.lang.Exception
 
 class OverviewActivity : AppCompatActivity() {
@@ -29,6 +33,7 @@ class OverviewActivity : AppCompatActivity() {
     private lateinit var viewModel :OverviewViewModel
     var topViewIsShowing = false
     var theAssignment: Assignment? = null
+    var questionsWithAnswers = mutableListOf<OverviewListItem>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,50 +44,79 @@ class OverviewActivity : AppCompatActivity() {
             OverviewViewModelFactory(this)
         ).get(OverviewViewModel::class.java)
         theAssignment = intent.getParcelableExtra(ASSIGNMENT)
-        binding.overviewText.text = theAssignment?.survey?.title ?: "hej"
-
-        binding.overviewText.setOnClickListener {
-            //changeSizeOfTopView()
-            if (topViewIsShowing) {
-                binding.topView.removeAllViews()
-                unDimBackground()
-            }else{
-                addTextToTopView()
-            }
-            topViewIsShowing = !topViewIsShowing
-        }
-
-        binding.dimBackgroundView.alpha = 0F
-        binding.dimBackgroundView.isClickable = false
 
         if (theAssignment != null) {
+            filterList()
             presentQuestionsInScrollview()
         }
+
+        binding.overviewTopTitleTextView.text = "Besvarad enkät"
+        binding.overviewTopInfoTextView.text = theAssignment?.survey?.title ?: "noTitle"
+        //binding.overviewTopNumberOfQuestionTextView.text = "${theAssignment?.survey?.questions?.size ?: 0} st"
+        binding.overviewTopPublishedTextView.text = theAssignment?.publishAt?.toDate()?.formatToReadable() ?: "noDate"
+        binding.overviewTopExpiredTextView.text = theAssignment?.dataset?.updatedAt?.toDate()?.formatToReadable() ?: "noDate"
+        binding.overviewTopOkButton.setOnClickListener {
+            onBackPressed()
+        }
+    }
+
+    private fun filterList(){
+        if (theAssignment != null){
+            val header = theAssignment!!.survey.questions?.find { it.type == HEADER_VIEW }
+            if (header != null){
+                val answer = Answer(type = HEADER_VIEW, index = header.index)
+                questionsWithAnswers.add(OverviewListItem(header,answer))
+            }
+            for (que in theAssignment!!.survey.questions!!){
+
+                val answers = theAssignment!!.dataset?.answers
+                if (answers != null) {
+                    if (que.type != FOOTER_VIEW) {
+                        val answer = answers.find { it.index == que.index }
+                        if (answer != null){
+                            questionsWithAnswers.add(
+                                OverviewListItem(
+                                    question = que,
+                                    answer = answer
+                                )
+                            )
+                        }
+                    }
+                }
+            }
+            //MARK: add footer too?
+        }
+        questionsWithAnswers.sortedBy { it.question.index }
+        binding.overviewTopNumberOfQuestionTextView.text = "Totalt ${(theAssignment!!.survey.questions?.size ?: 0) - 2}, besvarade ${questionsWithAnswers.size - 1}"
+
+
     }
 
     private fun presentQuestionsInScrollview(){
         if (!theAssignment!!.survey.questions.isNullOrEmpty()) {
-            val questionsWithoutHeaderAndFooter = theAssignment!!.survey.questions!!
-                .filter { it.type != HEADER_VIEW &&
-                    it.type != FOOTER_VIEW
-            }
-            for (question in questionsWithoutHeaderAndFooter) {
+
+            for (listItem in questionsWithAnswers) {
 
                 val selectedAnswerIndex = if(!theAssignment!!.dataset?.answers.isNullOrEmpty())
-                    theAssignment!!.dataset!!.answers.indexOfFirst { it.index == question.index } else null
+                    theAssignment!!.dataset!!.answers.indexOfFirst { it.index == listItem.question.index } else null
                 var selectedAnswer: Answer? = null
                 try {
                     selectedAnswer = theAssignment!!.dataset!!.answers[selectedAnswerIndex!!]
                 } catch (e: Exception){
                     println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
 
-                when (question.type) {
+                when (listItem.question.type) {
+                    HEADER_VIEW -> {
+                        val header = OverviewHeaderView(this)
+                        header.setText(listItem.question)
+                        binding.overviewQuestionContainer.addView(header)
+                    }
                     LIKERT_SCALES -> {
                         val likert = OverviewLikertView(this)
                         if (selectedAnswer?.likertAnswer ?: -1 != -1 &&
                                 selectedAnswer?.likertAnswer ?: -1 >= 0 &&
                                 selectedAnswer?.likertAnswer ?: -1 < 5){
-                            likert.setText(question, selectedAnswer?.likertAnswer!!)
+                            likert.setText(listItem.question, selectedAnswer?.likertAnswer!!)
                         }
                         binding.overviewQuestionContainer.addView(likert)
                     }
@@ -91,10 +125,10 @@ class OverviewActivity : AppCompatActivity() {
                         val selectedWord =
                             if (selectedAnswer != null){
                                 try {
-                                    question.fillBlanksChoises?.get(selectedAnswer.fillBlankAnswer!!)
+                                    listItem.question.fillBlanksChoises?.get(selectedAnswer.fillBlankAnswer!!)
                                 }catch (e: Exception){null}
                             }  else null
-                        likert.setText(question, selectedWord)
+                        likert.setText(listItem.question, selectedWord)
                         binding.overviewQuestionContainer.addView(likert)
                     }
                     MULTIPLE_CHOICE -> {
@@ -103,27 +137,27 @@ class OverviewActivity : AppCompatActivity() {
                         if (selectedAnswer?.multipleChoiceAnswer != null){
                             for (wordIndex in selectedAnswer.multipleChoiceAnswer!!) {
                                 try {
-                                    templist.add(question.multipleChoisesAnswers?.get(wordIndex)!!)
+                                    templist.add(listItem.question.multipleChoisesAnswers?.get(wordIndex)!!)
                                 } catch (e: Exception) {
                                     println("presentQuestionsInScrollview, e: ${e.localizedMessage}")
                                 }
                             }
                         }
-                        likert.setText(question, templist)
+                        likert.setText(listItem.question, templist)
                         binding.overviewQuestionContainer.addView(likert)
                     }
                     SINGLE_MULTIPLE_ANSWERS -> {
                         val likert = OverviewSingleMultipleView(this)
                         var theChoice: String? = null
                         if (selectedAnswer?.singleMultipleAnswer != null &&
-                            question.singleMultipleAnswers != null) {
+                            listItem.question.singleMultipleAnswers != null) {
                             try {
                                 theChoice =
-                                    question.singleMultipleAnswers!!.get(selectedAnswer.singleMultipleAnswer!!)
+                                    listItem.question.singleMultipleAnswers!!.get(selectedAnswer.singleMultipleAnswer!!)
                             }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
 
                         }
-                        likert.setText(question, theChoice)
+                        likert.setText(listItem.question, theChoice)
                         binding.overviewQuestionContainer.addView(likert)
                     }
                     OPEN_ENDED_TEXT_RESPONSES -> {
@@ -134,44 +168,23 @@ class OverviewActivity : AppCompatActivity() {
                                 theText = selectedAnswer.openEndedAnswer ?: ""
                             }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
                         }
-                        likert.setText(question, theText)
+                        likert.setText(listItem.question, theText)
                         binding.overviewQuestionContainer.addView(likert)
+                    }
+                    TIME_DURATION -> {
+                        var selectedTime = -99
+                        val duration = OverviewTimDurationView(this)
+                        if (selectedAnswer?.timeDurationAnswer != null){
+                            try {
+                                selectedTime = selectedAnswer.timeDurationAnswer ?: -99
+                            }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
+                        }
+                        duration.setText(listItem.question, selectedAnswer)
+                        binding.overviewQuestionContainer.addView(duration)
                     }
                 }
             }
         }
-    }
-
-    fun dimBackgroundClicked(view: View) {
-        binding.topView.removeAllViews()
-        unDimBackground()
-        binding.dimBackgroundView.isClickable = false
-        topViewIsShowing = false
-    }
-
-    private fun addTextToTopView() {
-        val topView1 = TopViewItem(this)
-        if (theAssignment != null) {
-            topView1.setText(theAssignment!!)
-        }
-        binding.topView.addView(topView1)
-        dimBackground()
-        binding.dimBackgroundView.isClickable = true
-    }
-
-
-    fun dimBackground(){
-        val anim = ObjectAnimator.ofFloat(binding.dimBackgroundView,
-            "alpha",0.75F)
-        anim.duration = 300L
-        anim.start()
-    }
-
-    fun unDimBackground(){
-        val anim = ObjectAnimator.ofFloat(binding.dimBackgroundView,
-            "alpha",0F)
-        anim.duration = 450L
-        anim.start()
     }
 
 

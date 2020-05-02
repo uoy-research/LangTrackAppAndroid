@@ -17,6 +17,7 @@ import android.widget.Toast
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.messaging.FirebaseMessaging
 import kotlinx.android.synthetic.main.login_activity.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.User
@@ -46,8 +47,8 @@ class LoginActivity : AppCompatActivity() {
             val width = (loginLayout.measuredWidth * 0.75).toInt()
             val alertPopup = PopupAlert.show(
                 width = width,
-                title = "THE LANG-TRACK-APP",
-                textViewText = "Studera exponering för och användning av ett nytt språk med smartphone-teknik.\n\n",
+                title = "Info",
+                textViewText = "The Lang Track App är en app som utvecklats av humanistlaboratoriet på Lunds Universitet i forskningssyfte.\n\nLogga in med det användarnamn och lösenord som du tilldelats från Humlab Lunds Universitet",
                 placecenter = true
             )
             alertPopup.show(alertFm, "alertPopup")
@@ -85,6 +86,18 @@ class LoginActivity : AppCompatActivity() {
         return pattern.matcher(email).matches()
     }
 
+    fun subscribeToTopic(topic:String){
+        FirebaseMessaging.getInstance().subscribeToTopic(topic)
+            .addOnCompleteListener { task ->
+                if (!task.isSuccessful) {
+                    println("subscribeToTopic ERROR: ${task.exception?.localizedMessage}")
+                }else{
+                    println("subscribeToTopic, subscribed to topic: $topic")
+                }
+            }
+    }
+
+
     fun logIn(email: String, password: String){
         val mAuth = FirebaseAuth.getInstance()
         mAuth.signInWithEmailAndPassword(email,password)
@@ -93,7 +106,17 @@ class LoginActivity : AppCompatActivity() {
                 if (it.isSuccessful){
                     val userEmail = mAuth.currentUser!!.email
                     val userName = userEmail?.substringBefore('@')
-                    viewModel.setCurrentUser(User("",userName ?: "", userEmail ?: ""))
+                    if (!userName.isNullOrEmpty()) {
+                        viewModel.setCurrentUser(
+                            User(
+                                id = userName,
+                                name = userName,
+                                mail = userEmail
+                            )
+                        )
+                        viewModel.putDeviceToken()
+                        subscribeToTopic(userName)
+                    }
                     onBackPressed()
                 }else{
                     Toast.makeText(this@LoginActivity,

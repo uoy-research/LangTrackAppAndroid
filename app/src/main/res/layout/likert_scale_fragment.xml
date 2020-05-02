@@ -17,7 +17,7 @@
             android:layout_marginStart="10dp"
             android:layout_marginEnd="10dp"
             android:layout_marginBottom="25dp"
-            android:background="@drawable/rounded_button_white_blue"
+            android:background="@drawable/disabled_button"
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
@@ -36,7 +36,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="10dp"
             android:layout_marginBottom="25dp"
-            android:background="@drawable/rounded_button_white_blue"
+            android:background="@drawable/disabled_button"
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
@@ -73,29 +73,58 @@
                 android:text="Jag är idag säkrare på att delta i samtal än igår"
                 android:textAlignment="center"
                 android:textColor="@color/lta_text"
-                android:textSize="20sp" />
+                android:textSize="19sp" />
 
             <TextView
                 android:id="@+id/likertScaleDescriptionTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="50dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="15dp"
+                android:layout_marginStart="25dp"
+                android:layout_marginTop="20dp"
+                android:layout_marginEnd="25dp"
                 android:maxLines="3"
-                android:text="Hur mycket stämmer följande påstående?\n1: stämmer inte alls\n5: stämmer helt"
+                android:text="Detta är description"
                 android:textSize="15sp"
                 android:textStyle="italic" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="40dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/likertScaleMin"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="20dp"
+                    android:layout_weight="1"
+                    android:text="min"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+
+                <TextView
+                    android:id="@+id/likertScaleMax"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="20dp"
+                    android:layout_weight="1"
+                    android:text="max"
+                    android:textAlignment="textEnd"
+                    android:textSize="12sp"
+                    android:textStyle="italic" />
+            </LinearLayout>
 
             <RadioGroup
                 android:id="@+id/likertScaleRadioGroup"
                 android:layout_width="match_parent"
                 android:layout_height="32dp"
                 android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
-                android:layout_marginEnd="30dp"
-                android:layout_marginBottom="50dp"
-                android:checkedButton="@id/likertScaleRadioButton3"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="20dp"
+                android:layout_marginBottom="40dp"
                 android:orientation="horizontal"
                 android:paddingStart="20dp"
                 android:paddingEnd="10dp">
@@ -105,7 +134,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:tag="1"
+                    android:tag="0"
                     android:text="1"
                     android:textColor="@color/lta_text" />
 
@@ -114,7 +143,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:tag="2"
+                    android:tag="1"
                     android:text="2"
                     android:textColor="@color/lta_text" />
 
@@ -123,7 +152,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:tag="3"
+                    android:tag="2"
                     android:text="3"
                     android:textColor="@color/lta_text" />
 
@@ -132,7 +161,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:tag="4"
+                    android:tag="3"
                     android:text="4"
                     android:textColor="@color/lta_text" />
 
@@ -141,7 +170,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:tag="5"
+                    android:tag="4"
                     android:text="5"
                     android:textColor="@color/lta_text" />
             </RadioGroup>

@@ -47,15 +47,26 @@ class SurveyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         return items[position]
     }
 
+    override fun onViewDetachedFromWindow(holder: RecyclerView.ViewHolder) {
+        super.onViewDetachedFromWindow(holder)
+        if (holder is ActiveViewHolder){
+            holder.removeCallbacks()
+        }
+    }
+
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         when(holder){
-            is ActiveViewHolder -> holder.bind(items[position], position, object: OnExpiredListener{
-                override fun assignmentExpired() {
-                    notifyDataSetChanged()
-                }
-
-            })
-            is SurveyItemViewHolder -> holder.bind(items[position], position)
+            is ActiveViewHolder -> {
+                holder.setCallbacks()
+                holder.bind(items[position], position, object: OnExpiredListener{
+                    override fun assignmentExpired() {
+                        notifyDataSetChanged()
+                    }
+                })
+            }
+            is SurveyItemViewHolder -> {
+                holder.bind(items[position], position)
+            }
         }
 
     }
@@ -69,10 +80,6 @@ class SurveyAdapter : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
         }
     }
 
-    /*fun setTasks(items: List<Survey>){
-        this.items = items
-        notifyDataSetChanged()
-    }*/
      fun setAssignments(items: List<Assignment>){
          this.items = items
          notifyDataSetChanged()

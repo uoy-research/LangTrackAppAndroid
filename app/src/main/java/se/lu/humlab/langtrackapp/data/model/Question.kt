@@ -19,6 +19,8 @@ data class Question (
     var title: String = "",
     var text: String = "",
     var description: String = "",
+    var likertMax: String = "",
+    var likertMin: String = "",
     var fillBlanksChoises: MutableList<String>? = null,
     var multipleChoisesAnswers: MutableList<String>? = null,
     var singleMultipleAnswers: MutableList<String>? = null,
@@ -31,6 +33,8 @@ data class Question (
         parcel.readInt(),
         parcel.readInt(),
         parcel.readInt(),
+        parcel.readString() ?: "",
+        parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
         parcel.readString() ?: "",
@@ -50,6 +54,8 @@ data class Question (
         parcel.writeString(title)
         parcel.writeString(text)
         parcel.writeString(description)
+        parcel.writeString(likertMax)
+        parcel.writeString(likertMin)
         parcel.writeStringList(fillBlanksChoises)
         parcel.writeStringList(multipleChoisesAnswers)
         parcel.writeStringList(singleMultipleAnswers)
