@@ -94,10 +94,10 @@ class Repository(val context: Context) {
     fun postAnswer(answerDict: Map<Int,Answer>){
         if (currentUser.id.isNotEmpty()){
             val answers = mutableListOf<AnswerBody>()
-            var stringValue: String? = null
-            var intValue: Int? = null
-            var multiValue: MutableList<Int>? = null
             for (answer in answerDict.values){
+                var stringValue: String? = null
+                var intValue: Int? = null
+                var multiValue: MutableList<Int>? = null
                 when(answer.type){
                     SurveyContainerActivity.LIKERT_SCALES ->
                         intValue = answer.likertAnswer
