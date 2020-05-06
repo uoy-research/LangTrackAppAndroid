@@ -23,6 +23,7 @@ import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.SingleMultipleAnswersFragmentBinding
 import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
+import se.lu.humlab.langtrackapp.util.setMarginTop
 
 
 class SingleMultipleAnswersFragment : Fragment(){
@@ -93,6 +94,7 @@ class SingleMultipleAnswersFragment : Fragment(){
                 radioButton.tag = index
                 radioButton.textSize = 17f
                 binding.singleMultipleAnswerContainer.addView(radioButton)
+                radioButton.setMarginTop(10)
                 if (theAnswer?.singleMultipleAnswer ?: -99 == index) {
                     radioButton.isChecked = true
                     selectedRadioButton = index

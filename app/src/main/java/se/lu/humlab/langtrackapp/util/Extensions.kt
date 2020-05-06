@@ -3,6 +3,8 @@ package se.lu.humlab.langtrackapp.util
 import android.content.Context
 import android.content.Intent
 import android.net.Uri
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -62,4 +64,10 @@ fun Uri?.openInBrowser(context: Context) {
 
     val browserIntent = Intent(Intent.ACTION_VIEW, this)
     ContextCompat.startActivity(context, browserIntent, null)
+}
+
+fun View.setMarginTop(topMargin: Int) {
+    val params = layoutParams as ViewGroup.MarginLayoutParams
+    params.setMargins(params.leftMargin, topMargin, params.rightMargin, params.bottomMargin)
+    layoutParams = params
 }

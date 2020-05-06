@@ -21,6 +21,7 @@ import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.MultipleChoiceFragmentBinding
 import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
+import se.lu.humlab.langtrackapp.util.setMarginTop
 
 class MultipleChoiceFragment : Fragment(){
 
@@ -109,12 +110,15 @@ class MultipleChoiceFragment : Fragment(){
                         }
                     }
                 }
+
                 binding.multipleRadioButtonContainer.addView(checkBox)
+                checkBox.setMarginTop(10)
                 checkBox.isChecked = theAnswer?.multipleChoiceAnswer?.contains(index) == true
             }
         }
         setNextButton()
     }
+
 
     private fun setNextButton(){
         binding.multipleChoiseFragmentNextButton.isEnabled =
