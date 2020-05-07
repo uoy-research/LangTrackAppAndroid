@@ -68,8 +68,8 @@ class TimeDurationFragment : Fragment(){
     }
 
     private fun getSelectedDurationInSeconds() : Int{
-        var seconds: Int = selectedHours * 60
-        seconds += selectedMinutes
+        var seconds: Int = selectedHours * 60 * 60
+        seconds += (selectedMinutes * 60)
         println("seconds: $seconds")
         return seconds
     }
