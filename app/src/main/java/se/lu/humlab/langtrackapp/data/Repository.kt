@@ -141,6 +141,8 @@ class Repository(val context: Context) {
                 call.execute().use {
                     if (it.isSuccessful){
                         println("postAnswer SUCCESS: ${it.body}")
+                        //reload to get answer to list
+                        getAssignments()
                     }else{
                         println("postAnswer ERROR: ${it.body}")
                     }
