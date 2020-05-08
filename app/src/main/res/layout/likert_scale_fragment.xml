@@ -73,7 +73,8 @@
                 android:text="Jag är idag säkrare på att delta i samtal än igår"
                 android:textAlignment="center"
                 android:textColor="@color/lta_text"
-                android:textSize="19sp" />
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/likertScaleDescriptionTextView"
