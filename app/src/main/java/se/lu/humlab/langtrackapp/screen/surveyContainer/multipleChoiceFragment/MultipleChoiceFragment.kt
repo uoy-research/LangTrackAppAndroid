@@ -41,11 +41,21 @@ class MultipleChoiceFragment : Fragment(){
         val v = binding.root
         v.multipleChoiseFragmentNextButton.setOnClickListener {
             theAnswer = null
+            binding.multipleIndicatorBottom.elevation = 0f
             listener?.nextQuestion(theQuestion)
         }
         v.multipleChoiseFragmentBackButton.setOnClickListener {
             theAnswer = null
+            binding.multipleIndicatorBottom.elevation = 0f
             listener?.prevoiusQuestion(current = theQuestion)
+        }
+        binding.multipleScroll.setOnScrollChangeListener { _, _, _, _, _ ->
+            binding.multipleIndicatorTop.isSelected = binding.multipleScroll.canScrollVertically(-1)
+            binding.multipleIndicatorBottom.isSelected = binding.multipleScroll.canScrollVertically(1)
+        }
+
+        binding.multipleScroll.viewTreeObserver.addOnGlobalLayoutListener {
+            binding.multipleIndicatorBottom.isSelected = binding.multipleScroll.canScrollVertically(1)
         }
         return v
     }
@@ -62,10 +72,19 @@ class MultipleChoiceFragment : Fragment(){
         }
     }
 
+    fun setBottomShadow(){
+        val actualHeight = binding.multipleScrollLayout.measuredHeight
+        val contentHeight = binding.multipleScroll.measuredHeight
+        println("actualHeight: $actualHeight")
+        println("contentHeight: $contentHeight")
+        binding.multipleScroll.isSelected = contentHeight > actualHeight
+    }
+
     fun setQuestion(){
         if (::binding.isInitialized) {
             binding.multipleTextTextView.text = theQuestion.text
             showChoices()
+            //setBottomShadow()
         }
     }
 
