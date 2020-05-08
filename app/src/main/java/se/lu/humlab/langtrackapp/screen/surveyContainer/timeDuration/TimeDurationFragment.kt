@@ -70,7 +70,6 @@ class TimeDurationFragment : Fragment(){
     private fun getSelectedDurationInSeconds() : Int{
         var seconds: Int = selectedHours * 60 * 60
         seconds += (selectedMinutes * 60)
-        println("seconds: $seconds")
         return seconds
     }
 
@@ -79,7 +78,6 @@ class TimeDurationFragment : Fragment(){
         if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
-                //load survey
                 setQuestion()
             }
         }else {
@@ -92,9 +90,8 @@ class TimeDurationFragment : Fragment(){
             binding.timeDurationTextTextView.text = theQuestion.text
             if (theAnswer != null){
                 if (theAnswer!!.timeDurationAnswer != null){
-                    val hours = theAnswer!!.timeDurationAnswer!! / 60
-                    val minutes = theAnswer!!.timeDurationAnswer!! - (hours * 60)
-                    println("hours: $hours, minutes: $minutes")
+                    val hours = theAnswer!!.timeDurationAnswer!! / 60 / 60
+                    val minutes = (theAnswer!!.timeDurationAnswer!! - (hours * 60 * 60)) / 60
                     binding.numberPickerHour.value = hours
                     var minString = minutes.toString()
                     if (minString == "0"){
