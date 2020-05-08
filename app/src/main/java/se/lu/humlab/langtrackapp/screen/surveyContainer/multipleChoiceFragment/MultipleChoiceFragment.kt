@@ -47,6 +47,11 @@ class MultipleChoiceFragment : Fragment(){
             theAnswer = null
             listener?.prevoiusQuestion(current = theQuestion)
         }
+        binding.multipleScroll.setOnScrollChangeListener { _, _, _, _, _ ->
+            binding.multipleIndicatorTop.isSelected = binding.multipleScroll.canScrollVertically(-1)
+            binding.multipleIndicatorBottom.isSelected = binding.multipleScroll.canScrollVertically(1)
+        }
+
         return v
     }
 

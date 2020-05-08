@@ -32,17 +32,28 @@
                 android:textColor="@color/lta_text"
                 android:textSize="19sp" />
 
+            <View
+                android:id="@+id/multipleIndicatorTop"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="@android:color/white"
+                android:stateListAnimator="@animator/top_indicator_elevation" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <ScrollView
                     android:id="@+id/multipleScroll"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:overScrollMode="never">
 
                     <LinearLayout
                         android:id="@+id/multipleRadioButtonContainer"
@@ -50,7 +61,18 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical" />
                 </ScrollView>
+
             </LinearLayout>
+
+            <View
+                android:id="@+id/multipleIndicatorBottom"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="25dp"
+                android:background="@android:color/white"
+                android:stateListAnimator="@animator/bottom_indicator_elevation" />
 
         </LinearLayout>
 
