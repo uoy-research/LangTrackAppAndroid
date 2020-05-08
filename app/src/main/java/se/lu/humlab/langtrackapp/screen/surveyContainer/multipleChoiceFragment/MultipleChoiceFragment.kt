@@ -49,12 +49,16 @@ class MultipleChoiceFragment : Fragment(){
             binding.multipleIndicatorBottom.elevation = 0f
             listener?.prevoiusQuestion(current = theQuestion)
         }
+
+        //set shadow on scroll
         binding.multipleScroll.setOnScrollChangeListener { _, _, _, _, _ ->
             binding.multipleIndicatorTop.isSelected = binding.multipleScroll.canScrollVertically(-1)
             binding.multipleIndicatorBottom.isSelected = binding.multipleScroll.canScrollVertically(1)
         }
 
+        //set shadow when start
         binding.multipleScroll.viewTreeObserver.addOnGlobalLayoutListener {
+            binding.multipleIndicatorTop.isSelected = binding.multipleScroll.canScrollVertically(-1)
             binding.multipleIndicatorBottom.isSelected = binding.multipleScroll.canScrollVertically(1)
         }
         return v
@@ -72,19 +76,10 @@ class MultipleChoiceFragment : Fragment(){
         }
     }
 
-    fun setBottomShadow(){
-        val actualHeight = binding.multipleScrollLayout.measuredHeight
-        val contentHeight = binding.multipleScroll.measuredHeight
-        println("actualHeight: $actualHeight")
-        println("contentHeight: $contentHeight")
-        binding.multipleScroll.isSelected = contentHeight > actualHeight
-    }
-
     fun setQuestion(){
         if (::binding.isInitialized) {
             binding.multipleTextTextView.text = theQuestion.text
             showChoices()
-            //setBottomShadow()
         }
     }
 
@@ -95,7 +90,7 @@ class MultipleChoiceFragment : Fragment(){
                 val checkBox = CheckBox(binding.multipleRadioButtonContainer.context)
                 checkBox.tag = index
                 checkBox.text = choice
-                checkBox.textSize = 18F
+                checkBox.textSize = 17F
                 checkBox.setOnClickListener {
                     val theCheckbox = it as? CheckBox
                     if (theCheckbox != null){

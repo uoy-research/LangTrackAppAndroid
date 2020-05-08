@@ -43,15 +43,15 @@ class SingleMultipleAnswersFragment : Fragment(){
         binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
-        v.singleMultipleAnswerNextButton.setOnClickListener {
+        binding.singleMultipleAnswerNextButton.setOnClickListener {
             theAnswer = null
             listener?.nextQuestion(theQuestion)
         }
-        v.singleMultipleAnswerBackButton.setOnClickListener {
+        binding.singleMultipleAnswerBackButton.setOnClickListener {
             theAnswer = null
             listener?.prevoiusQuestion(current = theQuestion)
         }
-        v.singleMultipleAnswerContainer.setOnCheckedChangeListener { group, checkedId ->
+        binding.singleMultipleAnswerContainer.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId != -1 ) {
                 val radio: RadioButton? = group.findViewById(group.checkedRadioButtonId)
                 if (radio != null) {
@@ -61,6 +61,17 @@ class SingleMultipleAnswersFragment : Fragment(){
                     setNextButton()
                 }
             }
+        }
+        //set shadow on scroll
+        binding.singleMultipleAnswerScroll.setOnScrollChangeListener { _, _, _, _, _ ->
+            binding.singleIndicatorTop.isSelected = binding.singleMultipleAnswerScroll.canScrollVertically(-1)
+            binding.singleIndicatorBottom.isSelected = binding.singleMultipleAnswerScroll.canScrollVertically(1)
+        }
+
+        //set shadow when start
+        binding.singleMultipleAnswerScroll.viewTreeObserver.addOnGlobalLayoutListener {
+            binding.singleIndicatorTop.isSelected = binding.singleMultipleAnswerScroll.canScrollVertically(-1)
+            binding.singleIndicatorBottom.isSelected = binding.singleMultipleAnswerScroll.canScrollVertically(1)
         }
         return v
     }
@@ -81,7 +92,15 @@ class SingleMultipleAnswersFragment : Fragment(){
         if (::binding.isInitialized) {
             binding.singleMultipleAnswerTextTextView.text = theQuestion.text
             presentChoices()
+            //setWidthOfShadows()
         }
+    }
+
+    fun setWidthOfShadows(){
+        val radioButtonContainerWidth = binding.singleMultipleAnswerContainer.measuredWidth
+        val paramTop = binding.singleIndicatorTop.layoutParams
+        paramTop.width = radioButtonContainerWidth
+        binding.singleIndicatorTop.layoutParams = paramTop
     }
 
     fun presentChoices(){
