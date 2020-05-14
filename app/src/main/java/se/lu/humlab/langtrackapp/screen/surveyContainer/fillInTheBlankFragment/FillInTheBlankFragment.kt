@@ -112,7 +112,7 @@ class FillInTheBlankFragment : Fragment(){
                 if (theSentence != null){
                     theChosenWordIndex = answerIndex
                     check++
-                    spinner.setSelection(answerIndex,false)
+                    spinner.setSelection(answerIndex + 1,false)//must add 1 because _____ at first place
                 }
             }
         }
