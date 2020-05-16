@@ -2,11 +2,17 @@ package se.lu.humlab.langtrackapp.screen.contact
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Paint
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.view.View
 import androidx.databinding.DataBindingUtil
-import kotlinx.android.synthetic.main.contact_activity.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.databinding.ContactActivityBinding
 import se.lu.humlab.langtrackapp.util.asUri
@@ -43,6 +49,40 @@ class ContactActivity : AppCompatActivity() {
             "https://www.lu.se/"
                 .asUri().openInBrowser(this)
         }
+        mBind.contactTopCloseButton.setOnClickListener {
+            onBackPressed()
+        }
+        setContactInfo()
+    }
+
+    fun setContactInfo() {
+
+        val reserchText1 = "Här kan du komma i kontakt med teamet bakom Lang-Track-App.\n" +
+                "\nHar du frågor om din medverkan i underökningen, åsikter om innehållet eller liknande. Klicka här för att komma i kontakt med forskare bakom undersökningen.\n"
+
+        val ltaMail = "humlablu@gmail.com"
+
+        val clickableSpan = object: ClickableSpan() {
+            override fun onClick(textView: View) {
+                val to = ltaMail
+                val subject = "Angående Lang-Track-App"
+                val mailTo = "mailto:" + to +
+                        "?&subject=" + Uri.encode(subject)
+                val emailIntent = Intent(Intent.ACTION_VIEW)
+                emailIntent.putExtra(Intent.EXTRA_TEXT, "-Här kan du skriva till forskarna bakom Lang-Track-App-")
+                emailIntent.data = Uri.parse(mailTo)
+                startActivity(emailIntent)
+            }
+        }
+        val startIndex = reserchText1.indexOf("Klicka här")
+        val endIndex = startIndex + "Klicka här".count()
+
+        val spannableString = SpannableString(reserchText1)
+        spannableString.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        mBind.contactInfoTextView.text = spannableString
+        mBind.contactInfoTextView.movementMethod = LinkMovementMethod.getInstance()
+        mBind.contactInfoTextView.highlightColor = Color.CYAN
     }
 
 

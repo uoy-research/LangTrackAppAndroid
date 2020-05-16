@@ -37,9 +37,6 @@
         <activity android:name=".screen.contact.ContactActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".screen.instructions.InstructionsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".screen.about.AboutActivity"
             android:screenOrientation="portrait"
