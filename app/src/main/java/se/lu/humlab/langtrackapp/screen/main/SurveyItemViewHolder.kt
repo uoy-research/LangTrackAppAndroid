@@ -37,9 +37,9 @@ class SurveyItemViewHolder(theItemView: View,
     fun bind(item: Assignment, pos: Int){
         this.item = item
         task.text = this.item.survey.title
-        date.text = "Inaktiv, ${if (item.dataset != null) "besvarad" else "obesvarad"}"
-        date.text = item.publishAt.toDate()?.formatToReadable() ?: "noDate"
-        answeredTextView.text = if (item.dataset != null) "besvarad" else "obesvarad"
+        date.text = item.publishAt.toDate()?.formatToReadable(date.context.getString(R.string.dateFormat)) ?: date.context.getString(R.string.noDate)
+        answeredTextView.text = if (item.dataset != null) answeredTextView.context.getString(R.string.answered)
+            else answeredTextView.context.getString(R.string.unanswered)
     }
 
     fun getItem(): Assignment {

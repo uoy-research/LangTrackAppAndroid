@@ -6,6 +6,48 @@
     <string name="loading" translatable="false">Laddar värde</string>
     <string name="Open" translatable="false">Open</string>
     <string name="Close" translatable="false">Close</string>
-    <string name="empty_list_info">Här var det tomt…\nNär humlab tilldelar dig en enkät kommer den att hamna här</string>
-    <string name="server_fail_info">Ingen kontakt med server</string>
+    <string name="empty_list_info">Here it was empty…\nWhen Humlab assigns you a survey, it will end up here</string>
+    <string name="server_fail_info">No contact with server</string>
+    <string name="mail_subject">Concerning Lang-Track-App</string>
+    <string name="mail_reserch_body">-Here you can write to the researchers for Lang-Track-App-</string>
+    <string name="reserchText1">Do you have questions about your participation in the study, opinions about the content or similar. Click here to get in touch with the researchers for the study.</string>
+    <string name="click_here">Click here</string>
+    <string name="log_out">Log out</string>
+    <string name="doYouWantToLogOut">Do you want to log out \n%1$s?</string>
+    <string name="cancel">Cancel</string>
+    <string name="langTrackApp" translatable="false">Lang-Track-App</string>
+    <string name="humanityLab">Humanities Lab</string>
+    <string name="menu">Menu</string>
+    <string name="loggedInAs">Logged in as</string>
+    <string name="logOut">Log out</string>
+    <string name="contakt">Contakt</string>
+    <string name="about">About</string>
+    <string name="SurveyToAnswer">Survey to answer</string>
+    <string name="timeLeftMinute">Time left: %1d minutes</string>
+    <string name="timeLeftMinutes">Time left: %2d minutes</string>
+    <string name="hour">hour</string>
+    <string name="hours">hours</string>
+    <string name="timeLeftHourAndOneMinute">Time left: %2d %s and %1d minute</string>
+    <string name="timeLeftHourAndMinute">Time left: %2d %s and %1d minutes</string>
+    <string name="timeLeftHourAndMinutes">Time left: %2d %s and %2d minutes</string>
+    <string name="surveyToAnswer">Survey to answer</string>
+    <string name="timeLeftOneMinute">Time left: %1d minute</string>
+    <string name="answered">Answered</string>
+    <string name="noDate">noDate</string>
+    <string name="unanswered">Unanswered</string>
+    <string name="dateFormat">M/dd/yy hh:mm a</string>
+    <string name="answeredSurvey">Answered survey</string>
+    <string name="unansweredSurvey">Unanswered survey</string>
+    <string name="published">Published:</string>
+    <string name="expired">Expired:</string>
+    <string name="numberOfQuestions">Number of questions:</string>
+    <string name="numberEnding">%d</string>
+    <string name="noTitle">noTitle</string>
+    <string name="humanitiesLab">Humanities Lab</string>
+    <string name="oneHour">%d hour</string>
+    <string name="manyHours">%d hours</string>
+    <string name="numberOfMinutes">%d minutes</string>
+    <string name="numberOfHourAndMinutes">%d hour and %d minutes</string>
+    <string name="numberOfHoursAndMinutes">%d hours and %d minutes</string>
+    <string name="noDuration">0 hours and 0 minutes</string>
 </resources>

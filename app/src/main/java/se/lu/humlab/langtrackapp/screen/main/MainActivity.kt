@@ -227,9 +227,10 @@ class MainActivity : AppCompatActivity() {
         val width = (main_layout.measuredWidth * 0.75).toInt()
         val oneChoicePopup = OneChoicePopup.show(
             width = width,
-            title = "Logga ut",
-            infoText = "Vill du logga ut?\n${viewModel.getCurrentUser().userName}",
-            okButtonText = "Logga ut",
+            title = getString(R.string.log_out),
+            infoText = getString(R.string.doYouWantToLogOut, viewModel.getCurrentUser().userName),
+            okButtonText = getString(R.string.log_out),
+            cancelButtonText = getString(R.string.cancel),
             placecenter = true,
             cancelable = true
         )

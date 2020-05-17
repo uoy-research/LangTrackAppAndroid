@@ -46,7 +46,7 @@ class ActiveViewHolder(theItemView: View,
     fun bind(item: Assignment, pos: Int, listener: OnExpiredListener){
         this.expiryListener = listener
         this.item = item
-        task.text = "Enkät att besvara"
+        task.text = task.context.getString(R.string.surveyToAnswer)
         setRemainingTime()
     }
 
@@ -59,20 +59,32 @@ class ActiveViewHolder(theItemView: View,
                 val minutes = ((diff / 60) % 60).toInt()
                 val hours = (diff / 3600).toInt()
                 if (hours == 0) {
-                    if(minutes < 10) {
-                        date.text = "Tid kvar: %1d minuter".format(minutes)
-                    }else {
-                        date.text = "Tid kvar: %2d minuter".format(minutes)
+                    when {
+                        minutes == 1 -> {
+                            date.text = date.context.getString(R.string.timeLeftOneMinute).format(minutes)
+                        }
+                        minutes < 10 -> {
+                            date.text = date.context.getString(R.string.timeLeftMinute).format(minutes)
+                        }
+                        else -> {
+                            date.text = date.context.getString(R.string.timeLeftMinutes).format(minutes)
+                        }
                     }
                 }else {
-                    var hourString = "timme"
+                    var hourString = date.context.getString(R.string.hour)
                     if (hours > 1){
-                        hourString = "timmar"
+                        hourString = date.context.getString(R.string.hours)
                     }
-                    if(minutes < 10) {
-                        date.text = "Tid kvar: %2d %s och %1d minuter".format(hours,hourString, minutes)
-                    }else {
-                        date.text = "Tid kvar: %2d %s och %2d minuter".format(hours,hourString, minutes)
+                    when {
+                        minutes == 1 -> {
+                            date.text = date.context.getString(R.string.timeLeftHourAndOneMinute).format(hours,hourString, minutes)
+                        }
+                        minutes < 10 -> {
+                            date.text = date.context.getString(R.string.timeLeftHourAndMinute).format(hours,hourString, minutes)
+                        }
+                        else -> {
+                            date.text = date.context.getString(R.string.timeLeftHourAndMinutes).format(hours,hourString, minutes)
+                        }
                     }
                 }
             }else{

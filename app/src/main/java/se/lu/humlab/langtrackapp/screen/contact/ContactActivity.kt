@@ -57,25 +57,24 @@ class ContactActivity : AppCompatActivity() {
 
     fun setContactInfo() {
 
-        val reserchText1 = "Här kan du komma i kontakt med teamet bakom Lang-Track-App.\n" +
-                "\nHar du frågor om din medverkan i underökningen, åsikter om innehållet eller liknande. Klicka här för att komma i kontakt med forskare bakom undersökningen.\n"
+        val reserchText1 = getString(R.string.reserchText1)
 
         val ltaMail = "humlablu@gmail.com"
 
         val clickableSpan = object: ClickableSpan() {
             override fun onClick(textView: View) {
                 val to = ltaMail
-                val subject = "Angående Lang-Track-App"
+                val subject = getString(R.string.mail_subject)
                 val mailTo = "mailto:" + to +
                         "?&subject=" + Uri.encode(subject)
                 val emailIntent = Intent(Intent.ACTION_VIEW)
-                emailIntent.putExtra(Intent.EXTRA_TEXT, "-Här kan du skriva till forskarna bakom Lang-Track-App-")
+                emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_reserch_body))
                 emailIntent.data = Uri.parse(mailTo)
                 startActivity(emailIntent)
             }
         }
-        val startIndex = reserchText1.indexOf("Klicka här")
-        val endIndex = startIndex + "Klicka här".count()
+        val startIndex = reserchText1.indexOf(getString(R.string.click_here))
+        val endIndex = startIndex + getString(R.string.click_here).count()
 
         val spannableString = SpannableString(reserchText1)
         spannableString.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)

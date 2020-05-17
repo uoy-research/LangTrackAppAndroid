@@ -33,21 +33,21 @@ class OverviewTimDurationView  @JvmOverloads constructor(
         overviewDurationViewTextTextView.text = question.text
 
         if (answeredMinutes == 0 && answeredHour == 0){
-            overviewDurationViewSelectedTextView.text = "0:0"
+            overviewDurationViewSelectedTextView.text = context.getString(R.string.noDuration)
         }else if (answeredMinutes == 0){
             if (answeredHour == 1){
-                overviewDurationViewSelectedTextView.text = "$answeredHour timme"
+                overviewDurationViewSelectedTextView.text = context.getString(R.string.oneHour, answeredHour)
             }else{
-                overviewDurationViewSelectedTextView.text = "$answeredHour timmar"
+                overviewDurationViewSelectedTextView.text = context.getString(R.string.manyHours, answeredHour)
             }
         }else{
             if (answeredHour == 0){
-                overviewDurationViewSelectedTextView.text = "$answeredMinutes minuter"
+                overviewDurationViewSelectedTextView.text = context.getString(R.string.numberOfMinutes, answeredMinutes)
             }else{
                 if (answeredHour == 1){
-                    overviewDurationViewSelectedTextView.text = "$answeredHour timme och $answeredMinutes minuter"
+                    overviewDurationViewSelectedTextView.text = context.getString(R.string.numberOfHourAndMinutes, answeredHour, answeredMinutes)//"$answeredHour timme och $answeredMinutes minuter"
                 }else{
-                    overviewDurationViewSelectedTextView.text = "$answeredHour timmar och $answeredMinutes minuter"
+                    overviewDurationViewSelectedTextView.text = context.getString(R.string.numberOfHoursAndMinutes, answeredHour, answeredMinutes)//"$answeredHour timmar och $answeredMinutes minuter"
                 }
             }
         }

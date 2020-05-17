@@ -93,6 +93,7 @@ class SurveyContainerActivity : AppCompatActivity(),
                 title = "Avsluta enkät",
                 infoText = "Vill du stänga enkäten och gå tillbaka till startsidan?\nSvaren kommer inte att sparas.",
                 okButtonText = "Avsluta enkät",
+                cancelButtonText = getString(R.string.cancel),
                 placecenter = true,
                 cancelable = true
             )
