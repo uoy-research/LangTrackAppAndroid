@@ -90,9 +90,9 @@ class SurveyContainerActivity : AppCompatActivity(),
             val width = (surveyContainer_layout.measuredWidth * 0.75).toInt()
             val oneChoicePopup = OneChoicePopup.show(
                 width = width,
-                title = "Avsluta enkät",
-                infoText = "Vill du stänga enkäten och gå tillbaka till startsidan?\nSvaren kommer inte att sparas.",
-                okButtonText = "Avsluta enkät",
+                title = getString(R.string.closeTheSurvey),
+                infoText = getString(R.string.doYouWantToCloseTheSurvey),
+                okButtonText = getString(R.string.closeTheSurvey),
                 cancelButtonText = getString(R.string.cancel),
                 placecenter = true,
                 cancelable = true

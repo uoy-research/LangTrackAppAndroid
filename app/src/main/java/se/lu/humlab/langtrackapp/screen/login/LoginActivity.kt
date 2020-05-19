@@ -47,8 +47,8 @@ class LoginActivity : AppCompatActivity() {
             val width = (loginLayout.measuredWidth * 0.75).toInt()
             val alertPopup = PopupAlert.show(
                 width = width,
-                title = "Info",
-                textViewText = "The Lang Track App är en app som utvecklats av humanistlaboratoriet på Lunds Universitet i forskningssyfte.\n\nLogga in med det användarnamn och lösenord som du tilldelats från Humlab Lunds Universitet",
+                title = getString(R.string.info),
+                textViewText = getString(R.string.langTrackAppInfo1),
                 placecenter = true
             )
             alertPopup.show(alertFm, "alertPopup")
@@ -62,13 +62,13 @@ class LoginActivity : AppCompatActivity() {
         val password = mBind.logInPasswordEditText.text.toString().trim()
 
         if (username.isEmpty()){
-            mBind.logInEmailEditText.error = "Ange användarnamn"
+            mBind.logInEmailEditText.error = getString(R.string.enterUserName)
             mBind.logInEmailEditText.requestFocus()
             return
         }
 
         if (password.isEmpty()){
-            mBind.logInPasswordEditText.error = "Ange lösenord"
+            mBind.logInPasswordEditText.error = getString(R.string.enterPassword)
             mBind.logInPasswordEditText.requestFocus()
             return
         }
@@ -120,7 +120,7 @@ class LoginActivity : AppCompatActivity() {
                     onBackPressed()
                 }else{
                     Toast.makeText(this@LoginActivity,
-                        "Autentisering misslyckades.",
+                        getString(R.string.authenticationFailed),
                         Toast.LENGTH_SHORT).show()
                 }
             }

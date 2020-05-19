@@ -44,4 +44,23 @@
     <string name="numberOfHourAndMinutes">%d timme och %d minuter</string>
     <string name="numberOfHoursAndMinutes">%d timmar och %d minuter</string>
     <string name="noDuration">0 timmar och 0 minuter</string>
+    <string name="next">Nästa</string>
+    <string name="previous">Föregående</string>
+    <string name="pickFromList">"    Välj ord i listan"</string>
+    <string name="Close">Stäng</string>
+    <string name="submit">Skicka in</string>
+    <string name="start">Starta</string>
+    <string name="clickOutsideTextTo">Klicka utanför textrutan för att fälla ner tangentbordet</string>
+    <string name="openEndedHint">Ange text</string>
+    <string name="minutes">Minuter</string>
+    <string name="doYouWantToCloseTheSurvey">Vill du stänga enkäten och gå tillbaka till startsidan?\nSvaren kommer inte att sparas.</string>
+    <string name="closeTheSurvey">Avsluta enkät</string>
+    <string name="langTrackAppInfo1">The Lang Track App är en app som utvecklats av Humanistlaboratoriet på Lunds Universitet i forskningssyfte.\n\nLogga in med det användarnamn och lösenord som du tilldelats från Humlab Lunds Universitet</string>
+    <string name="enterCredentials">Ange dina inloggningsuppgifter</string>
+    <string name="authenticationFailed">Autentisering misslyckades.</string>
+    <string name="enterPassword">Ange lösenord</string>
+    <string name="enterUserName">Ange användarnamn</string>
+    <string name="username">Användarnamn</string>
+    <string name="password">Lösenord</string>
+    <string name="logIn">Logga in</string>
 </resources>

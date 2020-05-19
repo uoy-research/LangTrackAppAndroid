@@ -26,6 +26,7 @@ import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.FillInTheBlanksFragmentBinding
 import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
+import se.lu.humlab.langtrackapp.screen.surveyContainer.fillInTheBlankFragment.FillInTheBlankFragment.Companion.FIVE_UNDERSCORES
 
 
 class FillInTheBlankFragment : Fragment(){
@@ -120,8 +121,8 @@ class FillInTheBlankFragment : Fragment(){
 
 
     private fun addEmptyWordToTopOfList(){
-        if (theQuestion.fillBlanksChoises?.first() != "_____") {
-            theQuestion.fillBlanksChoises!!.add(0, "_____")
+        if (theQuestion.fillBlanksChoises?.first() != FIVE_UNDERSCORES) {
+            theQuestion.fillBlanksChoises!!.add(0, FIVE_UNDERSCORES)
         }
     }
 
@@ -182,6 +183,7 @@ class FillInTheBlankFragment : Fragment(){
     }
 
     companion object {
+        val FIVE_UNDERSCORES = "_____"
         @JvmStatic
         fun newInstance() =
             FillInTheBlankFragment().apply {
@@ -204,7 +206,7 @@ fun getTextAsList(theText: String): FillInWordSentence{
 
     var ind = -99
     for ((i,word) in listWithWords.withIndex()){
-        if (word == "_____"){
+        if (word == FIVE_UNDERSCORES){
             ind = i
         }
 

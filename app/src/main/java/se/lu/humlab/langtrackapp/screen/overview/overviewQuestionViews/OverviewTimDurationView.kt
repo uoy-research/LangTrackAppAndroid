@@ -23,7 +23,8 @@ class OverviewTimDurationView  @JvmOverloads constructor(
 
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.overview_time_duration_view_layout, this, true)
+        LayoutInflater.from(context)
+            .inflate(R.layout.overview_time_duration_view_layout, this, true)
     }
 
     fun setText(question: Question, answer: Answer?) {
@@ -36,18 +37,23 @@ class OverviewTimDurationView  @JvmOverloads constructor(
             overviewDurationViewSelectedTextView.text = context.getString(R.string.noDuration)
         }else if (answeredMinutes == 0){
             if (answeredHour == 1){
-                overviewDurationViewSelectedTextView.text = context.getString(R.string.oneHour, answeredHour)
+                overviewDurationViewSelectedTextView.text =
+                    context.getString(R.string.oneHour, answeredHour)
             }else{
-                overviewDurationViewSelectedTextView.text = context.getString(R.string.manyHours, answeredHour)
+                overviewDurationViewSelectedTextView.text =
+                    context.getString(R.string.manyHours, answeredHour)
             }
         }else{
             if (answeredHour == 0){
-                overviewDurationViewSelectedTextView.text = context.getString(R.string.numberOfMinutes, answeredMinutes)
+                overviewDurationViewSelectedTextView.text =
+                    context.getString(R.string.numberOfMinutes, answeredMinutes)
             }else{
                 if (answeredHour == 1){
-                    overviewDurationViewSelectedTextView.text = context.getString(R.string.numberOfHourAndMinutes, answeredHour, answeredMinutes)//"$answeredHour timme och $answeredMinutes minuter"
+                    overviewDurationViewSelectedTextView.text =
+                        context.getString(R.string.numberOfHourAndMinutes, answeredHour, answeredMinutes)
                 }else{
-                    overviewDurationViewSelectedTextView.text = context.getString(R.string.numberOfHoursAndMinutes, answeredHour, answeredMinutes)//"$answeredHour timmar och $answeredMinutes minuter"
+                    overviewDurationViewSelectedTextView.text =
+                        context.getString(R.string.numberOfHoursAndMinutes, answeredHour, answeredMinutes)
                 }
             }
         }

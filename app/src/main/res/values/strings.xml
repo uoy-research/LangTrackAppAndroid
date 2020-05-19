@@ -5,7 +5,7 @@
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="loading" translatable="false">Laddar värde</string>
     <string name="Open" translatable="false">Open</string>
-    <string name="Close" translatable="false">Close</string>
+    <string name="Close">Close</string>
     <string name="empty_list_info">Here it was empty…\nWhen Humlab assigns you a survey, it will end up here</string>
     <string name="server_fail_info">No contact with server</string>
     <string name="mail_subject">Concerning Lang-Track-App</string>
@@ -50,4 +50,23 @@
     <string name="numberOfHourAndMinutes">%d hour and %d minutes</string>
     <string name="numberOfHoursAndMinutes">%d hours and %d minutes</string>
     <string name="noDuration">0 hours and 0 minutes</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="pickFromList">"    Select word from the list"</string>
+    <string name="submit">Submit</string>
+    <string name="start">Start</string>
+    <string name="clickOutsideTextTo">Click outside the text box to close the keyboard</string>
+    <string name="openEndedHint">Enter text</string>
+    <string name="minutes">Minutes</string>
+    <string name="doYouWantToCloseTheSurvey">Do you want to close the survey and return to the start page?\nThe answers will not be saved.</string>
+    <string name="closeTheSurvey">Close survey</string>
+    <string name="langTrackAppInfo1">The Lang Track App is an app developed by the Humanities Lab at Lund University for research purposes.\n\nLog in with the username and password assigned to you by Humlab Lund University</string>
+    <string name="info" translatable="false">Info</string>
+    <string name="enterCredentials">Please enter your username and password</string>
+    <string name="authenticationFailed">Authentication failed.</string>
+    <string name="enterPassword">Enter password</string>
+    <string name="enterUserName">Enter username</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="logIn">Log in</string>
 </resources>
