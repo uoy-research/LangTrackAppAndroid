@@ -2,10 +2,81 @@
     <string name="app_name">Lang Track App</string>
 
     <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="loading">Laddar värde</string>
-    <string name="Open">Open</string>
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="loading" translatable="false">Laddar värde</string>
+    <string name="Open" translatable="false">Open</string>
     <string name="Close">Close</string>
-    <string name="empty_list_info">Här var det tomt…\nNär humlab tilldelar dig en enkät kommer den att hamna här</string>
-    <string name="server_fail_info">Ingen kontakt med server</string>
+    <string name="empty_list_info">There\'s nothing here... \nWhen Humlab assigns you a survey, you wil see it here.</string>
+    <string name="server_fail_info">No contact with server</string>
+    <string name="mail_subject">Concerning Lang-Track-App</string>
+    <string name="mail_reserch_body">-Here you can write to the researchers for Lang-Track-App-</string>
+    <string name="mail_tech_body">-Here you can write to the developers for Lang-Track-App-</string>
+    <string name="reserchText1">If you are experiencing any technical issues, please contact Stephan Björck.\nstephan.bjorck@humlab.lu.se\n\nIf you have questions or comments about the content of the survey, please email Henriette Arndt.\nhenriette.arndt@humlab.lu.se</string>
+    <string name="click_here">Click here</string>
+    <string name="log_out">Log out</string>
+    <string name="doYouWantToLogOut">Do you want to log out \n%1$s?</string>
+    <string name="cancel">Cancel</string>
+    <string name="langTrackApp" translatable="false">Lang-Track-App</string>
+    <string name="humanityLab">Humanities Lab</string>
+    <string name="menu">Menu</string>
+    <string name="loggedInAs">Logged in as</string>
+    <string name="logOut">Log out</string>
+    <string name="contakt">Contact</string>
+    <string name="about">About</string>
+    <string name="SurveyToAnswer">Survey to answer</string>
+    <string name="timeLeftMinute">Time left: %1d minutes</string>
+    <string name="timeLeftMinutes">Time left: %2d minutes</string>
+    <string name="hour">hour</string>
+    <string name="hours">hours</string>
+    <string name="timeLeftHourAndOneMinute">Time left: %2d %s and %1d minute</string>
+    <string name="timeLeftHourAndMinute">Time left: %2d %s and %1d minutes</string>
+    <string name="timeLeftHourAndMinutes">Time left: %2d %s and %2d minutes</string>
+    <string name="surveyToAnswer">Survey to answer</string>
+    <string name="timeLeftOneMinute">Time left: %1d minute</string>
+    <string name="answered">Answered</string>
+    <string name="noDate">noDate</string>
+    <string name="unanswered">Unanswered</string>
+    <string name="dateFormat">M/dd/yy hh:mm a</string>
+    <string name="answeredSurvey">Answered survey</string>
+    <string name="unansweredSurvey">Unanswered survey</string>
+    <string name="published">Published:</string>
+    <string name="expired">Expired:</string>
+    <string name="numberOfQuestions">Number of questions:</string>
+    <string name="numberEnding">%d</string>
+    <string name="noTitle">noTitle</string>
+    <string name="humanitiesLab">Humanities Lab</string>
+    <string name="oneHour">%d hour</string>
+    <string name="manyHours">%d hours</string>
+    <string name="numberOfMinutes">%d minutes</string>
+    <string name="numberOfHourAndMinutes">%d hour and %d minutes</string>
+    <string name="numberOfHoursAndMinutes">%d hours and %d minutes</string>
+    <string name="noDuration">0 hours and 0 minutes</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="pickFromList">"    Select a word from the list"</string>
+    <string name="submit">Submit</string>
+    <string name="start">Start</string>
+    <string name="clickOutsideTextTo">Click outside the text box to close the keyboard</string>
+    <string name="openEndedHint">Enter text</string>
+    <string name="minutes">Minutes</string>
+    <string name="doYouWantToCloseTheSurvey">Do you want to close the survey and return to the start page?\nThe answers will not be saved.</string>
+    <string name="closeTheSurvey">Close survey</string>
+    <string name="langTrackAppInfo1">The Lang Track App is an app developed by Lund University Humanities Lab for research purposes.\n\nLog in with the username and password assigned to you by Lund University Humanities Lab</string>
+    <string name="info" translatable="false">Info</string>
+    <string name="enterCredentials">Please enter your username and password</string>
+    <string name="authenticationFailed">Authentication failed.</string>
+    <string name="enterPassword">Enter password</string>
+    <string name="enterUserName">Enter username</string>
+    <string name="username">Username</string>
+    <string name="password">Password</string>
+    <string name="logIn">Log in</string>
+    <string name="menuProjectAbout">We developed the Lang-Track-App to study when, where, and how often language learners are in contact with different foreign languages in everyday life. This crucial to improving our understanding of the challenges of language learning outside of classrooms.\n\nThe project is a collaboration between the Lund University Centre for Languages and Literature and Lund University Humanities Lab.</string>
+    <string name="links">Links</string>
+    <string name="lund_university">Lund University</string>
+    <string name="marianneInfo">Marianne Gullberg, Professor of Psycholinguistics, Centre for Languages and Literature</string>
+    <string name="jonasInfo">Jonas Granfeldt, Professor of French Linguistics, Centre for Languages and Literature</string>
+    <string name="team">Team</string>
+    <string name="henrietteInfo">Henriette Arndt, Postdoctoral Research Fellow, LU Humanities Lab</string>
+    <string name="josefInfo">Josef Granqvist, Systems Developer, LU Humanities Lab</string>
+    <string name="stephanInfo">Stephan Björck, Systems Developer, LU Humanities Lab</string>
 </resources>

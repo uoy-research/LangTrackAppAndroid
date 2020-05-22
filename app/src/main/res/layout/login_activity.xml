@@ -24,7 +24,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="40dp"
-                android:text="THE LANG TRACK APP"
+                android:text="@string/langTrackApp"
                 android:textAlignment="center"
                 android:textSize="24sp" />
 
@@ -33,7 +33,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="Ange dina inloggningsuppgifter"
+                android:text="@string/enterCredentials"
                 android:textAlignment="center"
                 android:textSize="18sp" />
 
@@ -45,7 +45,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:ems="10"
-                android:hint="Användarnamn"
+                android:hint="@string/username"
                 android:inputType="textEmailAddress"
                 android:singleLine="true"
                 android:textAlignment="center" />
@@ -58,7 +58,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="10dp"
                 android:ems="10"
-                android:hint="Lösenord"
+                android:hint="@string/password"
                 android:inputType="textPassword"
                 android:singleLine="true"
                 android:textAlignment="center" />
@@ -68,7 +68,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
-                android:text="Logga in" />
+                android:text="@string/logIn" />
 
         </LinearLayout>
 

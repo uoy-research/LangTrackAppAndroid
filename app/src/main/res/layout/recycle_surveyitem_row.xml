@@ -17,7 +17,7 @@
         android:maxLines="6"
         android:minLines="1"
         android:singleLine="false"
-        android:text="Detta är en testtext. Detta är en testtext. Detta är en testtext.Detta är en testtext."
+        android:text=""
         android:textColor="@color/lta_blue"
         android:textSize="16sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -28,7 +28,7 @@
         android:id="@+id/surveyRecyclerDateTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:text="Test"
+        android:text=""
         android:textSize="14sp"
         android:textStyle="italic"
         app:layout_constraintBottom_toBottomOf="@+id/surveyRecyclerAnsweredTextView"
@@ -40,7 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:text="TextView"
+        android:text=""
         app:layout_constraintStart_toStartOf="@+id/surveyRecyclerTitleTextView"
         app:layout_constraintTop_toBottomOf="@+id/surveyRecyclerTitleTextView"/>
 

@@ -2,11 +2,17 @@ package se.lu.humlab.langtrackapp.screen.contact
 
 import android.content.Context
 import android.content.Intent
+import android.graphics.Color
 import android.graphics.Paint
+import android.net.Uri
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
+import android.view.View
 import androidx.databinding.DataBindingUtil
-import kotlinx.android.synthetic.main.contact_activity.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.databinding.ContactActivityBinding
 import se.lu.humlab.langtrackapp.util.asUri
@@ -43,6 +49,56 @@ class ContactActivity : AppCompatActivity() {
             "https://www.lu.se/"
                 .asUri().openInBrowser(this)
         }
+        mBind.contactTopCloseButton.setOnClickListener {
+            onBackPressed()
+        }
+        setContactInfo()
+    }
+
+    fun setContactInfo() {
+
+        val reserchText1 = getString(R.string.reserchText1)
+
+        val clickableSpanResearch = object: ClickableSpan() {
+            override fun onClick(textView: View) {
+                val to = "henriette.arndt@humlab.lu.se"
+                val subject = getString(R.string.mail_subject)
+                val mailTo = "mailto:" + to +
+                        "?&subject=" + Uri.encode(subject)
+                val emailIntent = Intent(Intent.ACTION_VIEW)
+                //emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_reserch_body))
+                emailIntent.data = Uri.parse(mailTo)
+                startActivity(emailIntent)
+            }
+        }
+        val clickableSpanTech = object: ClickableSpan() {
+            override fun onClick(textView: View) {
+                val to = "stephan.bjorck@humlab.lu.se"
+                val subject = getString(R.string.mail_subject)
+                val mailTo = "mailto:" + to +
+                        "?&subject=" + Uri.encode(subject)
+                val emailIntent = Intent(Intent.ACTION_VIEW)
+                //emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_tech_body))
+                emailIntent.data = Uri.parse(mailTo)
+                startActivity(emailIntent)
+            }
+        }
+
+        val stephan = "stephan.bjorck@humlab.lu.se"
+        val techStartIndex = reserchText1.indexOf(stephan)
+        val techEndIndex = techStartIndex + stephan.count()
+
+        val henriette = "henriette.arndt@humlab.lu.se"
+        val researchStartIndex = reserchText1.indexOf(henriette)
+        val researchEndIndex = researchStartIndex + henriette.count()
+
+        val spannableString = SpannableString(reserchText1)
+        spannableString.setSpan(clickableSpanTech, techStartIndex, techEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(clickableSpanResearch, researchStartIndex, researchEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+
+        mBind.contactInfoTextView.text = spannableString
+        mBind.contactInfoTextView.movementMethod = LinkMovementMethod.getInstance()
+        mBind.contactInfoTextView.highlightColor = Color.CYAN
     }
 
 

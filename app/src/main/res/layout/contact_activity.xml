@@ -20,10 +20,12 @@
             app:layout_constraintTop_toTopOf="parent"
             android:stateListAnimator="@animator/topview_elevation"/>
 
+
         <ScrollView
             android:id="@+id/contactScroll"
             android:layout_width="0dp"
             android:layout_height="0dp"
+            android:background="@color/lta_light_grey"
             android:scrollbars="none"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -56,25 +58,68 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginStart="4dp"
-                        android:layout_marginTop="4dp"
-                        android:layout_marginEnd="4dp"
-                        android:layout_marginBottom="0dp"
-                        android:background="@android:color/transparent"
+                        android:layout_margin="4dp"
+                        android:background="@color/lta_light_grey"
                         android:gravity="center_horizontal"
                         android:orientation="vertical">
 
                         <TextView
-                            android:layout_width="wrap_content"
+                            android:id="@+id/contactInfoTextView"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="15dp"
+                            android:layout_marginEnd="10dp"
+                            android:layout_marginBottom="8dp"
                             android:background="@android:color/transparent"
-                            android:text="Länkar"
-                            android:textAlignment="center"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:text=""
+                            android:textAlignment="textStart"
+                            android:textColor="@color/lta_blue"
+                            android:textSize="16sp" />
+
+
+                    </LinearLayout>
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_rowWeight="1"
+                    android:layout_columnWeight="1"
+                    android:layout_marginTop="4dp"
+                    android:layout_marginEnd="2dp"
+                    android:paddingStart="5dp"
+                    android:paddingEnd="5dp"
+                    app:cardBackgroundColor="@color/lta_light_grey"
+                    app:cardCornerRadius="12dp"
+                    app:cardElevation="3dp"
+                    app:cardUseCompatPadding="true">
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginStart="4dp"
+                        android:layout_marginTop="4dp"
+                        android:layout_marginEnd="4dp"
+                        android:layout_marginBottom="0dp"
+                        android:background="@color/lta_light_grey"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="10dp"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginEnd="10dp"
+                            android:background="@android:color/transparent"
+                            android:text="@string/links"
+                            android:textAlignment="textStart"
                             android:textColor="@color/lta_blue"
                             android:textSize="18sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText" />
+                            android:textStyle="bold" />
 
 
                         <TextView
@@ -87,11 +132,11 @@
                             android:background="@android:color/transparent"
                             android:clickable="true"
                             android:focusable="true"
-                            android:text="The Lang-Track-App project"
+                            android:text="@string/langTrackApp"
                             android:textAlignment="textStart"
                             android:textColor="@color/lta_blue"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
+                            android:textSize="16sp"/>
+
                         <TextView
                             android:id="@+id/contactHumLinkTextView"
                             android:layout_width="match_parent"
@@ -102,11 +147,10 @@
                             android:background="@android:color/transparent"
                             android:clickable="true"
                             android:focusable="true"
-                            android:text="Humanistlaboratoriet"
+                            android:text="@string/humanitiesLab"
                             android:textAlignment="textStart"
                             android:textColor="@color/lta_blue"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
+                            android:textSize="16sp" />
 
                         <TextView
                             android:id="@+id/contactLuLinkTextView"
@@ -119,83 +163,10 @@
                             android:background="@android:color/transparent"
                             android:clickable="true"
                             android:focusable="true"
-                            android:text="Lunds Universitet"
+                            android:text="@string/lund_university"
                             android:textAlignment="textStart"
                             android:textColor="@color/lta_blue"
-                            android:textSize="16sp"
-                            tools:ignore="HardcodedText" />
-
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="2dp"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    app:cardBackgroundColor="@color/lta_light_grey"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="3dp"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="4dp"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:text="Kontakt"
-                            android:textAlignment="center"
-                            android:textColor="@color/lta_blue"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText" />
-
-
-                    </LinearLayout>
-                </androidx.cardview.widget.CardView>
-
-                <androidx.cardview.widget.CardView
-                    android:layout_width="match_parent"
-                    android:layout_height="200dp"
-                    android:layout_rowWeight="1"
-                    android:layout_columnWeight="1"
-                    android:layout_marginTop="4dp"
-                    android:layout_marginEnd="2dp"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
-                    app:cardBackgroundColor="@color/lta_light_grey"
-                    app:cardCornerRadius="12dp"
-                    app:cardElevation="3dp"
-                    app:cardUseCompatPadding="true">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="4dp"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="10dp"
-                            android:text=""
-                            android:textAlignment="center"
-                            android:textColor="@color/lta_blue"
-                            android:textSize="18sp"
-                            android:textStyle="bold"
-                            tools:ignore="HardcodedText" />
+                            android:textSize="16sp"/>
 
 
                     </LinearLayout>
@@ -209,14 +180,32 @@
             android:id="@+id/textView18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Kontakt"
+            android:elevation="10dp"
+            android:text="@string/contakt"
             android:textColor="@color/lta_light_grey"
             android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@+id/contactTopView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="@+id/contactTopView"
-            app:layout_constraintTop_toTopOf="@+id/contactTopView"
-            android:elevation="10dp"/>
+            app:layout_constraintTop_toTopOf="@+id/contactTopView" />
+
+        <ImageButton
+            android:id="@+id/contactTopCloseButton"
+            android:layout_width="35dp"
+            android:layout_height="35dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@android:color/transparent"
+            android:elevation="5dp"
+            android:scaleType="centerInside"
+            android:src="@drawable/close_icon"
+            android:text=""
+            android:textAllCaps="false"
+            android:textColor="@color/lta_blue"
+            android:textSize="21sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

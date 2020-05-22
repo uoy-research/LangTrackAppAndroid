@@ -47,7 +47,6 @@ import se.lu.humlab.langtrackapp.popup.ExpiredSurveyPopup
 import se.lu.humlab.langtrackapp.popup.OneChoicePopup
 import se.lu.humlab.langtrackapp.screen.about.AboutActivity
 import se.lu.humlab.langtrackapp.screen.contact.ContactActivity
-import se.lu.humlab.langtrackapp.screen.instructions.InstructionsActivity
 import se.lu.humlab.langtrackapp.screen.login.LoginActivity
 import se.lu.humlab.langtrackapp.screen.overview.OverviewActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
@@ -168,10 +167,6 @@ class MainActivity : AppCompatActivity() {
             AboutActivity.start(this)
             //drawerLayout.closeDrawer(GravityCompat.START)
         }
-        menuInstructionsButton.setOnClickListener {
-            InstructionsActivity.start(this)
-            //drawerLayout.closeDrawer(GravityCompat.START)
-        }
         menuContactButton.setOnClickListener {
             ContactActivity.start(this)
             //drawerLayout.closeDrawer(GravityCompat.START)
@@ -233,9 +228,10 @@ class MainActivity : AppCompatActivity() {
         val width = (main_layout.measuredWidth * 0.75).toInt()
         val oneChoicePopup = OneChoicePopup.show(
             width = width,
-            title = "Logga ut",
-            infoText = "Vill du logga ut?\n${viewModel.getCurrentUser().userName}",
-            okButtonText = "Logga ut",
+            title = getString(R.string.log_out),
+            infoText = getString(R.string.doYouWantToLogOut, viewModel.getCurrentUser().userName),
+            okButtonText = getString(R.string.log_out),
+            cancelButtonText = getString(R.string.cancel),
             placecenter = true,
             cancelable = true
         )
@@ -270,6 +266,15 @@ class MainActivity : AppCompatActivity() {
             }
         })
         alertPopup.show(alertFm, "surveyInfoPopup")
+    }
+
+    override fun onBackPressed() {
+        //close menu if open
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }else {
+            super.onBackPressed()
+        }
     }
 
     companion object {

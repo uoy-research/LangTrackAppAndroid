@@ -22,8 +22,8 @@ class TimeDurationFragment : Fragment(){
     lateinit var binding: TimeDurationFragmentBinding
     lateinit var theQuestion: Question
     var theAnswer: Answer? = null
-    val listOfHours = arrayOf("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24")
-    val listOfMinutes = arrayOf("00","05","10","15","20","25","30","35","40","45","50","55")
+    private val listOfHours = arrayOf("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24")
+    private val listOfMinutes = arrayOf("00","05","10","15","20","25","30","35","40","45","50","55")
     var selectedHours = 0
     var selectedMinutes = 0
 

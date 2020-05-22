@@ -50,11 +50,10 @@ class OverviewActivity : AppCompatActivity() {
             presentQuestionsInScrollview()
         }
 
-        binding.overviewTopTitleTextView.text = "Besvarad enkät"
-        binding.overviewTopInfoTextView.text = theAssignment?.survey?.title ?: "noTitle"
+        binding.overviewTopInfoTextView.text = theAssignment?.survey?.title ?: getString(R.string.noTitle)
         //binding.overviewTopNumberOfQuestionTextView.text = "${theAssignment?.survey?.questions?.size ?: 0} st"
-        binding.overviewTopPublishedTextView.text = theAssignment?.publishAt?.toDate()?.formatToReadable() ?: "noDate"
-        binding.overviewTopExpiredTextView.text = theAssignment?.dataset?.updatedAt?.toDate()?.formatToReadable() ?: "noDate"
+        binding.overviewTopPublishedTextView.text = theAssignment?.publishAt?.toDate()?.formatToReadable(getString(R.string.dateFormat)) ?: getString(R.string.noDate)
+        binding.overviewTopExpiredTextView.text = theAssignment?.dataset?.updatedAt?.toDate()?.formatToReadable(getString(R.string.dateFormat)) ?: getString(R.string.noDate)
         binding.overviewTopOkButton.setOnClickListener {
             onBackPressed()
         }
@@ -87,7 +86,7 @@ class OverviewActivity : AppCompatActivity() {
             //MARK: add footer too?
         }
         questionsWithAnswers.sortedBy { it.question.index }
-        binding.overviewTopNumberOfQuestionTextView.text = "Totalt ${(theAssignment!!.survey.questions?.size ?: 0) - 2}, besvarade ${questionsWithAnswers.size - 1}"
+        binding.overviewTopNumberOfQuestionTextView.text = getString(R.string.numberEnding,questionsWithAnswers.size - 1)
 
 
     }

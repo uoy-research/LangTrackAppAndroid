@@ -21,7 +21,7 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:text="Nästa"
+            android:text="@string/next"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="18sp"
@@ -40,7 +40,7 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:text="Föregående"
+            android:text="@string/previous"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="18sp"
@@ -70,7 +70,7 @@
                 android:maxLines="20"
                 android:minLines="1"
                 android:padding="5dp"
-                android:text="Jag är idag säkrare på att delta i samtal än igår"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/lta_text"
                 android:textSize="17sp"
@@ -84,7 +84,7 @@
                 android:layout_marginTop="20dp"
                 android:layout_marginEnd="25dp"
                 android:maxLines="3"
-                android:text="Detta är description"
+                android:text=""
                 android:textSize="15sp"
                 android:textStyle="italic" />
 
@@ -102,7 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginEnd="20dp"
                     android:layout_weight="1"
-                    android:text="min"
+                    android:text=""
                     android:textSize="12sp"
                     android:textStyle="italic" />
 
@@ -112,7 +112,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"
                     android:layout_weight="1"
-                    android:text="max"
+                    android:text=""
                     android:textAlignment="textEnd"
                     android:textSize="12sp"
                     android:textStyle="italic" />
