@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Lang Track App</string>
-    <string name="empty_list_info">Här var det tomt…\nNär humlab tilldelar dig en enkät kommer den att hamna här</string>
+    <string name="empty_list_info">Här var det tomt…\nNär Humlabbet tilldelar dig en enkät kommer den att hamna här</string>
     <string name="server_fail_info">Ingen kontakt med server</string>
     <string name="mail_subject">Angående Lang-Track-App</string>
     <string name="mail_reserch_body">-Här kan du skriva till forskarna bakom Lang-Track-App-</string>
-    <string name="reserchText1">Har du frågor om din medverkan i underökningen, åsikter om innehållet eller liknande. Klicka här för att komma i kontakt med forskarna bakom undersökningen.</string>
+    <string name="reserchText1">Om du har tekniska problem, kontakta Stephan Björck.\nstephan.bjorck@humlab.lu.se\n\nOm du har frågor eller kommentarer om innehållet i enkäterna, mejla Henriette Arndt.\nhenriette.arndt@humlab.lu.se</string>
     <string name="click_here">Klicka här</string>
     <string name="log_out">Logga ut</string>
     <string name="doYouWantToLogOut">Vill du logga ut \n%1$s?</string>
@@ -55,7 +55,7 @@
     <string name="minutes">Minuter</string>
     <string name="doYouWantToCloseTheSurvey">Vill du stänga enkäten och gå tillbaka till startsidan?\nSvaren kommer inte att sparas.</string>
     <string name="closeTheSurvey">Avsluta enkät</string>
-    <string name="langTrackAppInfo1">The Lang Track App är en app som utvecklats av Humanistlaboratoriet på Lunds Universitet i forskningssyfte.\n\nLogga in med det användarnamn och lösenord som du tilldelats från Humlab Lunds Universitet</string>
+    <string name="langTrackAppInfo1">The Lang Track App är en app som utvecklats av Humanistlaboratoriet på Lunds universitet i forskningssyfte.\n\nLogga in med det användarnamn och lösenord som du tilldelats från Humlabbet Lunds universitet</string>
     <string name="enterCredentials">Ange dina inloggningsuppgifter</string>
     <string name="authenticationFailed">Autentisering misslyckades.</string>
     <string name="enterPassword">Ange lösenord</string>
@@ -63,4 +63,14 @@
     <string name="username">Användarnamn</string>
     <string name="password">Lösenord</string>
     <string name="logIn">Logga in</string>
+    <string name="menuProjectAbout">Vi har utvecklat Lang-Track-App för att utforska när, var och hur ofta människor har kontakt med främmade språk i vardagen. Detta är viktigt för att bättre förstå utmaningarna för språkinlärning utanför klassrummet.\n\nProjektet är ett samarbete mellan Språk– och Litteraturcentrum och Lunds Universitets Humanistlaboratorium.</string>
+    <string name="mail_tech_body">-Här kan du skriva till utvecklarna bakom Lang-Track-App-</string>
+    <string name="links">Länkar</string>
+    <string name="lund_university">Lunds Universitet</string>
+    <string name="marianneInfo">Marianne Gullberg, Professor i psykolingvistik, Språk- och Litteraturcentrum</string>
+    <string name="jonasInfo">Jonas Granfeldt, Professor i fransk språkvetenskap, Språk- och Litteraturcentrum</string>
+    <string name="team">Teamet</string>
+    <string name="henrietteInfo">Henriette Arndt, Postdoktor, LU Humanistlaboratoriet</string>
+    <string name="josefInfo">Josef Granqvist, Systemutvecklare, LU Humanistlaboratoriet</string>
+    <string name="stephanInfo">Stephan Björck, Systemutvecklare, LU Humanistlaboratoriet</string>
 </resources>

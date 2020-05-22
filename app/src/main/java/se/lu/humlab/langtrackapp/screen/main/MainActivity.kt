@@ -28,6 +28,7 @@ import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -265,6 +266,15 @@ class MainActivity : AppCompatActivity() {
             }
         })
         alertPopup.show(alertFm, "surveyInfoPopup")
+    }
+
+    override fun onBackPressed() {
+        //close menu if open
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }else {
+            super.onBackPressed()
+        }
     }
 
     companion object {

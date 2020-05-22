@@ -59,25 +59,42 @@ class ContactActivity : AppCompatActivity() {
 
         val reserchText1 = getString(R.string.reserchText1)
 
-        val ltaMail = "humlablu@gmail.com"
-
-        val clickableSpan = object: ClickableSpan() {
+        val clickableSpanResearch = object: ClickableSpan() {
             override fun onClick(textView: View) {
-                val to = ltaMail
+                val to = "henriette.arndt@humlab.lu.se"
                 val subject = getString(R.string.mail_subject)
                 val mailTo = "mailto:" + to +
                         "?&subject=" + Uri.encode(subject)
                 val emailIntent = Intent(Intent.ACTION_VIEW)
-                emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_reserch_body))
+                //emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_reserch_body))
                 emailIntent.data = Uri.parse(mailTo)
                 startActivity(emailIntent)
             }
         }
-        val startIndex = reserchText1.indexOf(getString(R.string.click_here))
-        val endIndex = startIndex + getString(R.string.click_here).count()
+        val clickableSpanTech = object: ClickableSpan() {
+            override fun onClick(textView: View) {
+                val to = "stephan.bjorck@humlab.lu.se"
+                val subject = getString(R.string.mail_subject)
+                val mailTo = "mailto:" + to +
+                        "?&subject=" + Uri.encode(subject)
+                val emailIntent = Intent(Intent.ACTION_VIEW)
+                //emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_tech_body))
+                emailIntent.data = Uri.parse(mailTo)
+                startActivity(emailIntent)
+            }
+        }
+
+        val stephan = "stephan.bjorck@humlab.lu.se"
+        val techStartIndex = reserchText1.indexOf(stephan)
+        val techEndIndex = techStartIndex + stephan.count()
+
+        val henriette = "henriette.arndt@humlab.lu.se"
+        val researchStartIndex = reserchText1.indexOf(henriette)
+        val researchEndIndex = researchStartIndex + henriette.count()
 
         val spannableString = SpannableString(reserchText1)
-        spannableString.setSpan(clickableSpan, startIndex, endIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(clickableSpanTech, techStartIndex, techEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        spannableString.setSpan(clickableSpanResearch, researchStartIndex, researchEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
 
         mBind.contactInfoTextView.text = spannableString
         mBind.contactInfoTextView.movementMethod = LinkMovementMethod.getInstance()
