@@ -47,6 +47,7 @@ import se.lu.humlab.langtrackapp.popup.ExpiredSurveyPopup
 import se.lu.humlab.langtrackapp.popup.OneChoicePopup
 import se.lu.humlab.langtrackapp.screen.about.AboutActivity
 import se.lu.humlab.langtrackapp.screen.contact.ContactActivity
+import se.lu.humlab.langtrackapp.screen.instructions.InstructionsActivity
 import se.lu.humlab.langtrackapp.screen.login.LoginActivity
 import se.lu.humlab.langtrackapp.screen.overview.OverviewActivity
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
@@ -163,9 +164,13 @@ class MainActivity : AppCompatActivity() {
         menuLogOutTextView.setOnClickListener {
             showLogOutPopup()
         }
+
+        menuInstructionsContactButton.setOnClickListener {
+            InstructionsActivity.start(this)
+        }
+
         menuAboutButton.setOnClickListener {
             AboutActivity.start(this)
-            //drawerLayout.closeDrawer(GravityCompat.START)
         }
         menuContactButton.setOnClickListener {
             ContactActivity.start(this)

@@ -79,4 +79,8 @@
     <string name="henrietteInfo">Henriette Arndt, Postdoctoral Research Fellow, LU Humanities Lab</string>
     <string name="josefInfo">Josef Granqvist, Systems Developer, LU Humanities Lab</string>
     <string name="stephanInfo">Stephan Björck, Systems Developer, LU Humanities Lab</string>
+    <string name="instructions">Instructions</string>
+    <string name="instructionsText">We will ask you to complete brief surveys in this app a few times per day. You will receive a push notification whenever there is a new survey. Make sure you keep your phone nearby and the notification sounds turned on!  \n\nIt’s important that you answer each survey as soon as possible. If you don’t answer a survey, it will automatically expire after 60 minutes.</string>
+    <string name="dataProcessingInfo">In addition to your survey responses, the app will automatically record the date and time when you opened each survey and when you submitted your answers. The app will not record any other data, e.g. about your location.  \n\nYour data will be compiled and analyzed by the project team. No one else will have access to your answers. When we report the results of the project, all information will be anonymized.</string>
+    <string name="dataProcessingHeader">Data processing</string>
 </resources>

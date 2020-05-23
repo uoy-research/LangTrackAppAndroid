@@ -73,4 +73,8 @@
     <string name="henrietteInfo">Henriette Arndt, Postdoktor, LU Humanistlaboratoriet</string>
     <string name="josefInfo">Josef Granqvist, Systemutvecklare, LU Humanistlaboratoriet</string>
     <string name="stephanInfo">Stephan Björck, Systemutvecklare, LU Humanistlaboratoriet</string>
+    <string name="instructions">Instruktioner</string>
+    <string name="instructionsText">Vi ber dig att besvara korta enkäter i den här appen några gånger per dag. Du får en push-notis när det finns en ny enkät. Ha din telefon med dig och stäng inte av meddelandeljudet.  \n\nDet är viktigt att du besvarar varje enkät så snart som möjligt. Om du inte svarar på en enkät stängs den automatisk efter 60 minuter.</string>
+    <string name="dataProcessingInfo">Förutom dina svar på frågorna registrerar appen automatiskt datum och tid när du öppnade enkäten och när du skickade in dina svar. Appen samlar inte in någon annan data som t.ex. platsinformation. \n\nDin data kommer att sammanställas och analyseras av forskare i projektet. Inga andra kommer att ha tillgång till dina svar. När vi redovisar resultaten från projektet kommer alla forskningspersoner att vara anonyma.</string>
+    <string name="dataProcessingHeader">Databehandling</string>
 </resources>
