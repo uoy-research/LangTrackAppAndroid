@@ -7,11 +7,11 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/lta_blue"
-    tools:context=".screen.about.AboutActivity"
-    android:animateLayoutChanges="true">
+    android:animateLayoutChanges="true"
+    tools:context=".screen.instructions.InstructionsActivity">
 
     <View
-        android:id="@+id/aboutTopView"
+        android:id="@+id/informationTopView"
         android:layout_width="0dp"
         android:layout_height="120dp"
         android:background="@color/lta_blue"
@@ -20,8 +20,9 @@
         app:layout_constraintTop_toTopOf="parent"
         android:stateListAnimator="@animator/topview_elevation"/>
 
+
     <ScrollView
-        android:id="@+id/aboutScroll"
+        android:id="@+id/informationScroll"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:background="@color/lta_light_grey"
@@ -29,7 +30,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/aboutTopView">
+        app:layout_constraintTop_toBottomOf="@id/informationTopView">
 
         <GridLayout
             android:layout_width="match_parent"
@@ -63,24 +64,27 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/aboutInfoTextView"
+                        android:id="@+id/informationInfoTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="8dp"
                         android:background="@android:color/transparent"
                         android:clickable="true"
                         android:focusable="true"
-                        android:paddingBottom="8dp"
-                        android:text="@string/menuProjectAbout"
+                        android:text=""
                         android:textAlignment="textStart"
                         android:textColor="@color/lta_blue"
-                        android:textSize="17sp" />
+                        android:textSize="16sp" />
 
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
+
+
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -104,23 +108,24 @@
                     android:orientation="vertical">
 
                     <TextView
-                        android:id="@+id/aboutTeamTextView"
+                        android:id="@+id/informationDataTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="10dp"
                         android:layout_marginTop="15dp"
                         android:layout_marginEnd="10dp"
+                        android:layout_marginBottom="8dp"
                         android:background="@android:color/transparent"
                         android:clickable="true"
                         android:focusable="true"
-                        android:paddingBottom="8dp"
                         android:text=""
                         android:textAlignment="textStart"
                         android:textColor="@color/lta_blue"
-                        android:textSize="17sp" />
+                        android:textSize="16sp" />
 
 
                 </LinearLayout>
+
             </androidx.cardview.widget.CardView>
 
         </GridLayout>
@@ -131,17 +136,17 @@
         android:id="@+id/textView18"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Om"
+        android:elevation="10dp"
+        android:text="@string/instructions"
         android:textColor="@color/lta_light_grey"
         android:textSize="24sp"
-        app:layout_constraintBottom_toBottomOf="@+id/aboutTopView"
+        app:layout_constraintBottom_toBottomOf="@+id/informationTopView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/aboutTopView"
-        app:layout_constraintTop_toTopOf="@+id/aboutTopView"
-        android:elevation="10dp"/>
+        app:layout_constraintStart_toStartOf="@+id/informationTopView"
+        app:layout_constraintTop_toTopOf="@+id/informationTopView" />
 
     <ImageButton
-        android:id="@+id/aboutTopCloseButton"
+        android:id="@+id/instructionsTopCloseButton"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="8dp"

@@ -15,7 +15,6 @@
         android:theme="@style/AppTheme"
         android:usesCleartextTraffic="true"
         tools:ignore="GoogleAppIndexingWarning">
-
         <!-- Firebase Messaging -->
         <service
             android:name=".util.MyFirebaseInstanceIDService"
@@ -24,19 +23,29 @@
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
         </service>
-        <!-- Set custom default icon. This is used when no icon is set for incoming notification messages.
-     See README(https://goo.gl/l4GJaQ) for more. -->
+        <!--
+ Set custom default icon. This is used when no icon is set for incoming notification messages.
+     See README(https://goo.gl/l4GJaQ) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_icon"
             android:resource="@drawable/lunds_universitet_small" />
-        <!-- Set color used with incoming notification messages. This is used when no color is set for the incoming
-             notification message. See README(https://goo.gl/6BKBk7) for more. -->
+        <!--
+ Set color used with incoming notification messages. This is used when no color is set for the incoming
+             notification message. See README(https://goo.gl/6BKBk7) for more.
+        -->
         <meta-data
             android:name="com.google.firebase.messaging.default_notification_color"
             android:resource="@color/lta_blue" />
-        <activity android:name=".screen.contact.ContactActivity"
+
+        <activity
+            android:name=".screen.instructions.InstructionsActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".screen.contact.ContactActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".screen.about.AboutActivity"
             android:screenOrientation="portrait"
@@ -51,9 +60,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".screen.surveyContainer.SurveyContainerActivity"
+            android:parentActivityName=".screen.main.MainActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:parentActivityName=".screen.main.MainActivity" />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".screen.splash.SplashActivity"
             android:screenOrientation="portrait"

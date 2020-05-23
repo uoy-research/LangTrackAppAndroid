@@ -196,7 +196,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:background="@android:color/transparent"
-            android:elevation="5dp"
+            android:elevation="8dp"
             android:scaleType="centerInside"
             android:src="@drawable/close_icon"
             android:text=""
