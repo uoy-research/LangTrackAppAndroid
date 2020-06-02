@@ -133,6 +133,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
         })
 
         adapter.setAssignments(viewModel.assignmentList)
@@ -180,11 +181,16 @@ class MainActivity : AppCompatActivity() {
         menuTestSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             inTestMode = isChecked
         }
+
+
+
     }
 
     override fun onStart() {
         super.onStart()
 
+        val verNum = getVersionNumber(this)
+        // save userId to repository
         if (mAuth.currentUser == null){
             LoginActivity.start(this)
         }else{
@@ -192,7 +198,7 @@ class MainActivity : AppCompatActivity() {
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User(userName ?: "",userName ?: "", userEmail ?: ""))
             menuUserNameTextView.text = userName ?: "noName"
-            menuVersionTextView.text = getVersionNumber(this)
+            menuVersionTextView.text = verNum
             viewModel.getAssignments()
             mAuth.currentUser!!.getIdToken(true).addOnSuccessListener{
                 val idToken = it.token
@@ -202,6 +208,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             setTestModeIfTeam(userName ?: "")
+
+
+            //push deviceToken to backend every time app starts
+            viewModel.postDeviceToken()
         }
     }
 
@@ -211,7 +221,8 @@ class MainActivity : AppCompatActivity() {
             userName == "josef" ||
             userName == "marianne" ||
             userName == "jonas" ||
-            userName == "henriette") View.VISIBLE else View.GONE
+            userName == "henriette" ||
+            userName == "stephandroid") View.VISIBLE else View.GONE
     }
 
     fun unsubscribeToTopic(){

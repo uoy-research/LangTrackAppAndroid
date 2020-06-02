@@ -51,10 +51,12 @@ class Repository(val context: Context) {
 
     fun putDeviceToken(){
 
+        val verNum = getVersionNumber(context)
+        //TODO: send version number together with deviceToken
+
         if (currentUser.id != "") {
             val verNr = getVersionNumber(context)
             println("putDeviceToken version number: $verNr")
-            //TODO: add versionNumber
 
             val localTimeZoneIdentifier = TimeZone.getDefault().id
             println("putDeviceToken localTimeZoneIdentifier: $localTimeZoneIdentifier")
