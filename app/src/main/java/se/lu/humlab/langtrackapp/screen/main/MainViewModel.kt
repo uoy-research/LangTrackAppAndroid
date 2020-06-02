@@ -53,7 +53,7 @@ class MainViewModel(repo: Repository): ViewModel() {
         mRepository.emptyAssignmentsList()
     }
 
-    fun postDeviceToken(token: String, versionNumber: String){
+    fun postDeviceToken(){
         mRepository.putDeviceToken()
     }
 
