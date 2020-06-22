@@ -6,7 +6,7 @@
     <string name="loading" translatable="false">Laddar värde</string>
     <string name="Open" translatable="false">Open</string>
     <string name="Close">Close</string>
-    <string name="empty_list_info">There\'s nothing here... \nWhen Humlab assigns you a survey, you wil see it here.</string>
+    <string name="empty_list_info">There\'s nothing here... \nWhen Humlab assigns you a survey, you will see it here.</string>
     <string name="server_fail_info">No contact with server</string>
     <string name="mail_subject">Concerning Lang-Track-App</string>
     <string name="mail_reserch_body">-Here you can write to the researchers for Lang-Track-App-</string>
