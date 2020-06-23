@@ -54,6 +54,11 @@ class StatisticsViewHolder(theItemView: View) : RecyclerView.ViewHolder(theItemV
                 setColor("gray")
             }
             progressBar.progress = percentRounded.toInt()
+        }else if (answered != 0){
+            statisticsEmojiText.text = "🌟"
+            setColor("green")
+            percentText.text = "100%"
+            progressBar.progress = 100
         }
     }
     fun setColor(color: String){
@@ -62,7 +67,7 @@ class StatisticsViewHolder(theItemView: View) : RecyclerView.ViewHolder(theItemV
             "green" -> theColor = statisticsEmojiText.context.getColor(R.color.lta_green)
             "yellow" -> theColor = statisticsEmojiText.context.getColor(R.color.lta_yellow)
             "brown" -> theColor = statisticsEmojiText.context.getColor(R.color.lta_brown)
-            "gray" -> theColor = statisticsEmojiText.context.getColor(R.color.lta_light_grey)
+            "gray" -> theColor = statisticsEmojiText.context.getColor(R.color.lta_grey)
         }
         progressBar.progressTintList = ColorStateList.valueOf(theColor)
     }

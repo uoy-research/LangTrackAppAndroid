@@ -14,6 +14,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.databinding.AboutActivityBinding
+import se.lu.humlab.langtrackapp.util.asUri
+import se.lu.humlab.langtrackapp.util.openInBrowser
 
 
 class AboutActivity : AppCompatActivity() {
@@ -35,6 +37,14 @@ class AboutActivity : AppCompatActivity() {
             onBackPressed()
         }
 
+        mBind.aboutFoundingTextView.text = getString(R.string.founding)
+
+        val resourceId = resources.getIdentifier(getString(R.string.founder_image_name), "drawable", packageName)
+        mBind.aboutFoundingImageView.setImageDrawable(getDrawable(resourceId))
+        mBind.aboutFoundingImageView.setOnClickListener {
+            getString(R.string.founding_link_address)
+                .asUri().openInBrowser(this)
+        }
         setTeamText()
     }
 

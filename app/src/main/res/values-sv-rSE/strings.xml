@@ -77,4 +77,7 @@
     <string name="instructionsText">Vi ber dig att besvara korta enkäter i den här appen några gånger per dag. Du får en push-notis när det finns en ny enkät. Ha din telefon med dig och stäng inte av meddelandeljudet.  \n\nDet är viktigt att du besvarar varje enkät så snart som möjligt. Om du inte svarar på en enkät stängs den automatisk efter 60 minuter.</string>
     <string name="dataProcessingInfo">Förutom dina svar på frågorna registrerar appen automatiskt datum och tid när du öppnade enkäten och när du skickade in dina svar. Appen samlar inte in någon annan data som t.ex. platsinformation. \n\nDin data kommer att sammanställas och analyseras av forskare i projektet. Inga andra kommer att ha tillgång till dina svar. När vi redovisar resultaten från projektet kommer alla forskningspersoner att vara anonyma.</string>
     <string name="dataProcessingHeader">Databehandling</string>
+    <string name="founding">Finansierad av</string>
+    <string name="founder_image_name">founding_se</string>
+    <string name="founding_link_address">https://maw.wallenberg.org</string>
 </resources>
