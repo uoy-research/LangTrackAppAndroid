@@ -59,7 +59,7 @@
                     android:layout_height="match_parent"
                     android:layout_margin="4dp"
                     android:background="@color/lta_light_grey"
-                    android:gravity="center_horizontal"
+                    android:gravity="start"
                     android:orientation="vertical">
 
                     <TextView
@@ -78,6 +78,22 @@
                         android:textColor="@color/lta_blue"
                         android:textSize="17sp" />
 
+                    <TextView
+                        android:id="@+id/aboutFoundingTextView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Founded by"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="15dp"
+                        android:layout_marginEnd="10dp"/>
+
+                    <ImageView
+                        android:id="@+id/aboutFoundingImageView"
+                        android:layout_width="200dp"
+                        android:layout_height="100dp"
+                        android:layout_marginStart="10dp"
+                        android:scaleType="fitStart"
+                        app:srcCompat="@drawable/founding_en" />
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>

@@ -3,14 +3,17 @@
     <color name="colorPrimary">#008577</color>
     <color name="colorPrimaryDark">#516496</color><!-- 00574B -->
     <color name="colorAccent">#516496</color>#
-    <color name="lta_gold">#BAA081</color>#
+    <color name="lta_gold">#33BAA081</color>#
     <color name="lta_blue">#516496</color>#
     <color name="lta_midblue">#AB516496</color>#
     <color name="lta_red">#96516F</color>#
+    <color name="lta_brown">#BF9156</color>#
+    <color name="lta_yellow">#D2C541</color>#
     <color name="lta_green">#6E9651</color>#
     <color name="lta_grey">#6C6E6E</color>#
     <color name="lta_text">#282829</color>#
     <color name="lta_light_grey">#F8E6E9E9</color>
+    <color name="lta_light_grey2">#B3DCD7D1</color>
     <color name="lta_mid_grey">#F8CFD1D1</color>
     <color name="lta_question_background">#A1516496</color>#
 </resources>

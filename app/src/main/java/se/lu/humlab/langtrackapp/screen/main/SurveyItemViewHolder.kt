@@ -28,6 +28,7 @@ class SurveyItemViewHolder(theItemView: View,
     private var date: TextView = itemView.findViewById(R.id.surveyRecyclerDateTextView)
     private var answeredTextView: TextView = itemView.findViewById(R.id.surveyRecyclerAnsweredTextView)
     private var cellLayout: ConstraintLayout = itemView.findViewById(R.id.surveyCellLayout)
+    private var indicator: View = itemView.findViewById(R.id.surveyRecyclerIndicatorView)
     private lateinit var item: Assignment
 
     init {
@@ -38,8 +39,14 @@ class SurveyItemViewHolder(theItemView: View,
         this.item = item
         task.text = this.item.survey.title
         date.text = item.publishAt.toDate()?.formatToReadable(date.context.getString(R.string.dateFormat)) ?: date.context.getString(R.string.noDate)
-        answeredTextView.text = if (item.dataset != null) answeredTextView.context.getString(R.string.answered)
-            else answeredTextView.context.getString(R.string.unanswered)
+        if (item.dataset != null) {
+            answeredTextView.text = answeredTextView.context.getString(R.string.answered)
+            indicator.background = indicator.context.getDrawable(R.drawable.recycler_indicator_background_green)
+        }
+            else {
+            answeredTextView.text = answeredTextView.context.getString(R.string.unanswered)
+            indicator.background = indicator.context.getDrawable(R.drawable.recycler_indicator_background_gray)
+        }
     }
 
     fun getItem(): Assignment {
