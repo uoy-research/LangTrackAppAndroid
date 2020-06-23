@@ -40,6 +40,7 @@ class MyFirebaseInstanceIDService: FirebaseMessagingService() {
 
     override fun onMessageReceived(p0: RemoteMessage) {
         super.onMessageReceived(p0)
+
         println("messaging MyFirebaseInstanceIDService: onMessageReceived")
         //from google example
         /*

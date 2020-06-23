@@ -133,6 +133,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
+
         })
 
         adapter.setAssignments(viewModel.assignmentList)
@@ -164,13 +165,13 @@ class MainActivity : AppCompatActivity() {
         menuLogOutTextView.setOnClickListener {
             showLogOutPopup()
         }
+
+        menuInstructionsContactButton.setOnClickListener {
+            InstructionsActivity.start(this)
+        }
+
         menuAboutButton.setOnClickListener {
             AboutActivity.start(this)
-            //drawerLayout.closeDrawer(GravityCompat.START)
-        }
-        menuInstructionsButton.setOnClickListener {
-            InstructionsActivity.start(this)
-            //drawerLayout.closeDrawer(GravityCompat.START)
         }
         menuContactButton.setOnClickListener {
             ContactActivity.start(this)
@@ -180,11 +181,16 @@ class MainActivity : AppCompatActivity() {
         menuTestSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             inTestMode = isChecked
         }
+
+
+
     }
 
     override fun onStart() {
         super.onStart()
 
+        val verNum = getVersionNumber(this)
+        // save userId to repository
         if (mAuth.currentUser == null){
             LoginActivity.start(this)
         }else{
@@ -192,7 +198,7 @@ class MainActivity : AppCompatActivity() {
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User(userName ?: "",userName ?: "", userEmail ?: ""))
             menuUserNameTextView.text = userName ?: "noName"
-            menuVersionTextView.text = getVersionNumber(this)
+            menuVersionTextView.text = verNum
             viewModel.getAssignments()
             mAuth.currentUser!!.getIdToken(true).addOnSuccessListener{
                 val idToken = it.token
@@ -202,6 +208,10 @@ class MainActivity : AppCompatActivity() {
                 }
             }
             setTestModeIfTeam(userName ?: "")
+
+
+            //push deviceToken to backend every time app starts
+            viewModel.postDeviceToken()
         }
     }
 
@@ -211,7 +221,8 @@ class MainActivity : AppCompatActivity() {
             userName == "josef" ||
             userName == "marianne" ||
             userName == "jonas" ||
-            userName == "henriette") View.VISIBLE else View.GONE
+            userName == "henriette" ||
+            userName == "stephandroid") View.VISIBLE else View.GONE
     }
 
     fun unsubscribeToTopic(){
@@ -233,9 +244,10 @@ class MainActivity : AppCompatActivity() {
         val width = (main_layout.measuredWidth * 0.75).toInt()
         val oneChoicePopup = OneChoicePopup.show(
             width = width,
-            title = "Logga ut",
-            infoText = "Vill du logga ut?\n${viewModel.getCurrentUser().userName}",
-            okButtonText = "Logga ut",
+            title = getString(R.string.log_out),
+            infoText = getString(R.string.doYouWantToLogOut, viewModel.getCurrentUser().userName),
+            okButtonText = getString(R.string.log_out),
+            cancelButtonText = getString(R.string.cancel),
             placecenter = true,
             cancelable = true
         )
@@ -270,6 +282,15 @@ class MainActivity : AppCompatActivity() {
             }
         })
         alertPopup.show(alertFm, "surveyInfoPopup")
+    }
+
+    override fun onBackPressed() {
+        //close menu if open
+        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
+            drawerLayout.closeDrawer(GravityCompat.START)
+        }else {
+            super.onBackPressed()
+        }
     }
 
     companion object {

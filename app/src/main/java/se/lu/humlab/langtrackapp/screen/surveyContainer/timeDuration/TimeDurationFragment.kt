@@ -22,8 +22,8 @@ class TimeDurationFragment : Fragment(){
     lateinit var binding: TimeDurationFragmentBinding
     lateinit var theQuestion: Question
     var theAnswer: Answer? = null
-    val listOfHours = arrayOf("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24")
-    val listOfMinutes = arrayOf("00","05","10","15","20","25","30","35","40","45","50","55")
+    private val listOfHours = arrayOf("0","1","2","3","4","5","6","7","8","9","10","11","12","13","14","15","16","17","18","19","20","21","22","23","24")
+    private val listOfMinutes = arrayOf("00","05","10","15","20","25","30","35","40","45","50","55")
     var selectedHours = 0
     var selectedMinutes = 0
 
@@ -68,9 +68,8 @@ class TimeDurationFragment : Fragment(){
     }
 
     private fun getSelectedDurationInSeconds() : Int{
-        var seconds: Int = selectedHours * 60
-        seconds += selectedMinutes
-        println("seconds: $seconds")
+        var seconds: Int = selectedHours * 60 * 60
+        seconds += (selectedMinutes * 60)
         return seconds
     }
 
@@ -79,7 +78,6 @@ class TimeDurationFragment : Fragment(){
         if (context is OnQuestionInteractionListener) {
             listener = context
             if (::binding.isInitialized) {
-                //load survey
                 setQuestion()
             }
         }else {
@@ -92,9 +90,8 @@ class TimeDurationFragment : Fragment(){
             binding.timeDurationTextTextView.text = theQuestion.text
             if (theAnswer != null){
                 if (theAnswer!!.timeDurationAnswer != null){
-                    val hours = theAnswer!!.timeDurationAnswer!! / 60
-                    val minutes = theAnswer!!.timeDurationAnswer!! - (hours * 60)
-                    println("hours: $hours, minutes: $minutes")
+                    val hours = theAnswer!!.timeDurationAnswer!! / 60 / 60
+                    val minutes = (theAnswer!!.timeDurationAnswer!! - (hours * 60 * 60)) / 60
                     binding.numberPickerHour.value = hours
                     var minString = minutes.toString()
                     if (minString == "0"){

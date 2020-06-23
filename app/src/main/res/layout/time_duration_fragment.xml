@@ -18,7 +18,7 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:text="Nästa"
+            android:text="@string/next"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="18sp"
@@ -37,7 +37,7 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:text="Föregående"
+            android:text="@string/previous"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="18sp"
@@ -66,10 +66,11 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="40dp"
                 android:layout_marginEnd="15dp"
-                android:text="Hur lång tid tog det?"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/lta_text"
-                android:textSize="19sp" />
+                android:textSize="17sp"
+                android:textStyle="bold" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -82,14 +83,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingEnd="15dp"
-                    android:text="timmar"
+                    android:text="@string/hours"
                     android:textStyle="italic" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:paddingStart="15dp"
-                    android:text="minuter"
+                    android:text="@string/minutes"
                     android:textStyle="italic" />
             </LinearLayout>
 

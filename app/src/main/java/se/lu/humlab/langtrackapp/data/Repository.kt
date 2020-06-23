@@ -51,10 +51,12 @@ class Repository(val context: Context) {
 
     fun putDeviceToken(){
 
+        val verNum = getVersionNumber(context)
+        //TODO: send version number together with deviceToken
+
         if (currentUser.id != "") {
             val verNr = getVersionNumber(context)
             println("putDeviceToken version number: $verNr")
-            //TODO: add versionNumber
 
             val localTimeZoneIdentifier = TimeZone.getDefault().id
             println("putDeviceToken localTimeZoneIdentifier: $localTimeZoneIdentifier")
@@ -94,10 +96,10 @@ class Repository(val context: Context) {
     fun postAnswer(answerDict: Map<Int,Answer>){
         if (currentUser.id.isNotEmpty()){
             val answers = mutableListOf<AnswerBody>()
-            var stringValue: String? = null
-            var intValue: Int? = null
-            var multiValue: MutableList<Int>? = null
             for (answer in answerDict.values){
+                var stringValue: String? = null
+                var intValue: Int? = null
+                var multiValue: MutableList<Int>? = null
                 when(answer.type){
                     SurveyContainerActivity.LIKERT_SCALES ->
                         intValue = answer.likertAnswer
@@ -141,6 +143,8 @@ class Repository(val context: Context) {
                 call.execute().use {
                     if (it.isSuccessful){
                         println("postAnswer SUCCESS: ${it.body}")
+                        //reload to get answer to list
+                        getAssignments()
                     }else{
                         println("postAnswer ERROR: ${it.body}")
                     }

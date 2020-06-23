@@ -41,11 +41,10 @@ class ExpiredSurveyPopup: DialogFragment() {
 
         //okButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
-        titleView.text = "Obesvarad enkät"
         infoView.text = infoText
-        numberTextView.text = "$questionNumber st"
-        publishedTextView.text = publishedText.toDate()?.formatToReadable() ?: "noDate"
-        expiredTextView.text = expiredText.toDate()?.formatToReadable() ?: "noDate"
+        numberTextView.text = getString(R.string.numberEnding,questionNumber)
+        publishedTextView.text = publishedText.toDate()?.formatToReadable(publishedTextView.context.getString(R.string.dateFormat)) ?: publishedTextView.context.getString(R.string.noDate)
+        expiredTextView.text = expiredText.toDate()?.formatToReadable(publishedTextView.context.getString(R.string.dateFormat)) ?: publishedTextView.context.getString(R.string.noDate)
 
         okButton.setOnClickListener {
             dialog?.dismiss()

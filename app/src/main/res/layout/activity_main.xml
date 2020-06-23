@@ -45,7 +45,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="Lang-Track-App"
+                android:text="@string/langTrackApp"
                 android:textColor="@color/lta_blue"
                 android:textSize="24sp"
                 android:textStyle="bold"
@@ -70,7 +70,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="0dp"
-                android:text="Humanistlaboratoriet"
+                android:text="@string/humanityLab"
                 android:textColor="@color/lta_blue"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -87,7 +87,6 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView" />
-
 
 
             <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -108,13 +107,12 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
-                    android:paddingStart="5dp"
-                    android:paddingEnd="5dp"
+                    android:paddingStart="-2dp"
+                    android:paddingEnd="-2dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
-
 
 
             </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>

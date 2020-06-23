@@ -38,11 +38,13 @@ class OneChoicePopup: DialogFragment() {
         val title = arguments?.getString(TITLE)
         val infoText = arguments?.getString(INFO_TEXT)
         val okButtonText = arguments?.getString(OK_BUTTON_TEXT)
+        val cancelButtonText = arguments?.getString(CANCEL_BUTTON_TEXT)
         val placeCenter = arguments?.getBoolean(PLACE_CENTER) ?: false
 
         titleView.text = title
         infoView.text = infoText
         okButton.setText(okButtonText)
+        cancelButton.setText(cancelButtonText)
         okButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         cancelButton.paintFlags = Paint.UNDERLINE_TEXT_FLAG
 
@@ -94,12 +96,14 @@ class OneChoicePopup: DialogFragment() {
         val INFO_TEXT = "infoText"
         val PLACE_CENTER = "placecenter"
         val OK_BUTTON_TEXT = "okButtonText"
+        val CANCEL_BUTTON_TEXT = "cancelButtonText"
         var popupWidth: Int? = 100
 
         fun show(width: Int,
                  title: String,
                  infoText: String,
                  okButtonText: String,
+                 cancelButtonText: String,
                  placecenter: Boolean,
                  cancelable: Boolean = true): OneChoicePopup {
             return OneChoicePopup().apply {
@@ -110,6 +114,7 @@ class OneChoicePopup: DialogFragment() {
                     putString(INFO_TEXT, infoText)
                     putBoolean(PLACE_CENTER, placecenter)
                     putString(OK_BUTTON_TEXT, okButtonText)
+                    putString(CANCEL_BUTTON_TEXT, cancelButtonText)
                 }
             }
         }

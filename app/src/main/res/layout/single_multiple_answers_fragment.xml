@@ -18,7 +18,7 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:text="Nästa"
+            android:text="@string/next"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="18sp"
@@ -37,7 +37,7 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:text="Föregående"
+            android:text="@string/previous"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="18sp"
@@ -64,15 +64,27 @@
                 android:id="@+id/singleMultipleAnswerTextTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="15dp"
+                android:layout_marginStart="10dp"
                 android:layout_marginTop="20dp"
-                android:layout_marginEnd="15dp"
-                android:text="Har du kommit i kontakt med något främmande språk den senaste timmen"
+                android:layout_marginEnd="10dp"
+                android:text=""
                 android:textAlignment="center"
                 android:textColor="@color/lta_text"
-                android:textSize="19sp" />
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/singleIndicatorTop"
+                android:layout_width="match_parent"
+                android:layout_height="0.01dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="5dp"
+                android:layout_marginEnd="8dp"
+                android:background="@android:color/white"
+                android:stateListAnimator="@animator/top_indicator_elevation" />
 
             <LinearLayout
+                android:layout_marginTop="2dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:gravity="center"
@@ -83,14 +95,16 @@
                 <ScrollView
                     android:id="@+id/singleMultipleAnswerScroll"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:scrollbars="none"
+                    android:overScrollMode="never">
 
                     <RadioGroup
                         android:id="@+id/singleMultipleAnswerContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:paddingTop="20dp"
+                        android:paddingTop="10dp"
                         android:paddingEnd="20dp">
 
                         <RadioButton
@@ -107,6 +121,15 @@
                     </RadioGroup>
                 </ScrollView>
             </LinearLayout>
+            <View
+                android:id="@+id/singleIndicatorBottom"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="25dp"
+                android:background="@android:color/white"
+                android:stateListAnimator="@animator/bottom_indicator_elevation" />
         </LinearLayout>
 
         <ImageView

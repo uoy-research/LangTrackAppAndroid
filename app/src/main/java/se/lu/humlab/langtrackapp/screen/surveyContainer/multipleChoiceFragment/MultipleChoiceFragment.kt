@@ -21,6 +21,7 @@ import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Question
 import se.lu.humlab.langtrackapp.databinding.MultipleChoiceFragmentBinding
 import se.lu.humlab.langtrackapp.interfaces.OnQuestionInteractionListener
+import se.lu.humlab.langtrackapp.util.setMarginTop
 
 class MultipleChoiceFragment : Fragment(){
 
@@ -40,11 +41,25 @@ class MultipleChoiceFragment : Fragment(){
         val v = binding.root
         v.multipleChoiseFragmentNextButton.setOnClickListener {
             theAnswer = null
+            binding.multipleIndicatorBottom.elevation = 0f
             listener?.nextQuestion(theQuestion)
         }
         v.multipleChoiseFragmentBackButton.setOnClickListener {
             theAnswer = null
+            binding.multipleIndicatorBottom.elevation = 0f
             listener?.prevoiusQuestion(current = theQuestion)
+        }
+
+        //set shadow on scroll
+        binding.multipleScroll.setOnScrollChangeListener { _, _, _, _, _ ->
+            binding.multipleIndicatorTop.isSelected = binding.multipleScroll.canScrollVertically(-1)
+            binding.multipleIndicatorBottom.isSelected = binding.multipleScroll.canScrollVertically(1)
+        }
+
+        //set shadow when start
+        binding.multipleScroll.viewTreeObserver.addOnGlobalLayoutListener {
+            binding.multipleIndicatorTop.isSelected = binding.multipleScroll.canScrollVertically(-1)
+            binding.multipleIndicatorBottom.isSelected = binding.multipleScroll.canScrollVertically(1)
         }
         return v
     }
@@ -75,7 +90,7 @@ class MultipleChoiceFragment : Fragment(){
                 val checkBox = CheckBox(binding.multipleRadioButtonContainer.context)
                 checkBox.tag = index
                 checkBox.text = choice
-                checkBox.textSize = 18F
+                checkBox.textSize = 17F
                 checkBox.setOnClickListener {
                     val theCheckbox = it as? CheckBox
                     if (theCheckbox != null){
@@ -109,12 +124,15 @@ class MultipleChoiceFragment : Fragment(){
                         }
                     }
                 }
+
                 binding.multipleRadioButtonContainer.addView(checkBox)
+                checkBox.setMarginTop(10)
                 checkBox.isChecked = theAnswer?.multipleChoiceAnswer?.contains(index) == true
             }
         }
         setNextButton()
     }
+
 
     private fun setNextButton(){
         binding.multipleChoiseFragmentNextButton.isEnabled =

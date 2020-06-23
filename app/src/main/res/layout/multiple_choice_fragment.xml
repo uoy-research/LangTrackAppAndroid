@@ -13,9 +13,9 @@
             android:id="@+id/multipleLayout"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
-            android:layout_marginEnd="40dp"
+            android:layout_marginEnd="10dp"
             android:layout_marginBottom="5dp"
             android:orientation="vertical"
             app:layout_constraintBottom_toTopOf="@+id/multipleChoiseFragmentBackButton"
@@ -28,29 +28,58 @@
                 android:id="@+id/multipleTextTextView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
                 android:textAlignment="center"
                 android:textColor="@color/lta_text"
-                android:textSize="19sp" />
+                android:textSize="17sp"
+                android:textStyle="bold" />
+
+            <View
+                android:id="@+id/multipleIndicatorTop"
+                android:layout_width="match_parent"
+                android:layout_height="0.01dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginEnd="8dp"
+                android:background="@android:color/white"
+                android:stateListAnimator="@animator/top_indicator_elevation" />
 
             <LinearLayout
+                android:id="@+id/multipleScrollLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="2dp"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <ScrollView
                     android:id="@+id/multipleScroll"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content">
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="10dp"
+                    android:layout_marginEnd="10dp"
+                    android:overScrollMode="never"
+                    android:scrollbars="none">
 
                     <LinearLayout
                         android:id="@+id/multipleRadioButtonContainer"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="vertical" />
+                        android:orientation="vertical"
+                        android:paddingTop="10dp" />
                 </ScrollView>
+
             </LinearLayout>
+
+            <View
+                android:id="@+id/multipleIndicatorBottom"
+                android:layout_width="match_parent"
+                android:layout_height="0.1dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginBottom="25dp"
+                android:background="@android:color/white"
+                android:stateListAnimator="@animator/bottom_indicator_elevation" />
 
         </LinearLayout>
 
@@ -65,7 +94,7 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:text="Nästa"
+            android:text="@string/next"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="18sp"
@@ -84,7 +113,7 @@
             android:padding="10dp"
             android:paddingStart="15dp"
             android:paddingEnd="15dp"
-            android:text="Föregående"
+            android:text="@string/previous"
             android:textAllCaps="false"
             android:textColor="@android:color/white"
             android:textSize="18sp"

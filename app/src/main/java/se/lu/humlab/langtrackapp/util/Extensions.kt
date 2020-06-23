@@ -1,7 +1,12 @@
 package se.lu.humlab.langtrackapp.util
 
 import android.content.Context
+import android.content.Intent
+import android.net.Uri
+import android.view.View
+import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import se.lu.humlab.langtrackapp.R
 import java.text.SimpleDateFormat
@@ -43,8 +48,26 @@ fun String.toDate(dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss", timeZone: TimeZo
     return parser.parse(this.substringBefore('.'))
 }
 
-fun Date.formatToReadable(dateFormat: String = "yyyy-MM-dd HH:mm", timeZone: TimeZone = TimeZone.getDefault()): String {
+fun Date.formatToReadable(dateFormat: String, timeZone: TimeZone = TimeZone.getDefault()): String {
     val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
     formatter.timeZone = timeZone
     return formatter.format(this)
+}
+fun String?.asUri(): Uri? {
+    try {
+        return Uri.parse(this)
+    } catch (e: Exception) {}
+    return null
+}
+fun Uri?.openInBrowser(context: Context) {
+    this ?: return // Do nothing if uri is null
+
+    val browserIntent = Intent(Intent.ACTION_VIEW, this)
+    ContextCompat.startActivity(context, browserIntent, null)
+}
+
+fun View.setMarginTop(topMargin: Int) {
+    val params = layoutParams as ViewGroup.MarginLayoutParams
+    params.setMargins(params.leftMargin, topMargin, params.rightMargin, params.bottomMargin)
+    layoutParams = params
 }
