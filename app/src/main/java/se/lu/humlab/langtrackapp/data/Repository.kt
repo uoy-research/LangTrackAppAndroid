@@ -51,44 +51,52 @@ class Repository(val context: Context) {
 
     fun putDeviceToken(){
 
-        val verNum = getVersionNumber(context)
-        //TODO: send version number together with deviceToken
+        apiIsAlive() { alive ->
+            if (alive) {
+                val verNum = getVersionNumber(context)
+                //TODO: send version number together with deviceToken
 
-        if (currentUser.id != "") {
-            val verNr = getVersionNumber(context)
-            println("putDeviceToken version number: $verNr")
+                if (currentUser.id != "") {
+                    val verNr = getVersionNumber(context)
+                    println("putDeviceToken version number: $verNr")
 
-            val localTimeZoneIdentifier = TimeZone.getDefault().id
-            println("putDeviceToken localTimeZoneIdentifier: $localTimeZoneIdentifier")
-            val deviceTokenUrl = "${ltaUrl}users/${currentUser.id}"
+                    val localTimeZoneIdentifier = TimeZone.getDefault().id
+                    println("putDeviceToken localTimeZoneIdentifier: $localTimeZoneIdentifier")
+                    val deviceTokenUrl = "${ltaUrl}users/${currentUser.id}"
 
-            if (localTimeZoneIdentifier != "") {
-                MyFirebaseInstanceIDService.getDeviceTokengetDeviceToken(object :
-                        (String?) -> Unit {
-                    override fun invoke(deviceToken: String?) {
-                        if (deviceToken != null) {
-                            val jsonAnswer =
-                                "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\"}"
-                            IO.execute {
-                                val httpUrl = deviceTokenUrl.toHttpUrl()
-                                val httpUrlBuilder = httpUrl.newBuilder()
-                                val requestBuilder = Request.Builder().url(httpUrlBuilder.build())
-                                val mediaTypeJson = "application/json; charset=utf-8".toMediaType()
-                                requestBuilder.put(
-                                    jsonAnswer.toRequestBody(mediaTypeJson)
-                                )
-                                val call = client.newCall(requestBuilder.build())
-                                call.execute().use {
-                                    if (it.isSuccessful) {
-                                        println("putDeviceToken SUCCESS: ${it.body}")
-                                    } else {
-                                        println("putDeviceToken ERROR: ${it.body}")
+                    if (localTimeZoneIdentifier != "") {
+                        MyFirebaseInstanceIDService.getDeviceTokengetDeviceToken(object :
+                                (String?) -> Unit {
+                            override fun invoke(deviceToken: String?) {
+                                if (deviceToken != null) {
+                                    val jsonAnswer =
+                                        "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\"}"
+                                    IO.execute {
+                                        val httpUrl = deviceTokenUrl.toHttpUrl()
+                                        val httpUrlBuilder = httpUrl.newBuilder()
+                                        val requestBuilder =
+                                            Request.Builder().url(httpUrlBuilder.build())
+                                        val mediaTypeJson =
+                                            "application/json; charset=utf-8".toMediaType()
+                                        requestBuilder.put(
+                                            jsonAnswer.toRequestBody(mediaTypeJson)
+                                        )
+                                        val call = client.newCall(requestBuilder.build())
+                                        call.execute().use {
+                                            if (it.isSuccessful) {
+                                                println("putDeviceToken SUCCESS: ${it.body}")
+                                            } else {
+                                                println("putDeviceToken ERROR: ${it.body}")
+                                            }
+                                        }
                                     }
                                 }
                             }
-                        }
+                        })
                     }
-                })
+                }
+            }else{
+                println("api is dead")
             }
         }
     }
@@ -206,61 +214,71 @@ class Repository(val context: Context) {
 
     private fun getAssignmentsFromJson(json: String): List<Assignment>{
         val theListWithSurveys = mutableListOf<Assignment>()
-        val jsonObj = JSONArray(json.substring(json.indexOf("["), json.lastIndexOf("]") + 1))
-        for (i in 0 until jsonObj.length()) {
-            var newsurvey: Survey? = null
-            var newupdatedAt = ""
-            var newcreatedAt = ""
-            var newuserId = ""
-            var newdataset: Dataset? = null
-            var newpublishAt = ""
-            var newexpireAt = ""
-            var newid = ""
-            val assignment = jsonObj.getJSONObject(i)
-            try {
-                val tempSurveyObj = assignment.get("survey") as? JSONObject
-                if (tempSurveyObj != null) {
-                    newsurvey = getSurveyFromJsonObj(tempSurveyObj)
+        if (json.contains('[') && json.contains(']')) {
+            val jsonObj = JSONArray(json.substring(json.indexOf("["), json.lastIndexOf("]") + 1))
+            for (i in 0 until jsonObj.length()) {
+                var newsurvey: Survey? = null
+                var newupdatedAt = ""
+                var newcreatedAt = ""
+                var newuserId = ""
+                var newdataset: Dataset? = null
+                var newpublishAt = ""
+                var newexpireAt = ""
+                var newid = ""
+                val assignment = jsonObj.getJSONObject(i)
+                try {
+                    val tempSurveyObj = assignment.get("survey") as? JSONObject
+                    if (tempSurveyObj != null) {
+                        newsurvey = getSurveyFromJsonObj(tempSurveyObj)
+                    }
+                } catch (e: Exception) {
                 }
-            }catch (e: Exception){ }
-            try {
-                newupdatedAt = assignment.get("updatedAt") as? String ?: ""
-            }catch (e: Exception){ }
-            try {
-                newcreatedAt = assignment.get("createdAt") as? String ?: ""
-            }catch (e: Exception){ }
-            try {
-                newuserId = assignment.get("userId") as? String ?: ""
-            }catch (e: Exception){ }
-            try {
-                val datasetObj = assignment.get("dataset") as? JSONObject
-                if (datasetObj != null){
-                    newdataset = getDatasetFromJsonObj(datasetObj)
+                try {
+                    newupdatedAt = assignment.get("updatedAt") as? String ?: ""
+                } catch (e: Exception) {
                 }
-            }catch (e: Exception){ }
-            try {
-                newpublishAt = assignment.get("publishAt") as? String ?: ""
-            }catch (e: Exception){ }
-            try {
-                newexpireAt = assignment.get("expireAt") as? String ?: ""
-            }catch (e: Exception){ }
-            try {
-                newid = assignment.get("_id") as? String ?: ""
-            }catch (e: Exception){ }
+                try {
+                    newcreatedAt = assignment.get("createdAt") as? String ?: ""
+                } catch (e: Exception) {
+                }
+                try {
+                    newuserId = assignment.get("userId") as? String ?: ""
+                } catch (e: Exception) {
+                }
+                try {
+                    val datasetObj = assignment.get("dataset") as? JSONObject
+                    if (datasetObj != null) {
+                        newdataset = getDatasetFromJsonObj(datasetObj)
+                    }
+                } catch (e: Exception) {
+                }
+                try {
+                    newpublishAt = assignment.get("publishAt") as? String ?: ""
+                } catch (e: Exception) {
+                }
+                try {
+                    newexpireAt = assignment.get("expireAt") as? String ?: ""
+                } catch (e: Exception) {
+                }
+                try {
+                    newid = assignment.get("_id") as? String ?: ""
+                } catch (e: Exception) {
+                }
 
-            if (newsurvey != null){
-                theListWithSurveys.add(
-                    Assignment(
-                        survey = newsurvey,
-                        updatedAt = newupdatedAt,
-                        createdAt = newcreatedAt,
-                        userId = newuserId,
-                        dataset = newdataset,
-                        publishAt = newpublishAt,
-                        expireAt = newexpireAt,
-                        id = newid
+                if (newsurvey != null) {
+                    theListWithSurveys.add(
+                        Assignment(
+                            survey = newsurvey,
+                            updatedAt = newupdatedAt,
+                            createdAt = newcreatedAt,
+                            userId = newuserId,
+                            dataset = newdataset,
+                            publishAt = newpublishAt,
+                            expireAt = newexpireAt,
+                            id = newid
+                        )
                     )
-                )
+                }
             }
         }
         return theListWithSurveys
