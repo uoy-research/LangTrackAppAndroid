@@ -214,6 +214,10 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     fun skipIsExecuted(current: Question) : Question?{
         current.skip?.also { skip ->
+            // skip if ifChosen is -1 regardless of answer...
+            if (skip.ifChosen == -1){
+                return theAssignment?.survey?.questions?.first { it.index == skip.goto }
+            }
             val answerObj = answer[current.index]
             if (answerObj != null){
                 when (answerObj.type){
