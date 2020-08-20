@@ -45,7 +45,7 @@ class MainViewModel(repo: Repository): ViewModel() {
         }*/
     }
 
-    fun apiIsAlive(listener: (result: Boolean) -> Unit) {
+    fun apiIsAlive(listener: (result: Boolean, theUrl: String?) -> Unit) {
         mRepository.apiIsAlive(listener)
     }
 
