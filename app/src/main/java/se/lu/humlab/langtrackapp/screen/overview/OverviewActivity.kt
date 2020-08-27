@@ -114,7 +114,7 @@ class OverviewActivity : AppCompatActivity() {
                         val likert = OverviewLikertView(this)
                         if (selectedAnswer?.likertAnswer ?: -1 != -1 &&
                                 selectedAnswer?.likertAnswer ?: -1 >= 0 &&
-                                selectedAnswer?.likertAnswer ?: -1 < 5){
+                                selectedAnswer?.likertAnswer ?: -1 < 6){
                             likert.setText(listItem.question, selectedAnswer?.likertAnswer!!)
                         }
                         binding.overviewQuestionContainer.addView(likert)
