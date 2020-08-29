@@ -89,6 +89,7 @@ class LikertScaleFragment : Fragment(){
                             2 -> binding.likertScaleRadioButton3.id
                             3 -> binding.likertScaleRadioButton4.id
                             4 -> binding.likertScaleRadioButton5.id
+                            5 -> binding.likertScaleRadioButtonNA.id
                             else -> null
                         }
                         if (theRadioButton != null) {
