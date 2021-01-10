@@ -10,10 +10,7 @@ package se.lu.humlab.langtrackapp.data
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.*
 import com.google.gson.Gson
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
@@ -44,6 +41,7 @@ class Repository(val context: Context) {
     //private val ltaUrl = "http://ht-lang-track.ht.lu.se/api/"
     //private val ltaUrl = "http://ht-lang-track.ht.lu.se:443/"
     var client = OkHttpClient()
+    private var useStagingServer = false
 
 
     fun setCurrentUser(user: User){
@@ -54,9 +52,22 @@ class Repository(val context: Context) {
         return currentUser
     }
 
+    fun setStagingUrl(useStaging: Boolean){
+        useStagingServer = useStaging
+    }
+
+    fun isInStaging() :Boolean{
+        return useStagingServer
+    }
+
     fun getUrl(listener: (result: String?) -> Unit) {
         val database = FirebaseDatabase.getInstance()
-        val myRef = database.getReference("url")
+        var myRef :DatabaseReference?
+        if (useStagingServer){
+            myRef = database.getReference("stagingUrl")
+        }else{
+            myRef = database.getReference("url")
+        }
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 println("getUrl snapshot: ${snapshot.value}")

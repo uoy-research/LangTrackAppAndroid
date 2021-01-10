@@ -80,4 +80,12 @@ class MainViewModel(repo: Repository): ViewModel() {
     fun getAssignments(){
         mRepository.getAssignments()
     }
+
+    fun setStagingUrl(useStaging: Boolean){
+        mRepository.setStagingUrl(useStaging)
+    }
+
+    fun isInStagingUrl(): Boolean{
+        return mRepository.isInStaging()
+    }
 }

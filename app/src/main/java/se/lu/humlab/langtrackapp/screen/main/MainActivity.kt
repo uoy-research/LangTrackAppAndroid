@@ -182,7 +182,12 @@ class MainActivity : AppCompatActivity() {
             inTestMode = isChecked
         }
 
-
+        menuServerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            viewModel.setStagingUrl(isChecked)
+            viewModel.postDeviceToken()
+            viewModel.clearAssignmentsList()
+            viewModel.getAssignments()
+        }
 
     }
 
@@ -209,7 +214,7 @@ class MainActivity : AppCompatActivity() {
             }
             setTestModeIfTeam(userName ?: "")
 
-
+            menuServerSwitch.isChecked = viewModel.isInStagingUrl()
             //push deviceToken to backend every time app starts
             viewModel.postDeviceToken()
         }
