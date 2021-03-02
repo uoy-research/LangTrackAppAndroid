@@ -8,6 +8,7 @@ import kotlinx.android.synthetic.main.overview_time_duration_view_layout.view.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Answer
 import se.lu.humlab.langtrackapp.data.model.Question
+import se.lu.humlab.langtrackapp.util.formatStringWithArabicNumbers
 
 class OverviewTimDurationView  @JvmOverloads constructor(
 
@@ -51,6 +52,7 @@ class OverviewTimDurationView  @JvmOverloads constructor(
                 if (answeredHour == 1){
                     overviewDurationViewSelectedTextView.text =
                         context.getString(R.string.numberOfHourAndMinutes, answeredHour, answeredMinutes)
+                    //resources.formatStringWithArabicNumbers(R.string.numberOfHourAndMinutes, answeredHour, answeredMinutes)
                 }else{
                     overviewDurationViewSelectedTextView.text =
                         context.getString(R.string.numberOfHoursAndMinutes, answeredHour, answeredMinutes)
@@ -58,6 +60,7 @@ class OverviewTimDurationView  @JvmOverloads constructor(
             }
         }
     }
+
 
     fun setHoursAndMinutes(){
         if (answer != null) {

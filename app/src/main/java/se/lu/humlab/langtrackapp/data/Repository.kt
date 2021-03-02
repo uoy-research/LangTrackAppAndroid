@@ -10,6 +10,10 @@ package se.lu.humlab.langtrackapp.data
 import android.content.Context
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.extensions.authentication
+import com.github.kittinunf.fuel.core.response
+import com.github.kittinunf.fuel.gson.jsonBody
+import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -25,6 +29,10 @@ import se.lu.humlab.langtrackapp.util.IO
 import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
 import se.lu.humlab.langtrackapp.util.getVersionNumber
 import se.lu.humlab.langtrackapp.util.showApiFailInfo
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 
 
@@ -70,7 +78,7 @@ class Repository(val context: Context) {
         }
         myRef.addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                println("getUrl snapshot: ${snapshot.value}")
+                //println("getUrl snapshot: ${snapshot.value}")
                 try {
                     val theFetchedUrl = snapshot.value as? String
                     listener(theFetchedUrl)
@@ -108,22 +116,28 @@ class Repository(val context: Context) {
                                 if (deviceToken != null) {
                                     val jsonAnswer =
                                         "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\"}"
+
                                     IO.execute {
                                         val httpUrl = deviceTokenUrl.toHttpUrl()
                                         val httpUrlBuilder = httpUrl.newBuilder()
                                         val requestBuilder =
-                                            Request.Builder().url(httpUrlBuilder.build())
-                                        val mediaTypeJson =
-                                            "application/json; charset=utf-8".toMediaType()
+                                            Request.Builder().url(httpUrlBuilder.build()).header(
+                                                "Authorization",
+                                                "token " + idToken
+                                            )
+                                        requestBuilder.addHeader("token", idToken)
+                                        requestBuilder.addHeader("bearer", idToken)
+                                        val mediaTypeJson = "application/json; charset=utf-8".toMediaType()
+
                                         requestBuilder.put(
                                             jsonAnswer.toRequestBody(mediaTypeJson)
                                         )
                                         val call = client.newCall(requestBuilder.build())
                                         call.execute().use {
                                             if (it.isSuccessful) {
-                                                println("putDeviceToken SUCCESS: ${it.body}")
+                                                println("putDeviceToken SUCCESS: ${it.body} url: ${theUrl}")
                                             } else {
-                                                println("putDeviceToken ERROR: ${it.body}")
+                                                println("putDeviceToken ERROR: ${it.body} url: ${theUrl}, ${it.message}")
                                             }
                                         }
                                     }
@@ -181,7 +195,12 @@ class Repository(val context: Context) {
                 IO.execute {
                     val httpUrl = answerUrl.toHttpUrl()
                     val httpUrlBuilder = httpUrl.newBuilder()
-                    val requestBuilder = Request.Builder().url(httpUrlBuilder.build())
+                    val requestBuilder = Request.Builder().url(httpUrlBuilder.build()).header(
+                        "Authorization",
+                        "token " + idToken
+                    )
+                    requestBuilder.addHeader("token", idToken)
+                    requestBuilder.addHeader("bearer", idToken)
                     val mediaTypeJson = "application/json; charset=utf-8".toMediaType()
                     requestBuilder.post(
                         jsonAnswer2.toRequestBody(mediaTypeJson)
@@ -189,15 +208,40 @@ class Repository(val context: Context) {
                     val call = client.newCall(requestBuilder.build())
                     call.execute().use {
                         if (it.isSuccessful) {
-                            println("postAnswer SUCCESS: ${it.body}")
+                            println("postAnswer SUCCESS: ${it.body} url: ${theUrl}")
                             //reload to get answer to list
                             getAssignments()
                         } else {
-                            println("postAnswer ERROR: ${it.body}")
+                            println("postAnswer ERROR: ${it.body} url: ${theUrl}")
                         }
                     }
                 }
             }
+        }
+    }
+
+    fun surveyOpened(){
+        //test2()
+        println("token: $idToken")
+        getUrl { theUrl ->
+            if (theUrl != null && selectedAssignment != null) {
+                val openedUrl = "${theUrl}assignments/${selectedAssignment!!.id}/open"
+                println("token: $idToken, openedUrl: $openedUrl")
+
+                IO.execute {
+                    val (ignoredRequest, ignoredResponse, result) =
+                        Fuel.post(openedUrl)
+                            .header("Content-Type", "text/html")
+                            .header("token" to idToken)
+                            .header("bearer" to idToken)
+                            .responseString()
+
+                    result.fold(
+                        { print("surveyOpened success: $result") },
+                        { print("surveyOpened failure: $result") })
+                }
+            }
+
         }
     }
 

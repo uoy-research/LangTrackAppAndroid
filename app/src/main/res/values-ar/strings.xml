@@ -30,7 +30,7 @@
     <string name="answered">تمت الإجابة</string>
     <string name="noDate">بدون تاريخ</string>
     <string name="unanswered">لم تتم الإجابة</string>
-    <string name="dateFormat">M/dd/yy hh:mm a</string>
+    <string name="dateFormat">yyyy-MM-dd HH:mm</string>
     <string name="answeredSurvey">استبيان مجاب عنه</string>
     <string name="unansweredSurvey">بحث لم يجب عنه</string>
     <string name="published">منشور</string>
@@ -80,4 +80,7 @@
     <string name="founder_image_name">founding_en</string>
     <string name="founding_link_address">https://maw.wallenberg.org/en</string>
     <string name="click_here">انقر هنا</string>
+    <string name="youHaveAnswered">" لقد أجبت على"</string>
+    <string name="ofYour">" من "</string>
+    <string name="surveys">استطلاعًا</string>
 </resources>

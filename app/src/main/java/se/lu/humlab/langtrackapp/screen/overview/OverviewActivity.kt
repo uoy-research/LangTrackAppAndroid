@@ -86,7 +86,7 @@ class OverviewActivity : AppCompatActivity() {
             //MARK: add footer too?
         }
         questionsWithAnswers.sortedBy { it.question.index }
-        binding.overviewTopNumberOfQuestionTextView.text = getString(R.string.numberEnding,questionsWithAnswers.size - 1)
+        binding.overviewTopNumberOfQuestionTextView.text = (questionsWithAnswers.size - 1).toString()//getString(R.string.numberEnding,questionsWithAnswers.size - 1)
 
 
     }

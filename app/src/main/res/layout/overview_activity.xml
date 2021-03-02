@@ -103,39 +103,36 @@
 
         <TextView
             android:id="@+id/overviewTopNumberOfQuestionTextView"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="0"
             android:textColor="@color/lta_light_grey"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView15"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toEndOf="@+id/textView15"
             app:layout_constraintTop_toTopOf="@+id/textView15" />
 
         <TextView
             android:id="@+id/overviewTopPublishedTextView"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2020-04-13 11:58"
             android:textColor="@color/lta_light_grey"
+            android:textDirection="ltr"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView17"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/textView15"
             app:layout_constraintTop_toTopOf="@+id/textView17" />
 
         <TextView
             android:id="@+id/overviewTopExpiredTextView"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="2020-04-13 12:58"
             android:textColor="@color/lta_light_grey"
+            android:textDirection="ltr"
             android:textSize="16sp"
             app:layout_constraintBottom_toBottomOf="@+id/textView19"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toEndOf="@+id/textView15"
             app:layout_constraintTop_toTopOf="@+id/textView19" />
 
