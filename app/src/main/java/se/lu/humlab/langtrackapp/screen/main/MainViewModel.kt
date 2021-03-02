@@ -45,6 +45,10 @@ class MainViewModel(repo: Repository): ViewModel() {
         }*/
     }
 
+    fun surveyOpened(){
+        mRepository.surveyOpened()
+    }
+
     fun apiIsAlive(listener: (result: Boolean, theUrl: String?) -> Unit) {
         mRepository.apiIsAlive(listener)
     }

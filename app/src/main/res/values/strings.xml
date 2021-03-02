@@ -36,7 +36,7 @@
     <string name="answered">Answered</string>
     <string name="noDate">noDate</string>
     <string name="unanswered">Unanswered</string>
-    <string name="dateFormat">M/dd/yy hh:mm a</string>
+    <string name="dateFormat">yyyy-MM-dd HH:mm</string>
     <string name="answeredSurvey">Answered survey</string>
     <string name="unansweredSurvey">Unanswered survey</string>
     <string name="published">Published:</string>
@@ -87,4 +87,7 @@
     <string name="founder_image_name">founding_en</string>
     <string name="founding_link_address">https://maw.wallenberg.org/en</string>
     <string name="click_here">click here</string>
+    <string name="youHaveAnswered">"You have answered "</string>
+    <string name="ofYour">" of your "</string>
+    <string name="surveys">" assigned surveys."</string>
 </resources>

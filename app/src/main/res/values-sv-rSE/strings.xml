@@ -80,4 +80,7 @@
     <string name="founding">Finansierad av</string>
     <string name="founder_image_name">founding_se</string>
     <string name="founding_link_address">https://maw.wallenberg.org</string>
+    <string name="youHaveAnswered">"Du har besvarat "</string>
+    <string name="ofYour">" av dina "</string>
+    <string name="surveys">" tilldelade enkäter"</string>
 </resources>

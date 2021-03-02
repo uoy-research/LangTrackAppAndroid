@@ -111,12 +111,14 @@ class MainActivity : AppCompatActivity() {
                 if (inTestMode) {
                     // in testMode, always show survey
                     SurveyContainerActivity.start(this@MainActivity, item)
+                    viewModel.surveyOpened()
                 } else {
                     if (item.isActive()) {
                         // show survey - if api is responding
                         viewModel.apiIsAlive { alive, _ ->
                             if (alive){
                                 SurveyContainerActivity.start(this@MainActivity, item)
+                                viewModel.surveyOpened()
                             }else{
                                 showApiFailInfo(this@MainActivity)
                             }
@@ -205,7 +207,8 @@ class MainActivity : AppCompatActivity() {
             menuUserNameTextView.text = userName ?: "noName"
             menuVersionTextView.text = verNum
             viewModel.getAssignments()
-            mAuth.currentUser!!.getIdToken(true).addOnSuccessListener{
+
+            mAuth.currentUser!!.getIdToken(false).addOnSuccessListener{
                 val idToken = it.token
                 if (!idToken.isNullOrBlank()){
                     viewModel.setIdToken(idToken)
