@@ -83,4 +83,9 @@
     <string name="youHaveAnswered">" لقد أجبت على"</string>
     <string name="ofYour">" من "</string>
     <string name="surveys">استطلاعًا</string>
+    <string name="minute">دقيقة</string>
+    <string name="days">أيام</string>
+    <string name="day">يوم</string>
+    <string name="and">و</string>
+    <string name="timeLeft">الوقت المتبقي:</string>
 </resources>

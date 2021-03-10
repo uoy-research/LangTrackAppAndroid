@@ -54,38 +54,47 @@ class ActiveViewHolder(theItemView: View,
         val endTimeInSec = (item.expireAt.toDate()?.time ?: 0) / 1000
         val now = Date().time / 1000
         if (endTimeInSec != 0L){
-            val diff = endTimeInSec - now
+            val diff = (endTimeInSec - now)
             if (diff > 0){
-                val minutes = ((diff / 60) % 60).toInt()
-                val hours = (diff / 3600).toInt()
-                if (hours == 0) {
-                    when {
-                        minutes == 1 -> {
-                            date.text = date.context.getString(R.string.timeLeftOneMinute).format(minutes)
-                        }
-                        minutes < 10 -> {
-                            date.text = date.context.getString(R.string.timeLeftMinute).format(minutes)
-                        }
-                        else -> {
-                            date.text = date.context.getString(R.string.timeLeftMinutes).format(minutes)
-                        }
-                    }
-                }else {
-                    var hourString = date.context.getString(R.string.hour)
-                    if (hours > 1){
-                        hourString = date.context.getString(R.string.hours)
-                    }
-                    when {
-                        minutes == 1 -> {
-                            date.text = date.context.getString(R.string.timeLeftHourAndOneMinute).format(hours,hourString, minutes)
-                        }
-                        minutes < 10 -> {
-                            date.text = date.context.getString(R.string.timeLeftHourAndMinute).format(hours,hourString, minutes)
-                        }
-                        else -> {
-                            date.text = date.context.getString(R.string.timeLeftHourAndMinutes).format(hours,hourString, minutes)
-                        }
-                    }
+                val days = (diff / 86400).toInt()
+                val hours = ((diff % 86400) / 3600).toInt()
+                val minutes = (((diff % 3600) / 60) % 60).toInt()
+
+                var dayString = date.context.getString(R.string.days)
+                if (days == 1){
+                    dayString = date.context.getString(R.string.day)
+                }
+                var hourString = date.context.getString(R.string.hours)
+                if (hours == 1){
+                    hourString = date.context.getString(R.string.hour)
+                }
+                var minuteString = date.context.getString(R.string.minutes)
+                if (minutes == 1){
+                    minuteString = date.context.getString(R.string.minute)
+                }
+
+                if (days > 0){
+                    date.text = "%s %2d %s %2d %s %s %2d %s".format(
+                        date.context.getString(R.string.timeLeft),
+                        days,
+                        dayString,
+                        hours,
+                        hourString,
+                        date.context.getString(R.string.and),
+                        minutes,
+                        minuteString)
+                }else if (hours > 0){
+                    date.text = "%s %2d %s %s %2d %s".format(
+                        date.context.getString(R.string.timeLeft),
+                        hours,
+                        hourString,
+                        date.context.getString(R.string.and),
+                        minutes,
+                        minuteString)
+                }else{date.text = "%s %2d %s".format(
+                    date.context.getString(R.string.timeLeft),
+                    minutes,
+                    minuteString)
                 }
             }else{
                 expiryListener.assignmentExpired()
