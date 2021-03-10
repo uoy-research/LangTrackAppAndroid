@@ -83,4 +83,9 @@
     <string name="youHaveAnswered">"Du har besvarat "</string>
     <string name="ofYour">" av dina "</string>
     <string name="surveys">" tilldelade enkäter"</string>
+    <string name="minute">minut</string>
+    <string name="day">dag</string>
+    <string name="days">dagar</string>
+    <string name="timeLeft">Tid kvar:</string>
+    <string name="and">och</string>
 </resources>

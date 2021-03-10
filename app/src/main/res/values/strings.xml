@@ -90,4 +90,9 @@
     <string name="youHaveAnswered">"You have answered "</string>
     <string name="ofYour">" of your "</string>
     <string name="surveys">" assigned surveys."</string>
+    <string name="minute">minute</string>
+    <string name="day">day</string>
+    <string name="days">days</string>
+    <string name="timeLeft">Time left:</string>
+    <string name="and">and</string>
 </resources>
