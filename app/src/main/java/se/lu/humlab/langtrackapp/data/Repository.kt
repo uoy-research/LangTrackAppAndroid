@@ -98,8 +98,6 @@ class Repository(val context: Context) {
 
         apiIsAlive { alive, theUrl ->
             if (alive) {
-                val verNum = getVersionNumber(context)
-                //TODO: send version number together with deviceToken
 
                 if (currentUser.id != "") {
                     val verNr = getVersionNumber(context)
@@ -115,7 +113,7 @@ class Repository(val context: Context) {
                             override fun invoke(deviceToken: String?) {
                                 if (deviceToken != null) {
                                     val jsonAnswer =
-                                        "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\"}"
+                                        "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\", \"versionNumber\":\"${verNr}\"}"
 
                                     IO.execute {
                                         val httpUrl = deviceTokenUrl.toHttpUrl()
