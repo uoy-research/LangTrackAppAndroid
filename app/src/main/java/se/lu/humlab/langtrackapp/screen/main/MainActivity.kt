@@ -205,7 +205,7 @@ class MainActivity : AppCompatActivity() {
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User(userName ?: "",userName ?: "", userEmail ?: ""))
             menuUserNameTextView.text = userName ?: "noName"
-            menuVersionTextView.text = verNum
+            menuVersionTextView.text = "Version: $verNum"
             viewModel.getAssignments()
 
             mAuth.currentUser!!.getIdToken(false).addOnSuccessListener{
