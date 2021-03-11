@@ -111,9 +111,9 @@ class Repository(val context: Context) {
                         MyFirebaseInstanceIDService.getDeviceTokengetDeviceToken(object :
                                 (String?) -> Unit {
                             override fun invoke(deviceToken: String?) {
-                                if (deviceToken != null) {
+                                if (deviceToken != null) {//"": "Android"
                                     val jsonAnswer =
-                                        "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\", \"versionNumber\":\"${verNr}\"}"
+                                        "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\", \"versionNumber\":\"${verNr}\", \"os\":\"Android\"}"
 
                                     IO.execute {
                                         val httpUrl = deviceTokenUrl.toHttpUrl()
