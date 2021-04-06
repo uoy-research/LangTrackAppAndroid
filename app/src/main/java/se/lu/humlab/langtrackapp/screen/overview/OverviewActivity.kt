@@ -22,6 +22,7 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.MULTIPLE_CHOICE
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.OPEN_ENDED_TEXT_RESPONSES
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.SINGLE_MULTIPLE_ANSWERS
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.SLIDER_SCALE
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.TIME_DURATION
 import se.lu.humlab.langtrackapp.util.formatToReadable
 import se.lu.humlab.langtrackapp.util.toDate
@@ -181,11 +182,21 @@ class OverviewActivity : AppCompatActivity() {
                         duration.setText(listItem.question, selectedAnswer)
                         binding.overviewQuestionContainer.addView(duration)
                     }
+                    SLIDER_SCALE -> {
+                        var value = -1
+                        val sliderScale = OverviewSliderScaleView(this)
+                        if (selectedAnswer?.sliderScaleAnswer != null){
+                            try {
+                                value = selectedAnswer.sliderScaleAnswer ?: -99
+                            }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
+                        }
+                        sliderScale.setText(listItem.question, value)
+                        binding.overviewQuestionContainer.addView(sliderScale)
+                    }
                 }
             }
         }
     }
-
 
     companion object {
         const val ASSIGNMENT = "overviewsurvey"
