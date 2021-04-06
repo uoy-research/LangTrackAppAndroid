@@ -171,6 +171,8 @@ class Repository(val context: Context) {
                             stringValue = answer.openEndedAnswer
                         SurveyContainerActivity.TIME_DURATION ->
                             intValue = answer.timeDurationAnswer
+                        SurveyContainerActivity.SLIDER_SCALE ->
+                            intValue = answer.sliderScaleAnswer
                     }
                     val body = AnswerBody(
                         index = answer.index,
@@ -431,7 +433,8 @@ class Repository(val context: Context) {
                                         fillBlankAnswer = null,
                                         multipleChoiceAnswer = null,
                                         singleMultipleAnswer = intValue,
-                                        openEndedAnswer = null
+                                        openEndedAnswer = null,
+                                        sliderScaleAnswer = null
                                     )
                                 )
                             }
@@ -444,7 +447,8 @@ class Repository(val context: Context) {
                                         fillBlankAnswer = null,
                                         multipleChoiceAnswer = multiValue,
                                         singleMultipleAnswer = null,
-                                        openEndedAnswer = null
+                                        openEndedAnswer = null,
+                                        sliderScaleAnswer = null
                                     )
                                 )
                             }
@@ -457,7 +461,8 @@ class Repository(val context: Context) {
                                         fillBlankAnswer = null,
                                         multipleChoiceAnswer = null,
                                         singleMultipleAnswer = null,
-                                        openEndedAnswer = null
+                                        openEndedAnswer = null,
+                                        sliderScaleAnswer = null
                                     )
                                 )
                             }
@@ -470,7 +475,8 @@ class Repository(val context: Context) {
                                         fillBlankAnswer = intValue,
                                         multipleChoiceAnswer = null,
                                         singleMultipleAnswer = null,
-                                        openEndedAnswer = null
+                                        openEndedAnswer = null,
+                                        sliderScaleAnswer = null
                                     )
                                 )
                             }
@@ -483,7 +489,8 @@ class Repository(val context: Context) {
                                         fillBlankAnswer = null,
                                         multipleChoiceAnswer = null,
                                         singleMultipleAnswer = null,
-                                        openEndedAnswer = stringValue
+                                        openEndedAnswer = stringValue,
+                                        sliderScaleAnswer = null
                                     )
                                 )
                             }
@@ -497,7 +504,23 @@ class Repository(val context: Context) {
                                         multipleChoiceAnswer = null,
                                         singleMultipleAnswer = null,
                                         openEndedAnswer = null,
-                                        timeDurationAnswer = intValue
+                                        timeDurationAnswer = intValue,
+                                        sliderScaleAnswer = null
+                                    )
+                                )
+                            }
+                            SurveyContainerActivity.SLIDER_SCALE -> {
+                                answers.add(
+                                    Answer(
+                                        type = type,
+                                        index = index,
+                                        likertAnswer = null,
+                                        fillBlankAnswer = null,
+                                        multipleChoiceAnswer = null,
+                                        singleMultipleAnswer = null,
+                                        openEndedAnswer = null,
+                                        timeDurationAnswer = null,
+                                        sliderScaleAnswer = intValue
                                     )
                                 )
                             }
