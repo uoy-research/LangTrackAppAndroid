@@ -8,6 +8,7 @@ package se.lu.humlab.langtrackapp.data
 * */
 
 import android.content.Context
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
 import com.github.kittinunf.fuel.core.extensions.authentication
@@ -111,9 +112,10 @@ class Repository(val context: Context) {
                         MyFirebaseInstanceIDService.getDeviceTokengetDeviceToken(object :
                                 (String?) -> Unit {
                             override fun invoke(deviceToken: String?) {
+                                val vNumber = Build.VERSION.RELEASE ?: ""
                                 if (deviceToken != null) {//"": "Android"
                                     val jsonAnswer =
-                                        "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\", \"versionNumber\":\"${verNr}\", \"os\":\"Android\"}"
+                                        "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\", \"versionNumber\":\"${verNr}\", \"os\":\"Android ${vNumber}\"}"
 
                                     IO.execute {
                                         val httpUrl = deviceTokenUrl.toHttpUrl()
