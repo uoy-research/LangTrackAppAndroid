@@ -69,7 +69,10 @@ class Repository(val context: Context) {
         return useStagingServer
     }
 
-    fun getUrl(listener: (result: String?) -> Unit) {
+    private fun getUrl(listener: (result: String?) -> Unit) {
+        /*
+         Getting the correct url from firebase realtime - prodUrl or stagingUrl
+         */
         val database = FirebaseDatabase.getInstance()
         var myRef :DatabaseReference?
         if (useStagingServer){

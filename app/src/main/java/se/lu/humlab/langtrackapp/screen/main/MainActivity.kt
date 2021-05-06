@@ -224,6 +224,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setTestModeIfTeam(userName: String){
+        /*
+        Adding userName for team members
+         will let them
+         * switch between staging server and production server
+         * using app in testMode -> open all surveys as active
+         */
         testView.visibility = if (
             userName == "stephan" ||
             userName == "josef" ||
