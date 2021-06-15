@@ -95,8 +95,12 @@ class AboutActivity : AppCompatActivity() {
         builder.append(spannableStringJosef)
         builder.append("\n\n")
 
-        val nameStephan = "Stephan Björck"
-        val stephanStartIndex = getString(R.string.stephanInfo).indexOf(nameStephan)
+        var nameStephan = "Stephan Björck"
+        var stephanStartIndex = getString(R.string.stephanInfo).indexOf(nameStephan)
+        if (stephanStartIndex < 0) {
+            nameStephan = "Stephan Bjorck"
+            stephanStartIndex = getString(R.string.stephanInfo).indexOf(nameStephan)
+        }
         val stephanEndIndex = stephanStartIndex + nameStephan.count()
         val spannableStringStephan = SpannableString(getString(R.string.stephanInfo))
         spannableStringStephan.setSpan(ForegroundColorSpan(getColor(R.color.lta_red)), stephanStartIndex, stephanEndIndex, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)

@@ -2,6 +2,7 @@ package se.lu.humlab.langtrackapp.util
 
 import android.content.Context
 import android.content.Intent
+import android.content.res.Resources
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
@@ -48,8 +49,14 @@ fun String.toDate(dateFormat: String = "yyyy-MM-dd'T'HH:mm:ss", timeZone: TimeZo
     return parser.parse(this.substringBefore('.'))
 }
 
+fun Resources.formatStringWithArabicNumbers(resId: Int, vararg args: Any?)
+        = String.format(Locale.US, this.getString(resId), *args)
+
+fun Resources.formatArabicNumbersToString(resId: Int)
+        = String.format(Locale.US, resId.toString())
+
 fun Date.formatToReadable(dateFormat: String, timeZone: TimeZone = TimeZone.getDefault()): String {
-    val formatter = SimpleDateFormat(dateFormat, Locale.getDefault())
+    val formatter = SimpleDateFormat(dateFormat, Locale.ENGLISH)
     formatter.timeZone = timeZone
     return formatter.format(this)
 }

@@ -18,7 +18,7 @@ class OverviewLikertView @JvmOverloads constructor(
     }
 
     fun setText(question: Question, answer: Int){
-        overviewLikertViewDescriptionTextView.text = question.description
+        overviewLikertViewDescriptionTextView.text = "${question.likertMin}\n${question.likertMax}"
         overviewLikertViewTextTextView.text = question.text
         setRadiobutton(answer)
     }
@@ -29,12 +29,14 @@ class OverviewLikertView @JvmOverloads constructor(
         overviewLikertViewRadioButton3.isChecked = false
         overviewLikertViewRadioButton4.isChecked = false
         overviewLikertViewRadioButton5.isChecked = false
+        overviewLikertViewRadioButtonNA.isChecked = false
         when(selected){
             0 -> overviewLikertViewRadioButton1.isChecked = true
             1 -> overviewLikertViewRadioButton2.isChecked = true
             2 -> overviewLikertViewRadioButton3.isChecked = true
             3 -> overviewLikertViewRadioButton4.isChecked = true
             4 -> overviewLikertViewRadioButton5.isChecked = true
+            5 -> overviewLikertViewRadioButtonNA.isChecked = true
         }
     }
 }

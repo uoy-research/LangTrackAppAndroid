@@ -12,7 +12,7 @@
     <string name="mail_reserch_body">-Here you can write to the researchers for Lang-Track-App-</string>
     <string name="mail_tech_body">-Here you can write to the developers for Lang-Track-App-</string>
     <string name="reserchText1">If you are experiencing any technical issues, please contact Stephan Björck.\nstephan.bjorck@humlab.lu.se\n\nIf you have questions or comments about the content of the survey, please email Henriette Arndt.\nhenriette.arndt@humlab.lu.se</string>
-    <string name="click_here">Click here</string>
+
     <string name="log_out">Log out</string>
     <string name="doYouWantToLogOut">Do you want to log out \n%1$s?</string>
     <string name="cancel">Cancel</string>
@@ -36,7 +36,7 @@
     <string name="answered">Answered</string>
     <string name="noDate">noDate</string>
     <string name="unanswered">Unanswered</string>
-    <string name="dateFormat">M/dd/yy hh:mm a</string>
+    <string name="dateFormat">yyyy-MM-dd HH:mm</string>
     <string name="answeredSurvey">Answered survey</string>
     <string name="unansweredSurvey">Unanswered survey</string>
     <string name="published">Published:</string>
@@ -86,4 +86,13 @@
     <string name="founding">Funded by</string>
     <string name="founder_image_name">founding_en</string>
     <string name="founding_link_address">https://maw.wallenberg.org/en</string>
+    <string name="click_here">click here</string>
+    <string name="youHaveAnswered">"You have answered "</string>
+    <string name="ofYour">" of your "</string>
+    <string name="surveys">" assigned surveys."</string>
+    <string name="minute">minute</string>
+    <string name="day">day</string>
+    <string name="days">days</string>
+    <string name="timeLeft">Time left:</string>
+    <string name="and">and</string>
 </resources>

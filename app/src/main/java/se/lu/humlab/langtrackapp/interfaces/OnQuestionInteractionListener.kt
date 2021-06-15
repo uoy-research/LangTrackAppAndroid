@@ -14,4 +14,5 @@ interface OnQuestionInteractionListener {
     fun setOpenEndedAnswer(text: String?)
     fun setFillBlankAnswer(selected: Int?)
     fun setTimeDurationAnswer(selected: Int)
+    fun setSliderAnswer(selected: Int, naButton: Boolean)
 }

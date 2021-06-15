@@ -45,7 +45,11 @@ class MainViewModel(repo: Repository): ViewModel() {
         }*/
     }
 
-    fun apiIsAlive(listener: (result: Boolean) -> Unit) {
+    fun surveyOpened(){
+        mRepository.surveyOpened()
+    }
+
+    fun apiIsAlive(listener: (result: Boolean, theUrl: String?) -> Unit) {
         mRepository.apiIsAlive(listener)
     }
 
@@ -79,5 +83,13 @@ class MainViewModel(repo: Repository): ViewModel() {
 
     fun getAssignments(){
         mRepository.getAssignments()
+    }
+
+    fun setStagingUrl(useStaging: Boolean){
+        mRepository.setStagingUrl(useStaging)
+    }
+
+    fun isInStagingUrl(): Boolean{
+        return mRepository.isInStaging()
     }
 }

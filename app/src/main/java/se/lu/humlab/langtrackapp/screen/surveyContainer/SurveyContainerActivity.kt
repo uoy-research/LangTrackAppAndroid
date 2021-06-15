@@ -29,6 +29,7 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.likertScaleFragment.Like
 import se.lu.humlab.langtrackapp.screen.surveyContainer.multipleChoiceFragment.MultipleChoiceFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.openEndedTextResponsesFragment.OpenEndedTextResponsesFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.singleMultipleAnswersFragment.SingleMultipleAnswersFragment
+import se.lu.humlab.langtrackapp.screen.surveyContainer.sliderScale.SliderScaleFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.timeDuration.TimeDurationFragment
 import se.lu.humlab.langtrackapp.util.loadFragment
 
@@ -46,6 +47,7 @@ class SurveyContainerActivity : AppCompatActivity(),
     private lateinit var singleMultipleAnswersFragment: SingleMultipleAnswersFragment
     private lateinit var openEndedTextResponsesFragment: OpenEndedTextResponsesFragment
     private lateinit var timeDurationFragment: TimeDurationFragment
+    private lateinit var sliderScaleFragment: SliderScaleFragment
     private lateinit var footerFragment: FooterFragment
     private var currentPage = Question()
     private var answer = mutableMapOf<Int,Answer>()
@@ -73,6 +75,7 @@ class SurveyContainerActivity : AppCompatActivity(),
         singleMultipleAnswersFragment = SingleMultipleAnswersFragment.newInstance()
         openEndedTextResponsesFragment = OpenEndedTextResponsesFragment.newInstance()
         timeDurationFragment = TimeDurationFragment.newInstance()
+        sliderScaleFragment = SliderScaleFragment.newInstance()
         footerFragment = FooterFragment.newInstance()
 
         if (theAssignment != null){
@@ -192,6 +195,12 @@ class SurveyContainerActivity : AppCompatActivity(),
                             timeDurationFragment.theAnswer = existingAnswer
                             timeDurationFragment.setQuestion()
                         }
+                        SLIDER_SCALE -> {
+                            sliderScaleFragment.question = question
+                            loadFragment(sliderScaleFragment)
+                            sliderScaleFragment.theAnswer = existingAnswer
+                            sliderScaleFragment.setQuestion()
+                        }
                         FOOTER_VIEW -> {
                             footerFragment.question = question
                             loadFragment(footerFragment)
@@ -214,6 +223,10 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     fun skipIsExecuted(current: Question) : Question?{
         current.skip?.also { skip ->
+            // skip if ifChosen is -1 regardless of answer...
+            if (skip.ifChosen == -1){
+                return theAssignment?.survey?.questions?.first { it.index == skip.goto }
+            }
             val answerObj = answer[current.index]
             if (answerObj != null){
                 when (answerObj.type){
@@ -393,7 +406,8 @@ class SurveyContainerActivity : AppCompatActivity(),
             multipleChoiceAnswer = null,
             singleMultipleAnswer = selected,
             openEndedAnswer = null,
-            timeDurationAnswer = null
+            timeDurationAnswer = null,
+            sliderScaleAnswer = null
         )
     }
 
@@ -406,7 +420,8 @@ class SurveyContainerActivity : AppCompatActivity(),
             multipleChoiceAnswer = selected?.toMutableList(),
             singleMultipleAnswer = null,
             openEndedAnswer = null,
-            timeDurationAnswer = null
+            timeDurationAnswer = null,
+            sliderScaleAnswer = null
         )
     }
 
@@ -419,7 +434,8 @@ class SurveyContainerActivity : AppCompatActivity(),
             multipleChoiceAnswer = null,
             singleMultipleAnswer = null,
             openEndedAnswer = null,
-            timeDurationAnswer = null
+            timeDurationAnswer = null,
+            sliderScaleAnswer = null
         )
     }
 
@@ -432,7 +448,8 @@ class SurveyContainerActivity : AppCompatActivity(),
             multipleChoiceAnswer = null,
             singleMultipleAnswer = null,
             openEndedAnswer = text,
-            timeDurationAnswer = null
+            timeDurationAnswer = null,
+            sliderScaleAnswer = null
         )
     }
 
@@ -445,7 +462,8 @@ class SurveyContainerActivity : AppCompatActivity(),
             multipleChoiceAnswer = null,
             singleMultipleAnswer = null,
             openEndedAnswer = null,
-            timeDurationAnswer = null
+            timeDurationAnswer = null,
+            sliderScaleAnswer = null
         )
     }
 
@@ -458,7 +476,26 @@ class SurveyContainerActivity : AppCompatActivity(),
             multipleChoiceAnswer = null,
             singleMultipleAnswer = null,
             openEndedAnswer = null,
-            timeDurationAnswer = selected
+            timeDurationAnswer = selected,
+            sliderScaleAnswer = null
+        )
+    }
+
+    override fun setSliderAnswer(selected: Int, naButton: Boolean) {
+        var theValue = selected
+        if (naButton) {
+            theValue = -1
+        }
+        answer[currentPage.index] = Answer(
+            type = SLIDER_SCALE,
+            index = currentPage.index,
+            likertAnswer = null,
+            fillBlankAnswer = null,
+            multipleChoiceAnswer = null,
+            singleMultipleAnswer = null,
+            openEndedAnswer = null,
+            timeDurationAnswer = null,
+            sliderScaleAnswer = theValue
         )
     }
 
@@ -471,6 +508,7 @@ class SurveyContainerActivity : AppCompatActivity(),
         const val SINGLE_MULTIPLE_ANSWERS = "single"
         const val OPEN_ENDED_TEXT_RESPONSES = "open"
         const val TIME_DURATION = "duration"
+        const val SLIDER_SCALE = "slider"
         const val FOOTER_VIEW = "footer"
 
         fun start(context: Context, assignment: Assignment){

@@ -8,12 +8,19 @@ package se.lu.humlab.langtrackapp.data
 * */
 
 import android.content.Context
+import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
+import com.github.kittinunf.fuel.core.extensions.authentication
+import com.github.kittinunf.fuel.core.response
+import com.github.kittinunf.fuel.gson.jsonBody
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.*
 import com.google.gson.Gson
-import okhttp3.*
 import okhttp3.HttpUrl.Companion.toHttpUrl
 import okhttp3.MediaType.Companion.toMediaType
+import okhttp3.OkHttpClient
+import okhttp3.Request
 import okhttp3.RequestBody.Companion.toRequestBody
 import org.json.JSONArray
 import org.json.JSONObject
@@ -23,6 +30,10 @@ import se.lu.humlab.langtrackapp.util.IO
 import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
 import se.lu.humlab.langtrackapp.util.getVersionNumber
 import se.lu.humlab.langtrackapp.util.showApiFailInfo
+import java.io.BufferedReader
+import java.io.InputStreamReader
+import java.net.HttpURLConnection
+import java.net.URL
 import java.util.*
 
 
@@ -36,9 +47,10 @@ class Repository(val context: Context) {
     var idToken = ""
     private var assignmentList = mutableListOf<Assignment>()
     var assignmentListLiveData = MutableLiveData<MutableList<Assignment>>()
-    private val ltaUrl = "http://ht-lang-track.ht.lu.se/api/"
+    //private val ltaUrl = "http://ht-lang-track.ht.lu.se/api/"
     //private val ltaUrl = "http://ht-lang-track.ht.lu.se:443/"
     var client = OkHttpClient()
+    private var useStagingServer = false
 
 
     fun setCurrentUser(user: User){
@@ -49,114 +61,202 @@ class Repository(val context: Context) {
         return currentUser
     }
 
+    fun setStagingUrl(useStaging: Boolean){
+        useStagingServer = useStaging
+    }
+
+    fun isInStaging() :Boolean{
+        return useStagingServer
+    }
+
+    fun getUrl(listener: (result: String?) -> Unit) {
+        val database = FirebaseDatabase.getInstance()
+        var myRef :DatabaseReference?
+        if (useStagingServer){
+            myRef = database.getReference("stagingUrl")
+        }else{
+            myRef = database.getReference("url")
+        }
+        myRef.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                //println("getUrl snapshot: ${snapshot.value}")
+                try {
+                    val theFetchedUrl = snapshot.value as? String
+                    listener(theFetchedUrl)
+                } catch (e: Exception) {
+                    println("getUrl Exception: $e")
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                println("getUrl ERROR: ${error.message}")
+            }
+
+        })
+    }
+
     fun putDeviceToken(){
 
-        val verNum = getVersionNumber(context)
-        //TODO: send version number together with deviceToken
+        apiIsAlive { alive, theUrl ->
+            if (alive) {
 
-        if (currentUser.id != "") {
-            val verNr = getVersionNumber(context)
-            println("putDeviceToken version number: $verNr")
+                if (currentUser.id != "") {
+                    val verNr = getVersionNumber(context)
+                    println("putDeviceToken version number: $verNr")
 
-            val localTimeZoneIdentifier = TimeZone.getDefault().id
-            println("putDeviceToken localTimeZoneIdentifier: $localTimeZoneIdentifier")
-            val deviceTokenUrl = "${ltaUrl}users/${currentUser.id}"
+                    val localTimeZoneIdentifier = TimeZone.getDefault().id
+                    println("putDeviceToken localTimeZoneIdentifier: $localTimeZoneIdentifier")
+                    val deviceTokenUrl = "${theUrl}users/${currentUser.id}"
 
-            if (localTimeZoneIdentifier != "") {
-                MyFirebaseInstanceIDService.getDeviceTokengetDeviceToken(object :
-                        (String?) -> Unit {
-                    override fun invoke(deviceToken: String?) {
-                        if (deviceToken != null) {
-                            val jsonAnswer =
-                                "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\"}"
-                            IO.execute {
-                                val httpUrl = deviceTokenUrl.toHttpUrl()
-                                val httpUrlBuilder = httpUrl.newBuilder()
-                                val requestBuilder = Request.Builder().url(httpUrlBuilder.build())
-                                val mediaTypeJson = "application/json; charset=utf-8".toMediaType()
-                                requestBuilder.put(
-                                    jsonAnswer.toRequestBody(mediaTypeJson)
-                                )
-                                val call = client.newCall(requestBuilder.build())
-                                call.execute().use {
-                                    if (it.isSuccessful) {
-                                        println("putDeviceToken SUCCESS: ${it.body}")
-                                    } else {
-                                        println("putDeviceToken ERROR: ${it.body}")
+                    if (localTimeZoneIdentifier != "") {
+                        MyFirebaseInstanceIDService.getDeviceTokengetDeviceToken(object :
+                                (String?) -> Unit {
+                            override fun invoke(deviceToken: String?) {
+                                val vNumber = Build.VERSION.RELEASE ?: ""
+                                if (deviceToken != null) {//"": "Android"
+                                    val jsonAnswer =
+                                        "{\"timezone\":\"${localTimeZoneIdentifier}\", \"deviceToken\":\"${deviceToken}\", \"versionNumber\":\"${verNr}\", \"os\":\"Android ${vNumber}\"}"
+
+                                    IO.execute {
+                                        val httpUrl = deviceTokenUrl.toHttpUrl()
+                                        val httpUrlBuilder = httpUrl.newBuilder()
+                                        val requestBuilder =
+                                            Request.Builder().url(httpUrlBuilder.build()).header(
+                                                "Authorization",
+                                                "token " + idToken
+                                            )
+                                        requestBuilder.addHeader("token", idToken)
+                                        requestBuilder.addHeader("bearer", idToken)
+                                        val mediaTypeJson = "application/json; charset=utf-8".toMediaType()
+
+                                        requestBuilder.put(
+                                            jsonAnswer.toRequestBody(mediaTypeJson)
+                                        )
+                                        val call = client.newCall(requestBuilder.build())
+                                        call.execute().use {
+                                            if (it.isSuccessful) {
+                                                println("putDeviceToken SUCCESS: ${it.body} url: ${theUrl}")
+                                            } else {
+                                                println("putDeviceToken ERROR: ${it.body} url: ${theUrl}, ${it.message}")
+                                            }
+                                        }
                                     }
                                 }
                             }
+                        })
+                    }
+                }
+            }else{
+                println("api is dead")
+            }
+        }
+    }
+
+    fun postAnswer(answerDict: Map<Int, Answer>){
+        if (currentUser.id.isNotEmpty()){
+            getUrl { theUrl ->
+                val answers = mutableListOf<AnswerBody>()
+                for (answer in answerDict.values) {
+                    var stringValue: String? = null
+                    var intValue: Int? = null
+                    var multiValue: MutableList<Int>? = null
+                    when (answer.type) {
+                        SurveyContainerActivity.LIKERT_SCALES ->
+                            intValue = answer.likertAnswer
+                        SurveyContainerActivity.SINGLE_MULTIPLE_ANSWERS ->
+                            intValue = answer.singleMultipleAnswer
+                        SurveyContainerActivity.FILL_IN_THE_BLANK ->
+                            intValue = answer.fillBlankAnswer
+                        SurveyContainerActivity.MULTIPLE_CHOICE ->
+                            multiValue = answer.multipleChoiceAnswer
+                        SurveyContainerActivity.OPEN_ENDED_TEXT_RESPONSES ->
+                            stringValue = answer.openEndedAnswer
+                        SurveyContainerActivity.TIME_DURATION ->
+                            intValue = answer.timeDurationAnswer
+                        SurveyContainerActivity.SLIDER_SCALE ->
+                            intValue = answer.sliderScaleAnswer
+                    }
+                    val body = AnswerBody(
+                        index = answer.index,
+                        type = answer.type,
+                        intValue = intValue,
+                        multiValue = multiValue,
+                        stringValue = stringValue
+                    )
+                    if (body.index != -99) {
+                        answers.add(body)
+                    }
+
+                }
+                val answerUrl =
+                    "${theUrl}users/${currentUser.id}/assignments/${selectedAssignment!!.id}/datasets"
+                val gson = Gson()
+                val jsonAnswer: String = gson.toJson(answers)
+                val jsonAnswer2 = "{\"answers\":${jsonAnswer}}"
+
+                IO.execute {
+                    val httpUrl = answerUrl.toHttpUrl()
+                    val httpUrlBuilder = httpUrl.newBuilder()
+                    val requestBuilder = Request.Builder().url(httpUrlBuilder.build()).header(
+                        "Authorization",
+                        "token " + idToken
+                    )
+                    requestBuilder.addHeader("token", idToken)
+                    requestBuilder.addHeader("bearer", idToken)
+                    val mediaTypeJson = "application/json; charset=utf-8".toMediaType()
+                    requestBuilder.post(
+                        jsonAnswer2.toRequestBody(mediaTypeJson)
+                    )
+                    val call = client.newCall(requestBuilder.build())
+                    call.execute().use {
+                        if (it.isSuccessful) {
+                            println("postAnswer SUCCESS: ${it.body} url: ${theUrl}")
+                            //reload to get answer to list
+                            getAssignments()
+                        } else {
+                            println("postAnswer ERROR: ${it.body} url: ${theUrl}")
                         }
                     }
-                })
-            }
-        }
-    }
-
-    fun postAnswer(answerDict: Map<Int,Answer>){
-        if (currentUser.id.isNotEmpty()){
-            val answers = mutableListOf<AnswerBody>()
-            for (answer in answerDict.values){
-                var stringValue: String? = null
-                var intValue: Int? = null
-                var multiValue: MutableList<Int>? = null
-                when(answer.type){
-                    SurveyContainerActivity.LIKERT_SCALES ->
-                        intValue = answer.likertAnswer
-                    SurveyContainerActivity.SINGLE_MULTIPLE_ANSWERS ->
-                        intValue = answer.singleMultipleAnswer
-                    SurveyContainerActivity.FILL_IN_THE_BLANK ->
-                        intValue = answer.fillBlankAnswer
-                    SurveyContainerActivity.MULTIPLE_CHOICE ->
-                        multiValue = answer.multipleChoiceAnswer
-                    SurveyContainerActivity.OPEN_ENDED_TEXT_RESPONSES ->
-                        stringValue = answer.openEndedAnswer
-                    SurveyContainerActivity.TIME_DURATION ->
-                        intValue = answer.timeDurationAnswer
-                }
-                val body = AnswerBody(
-                    index = answer.index,
-                    type = answer.type,
-                    intValue = intValue,
-                    multiValue = multiValue,
-                    stringValue = stringValue
-                )
-                if (body.index != -99){
-                    answers.add(body)
-                }
-
-            }
-            val answerUrl = "${ltaUrl}users/${currentUser.id}/assignments/${selectedAssignment!!.id}/datasets"
-            val gson = Gson()
-            val jsonAnswer: String = gson.toJson(answers)
-            val jsonAnswer2 = "{\"answers\":${jsonAnswer}}"
-
-            IO.execute {
-                val httpUrl = answerUrl.toHttpUrl()
-                val httpUrlBuilder = httpUrl.newBuilder()
-                val requestBuilder = Request.Builder().url(httpUrlBuilder.build())
-                val mediaTypeJson = "application/json; charset=utf-8".toMediaType()
-                requestBuilder.post(
-                    jsonAnswer2.toRequestBody(mediaTypeJson)
-                )
-                val call = client.newCall(requestBuilder.build())
-                call.execute().use {
-                    if (it.isSuccessful){
-                        println("postAnswer SUCCESS: ${it.body}")
-                        //reload to get answer to list
-                        getAssignments()
-                    }else{
-                        println("postAnswer ERROR: ${it.body}")
-                    }
                 }
             }
         }
     }
 
-    fun apiIsAlive(listener: (result: Boolean) -> Unit) {
-        val apiPingUrl = "${ltaUrl}ping"
-        Fuel.get(apiPingUrl).response{_,response,_ ->
-            listener(response.statusCode == 200)
+    fun surveyOpened(){
+        //test2()
+        println("token: $idToken")
+        getUrl { theUrl ->
+            if (theUrl != null && selectedAssignment != null) {
+                val openedUrl = "${theUrl}assignments/${selectedAssignment!!.id}/open"
+                println("token: $idToken, openedUrl: $openedUrl")
+
+                IO.execute {
+                    val (ignoredRequest, ignoredResponse, result) =
+                        Fuel.post(openedUrl)
+                            .header("Content-Type", "text/html")
+                            .header("token" to idToken)
+                            .header("bearer" to idToken)
+                            .responseString()
+
+                    result.fold(
+                        { print("surveyOpened success: $result") },
+                        { print("surveyOpened failure: $result") })
+                }
+            }
+
+        }
+    }
+
+    fun apiIsAlive(listener: (result: Boolean, theUrl: String?) -> Unit) {
+        getUrl { theUrl ->
+            if (theUrl != null) {
+                val apiPingUrl = "${theUrl}ping"
+                Fuel.get(apiPingUrl).response { _, response, _ ->
+                    listener(response.statusCode == 200, theUrl)
+                }
+            }else{
+                listener(false, null)
+            }
         }
     }
 
@@ -166,25 +266,27 @@ class Repository(val context: Context) {
     }
 
     fun getAssignments(){
-        val assigmnentUrl = "${ltaUrl}users/${currentUser.userName}/assignments"
-        Fuel.get(assigmnentUrl)
-            .header(mapOf("token" to idToken))
-            .response { _, _, result ->
+        getUrl { theUrl ->
+            val assigmnentUrl = "${theUrl}users/${currentUser.userName}/assignments"
+            Fuel.get(assigmnentUrl)
+                .header(mapOf("token" to idToken))
+                .response { _, _, result ->
 
-                val (bytes, error) = result
-                if (error == null) {
-                    if (bytes != null) {
-                        val templist = sortList(getAssignmentsFromJson(String(bytes))).toMutableList()
-                        if (!templist.isNullOrEmpty()) {
-                            assignmentList = templist
-                            assignmentListLiveData.value = assignmentList
+                    val (bytes, error) = result
+                    if (error == null) {
+                        if (bytes != null) {
+                            val templist = sortList(getAssignmentsFromJson(String(bytes))).toMutableList()
+                            if (!templist.isNullOrEmpty()) {
+                                assignmentList = templist
+                                assignmentListLiveData.value = assignmentList
+                            }
                         }
+                    }else{
+                        println("Repository getAssignmens ERROR: ${error.localizedMessage}")
+                        showApiFailInfo(context)
                     }
-                }else{
-                    println("Repository getAssignmens ERROR: ${error.localizedMessage}")
-                    showApiFailInfo(context)
                 }
-            }
+        }
     }
 
     private fun sortList(theListWithSurveys: List<Assignment>): List<Assignment>{
@@ -206,61 +308,71 @@ class Repository(val context: Context) {
 
     private fun getAssignmentsFromJson(json: String): List<Assignment>{
         val theListWithSurveys = mutableListOf<Assignment>()
-        val jsonObj = JSONArray(json.substring(json.indexOf("["), json.lastIndexOf("]") + 1))
-        for (i in 0 until jsonObj.length()) {
-            var newsurvey: Survey? = null
-            var newupdatedAt = ""
-            var newcreatedAt = ""
-            var newuserId = ""
-            var newdataset: Dataset? = null
-            var newpublishAt = ""
-            var newexpireAt = ""
-            var newid = ""
-            val assignment = jsonObj.getJSONObject(i)
-            try {
-                val tempSurveyObj = assignment.get("survey") as? JSONObject
-                if (tempSurveyObj != null) {
-                    newsurvey = getSurveyFromJsonObj(tempSurveyObj)
+        if (json.contains('[') && json.contains(']')) {
+            val jsonObj = JSONArray(json.substring(json.indexOf("["), json.lastIndexOf("]") + 1))
+            for (i in 0 until jsonObj.length()) {
+                var newsurvey: Survey? = null
+                var newupdatedAt = ""
+                var newcreatedAt = ""
+                var newuserId = ""
+                var newdataset: Dataset? = null
+                var newpublishAt = ""
+                var newexpireAt = ""
+                var newid = ""
+                val assignment = jsonObj.getJSONObject(i)
+                try {
+                    val tempSurveyObj = assignment.get("survey") as? JSONObject
+                    if (tempSurveyObj != null) {
+                        newsurvey = getSurveyFromJsonObj(tempSurveyObj)
+                    }
+                } catch (e: Exception) {
                 }
-            }catch (e: Exception){ }
-            try {
-                newupdatedAt = assignment.get("updatedAt") as? String ?: ""
-            }catch (e: Exception){ }
-            try {
-                newcreatedAt = assignment.get("createdAt") as? String ?: ""
-            }catch (e: Exception){ }
-            try {
-                newuserId = assignment.get("userId") as? String ?: ""
-            }catch (e: Exception){ }
-            try {
-                val datasetObj = assignment.get("dataset") as? JSONObject
-                if (datasetObj != null){
-                    newdataset = getDatasetFromJsonObj(datasetObj)
+                try {
+                    newupdatedAt = assignment.get("updatedAt") as? String ?: ""
+                } catch (e: Exception) {
                 }
-            }catch (e: Exception){ }
-            try {
-                newpublishAt = assignment.get("publishAt") as? String ?: ""
-            }catch (e: Exception){ }
-            try {
-                newexpireAt = assignment.get("expireAt") as? String ?: ""
-            }catch (e: Exception){ }
-            try {
-                newid = assignment.get("_id") as? String ?: ""
-            }catch (e: Exception){ }
+                try {
+                    newcreatedAt = assignment.get("createdAt") as? String ?: ""
+                } catch (e: Exception) {
+                }
+                try {
+                    newuserId = assignment.get("userId") as? String ?: ""
+                } catch (e: Exception) {
+                }
+                try {
+                    val datasetObj = assignment.get("dataset") as? JSONObject
+                    if (datasetObj != null) {
+                        newdataset = getDatasetFromJsonObj(datasetObj)
+                    }
+                } catch (e: Exception) {
+                }
+                try {
+                    newpublishAt = assignment.get("publishAt") as? String ?: ""
+                } catch (e: Exception) {
+                }
+                try {
+                    newexpireAt = assignment.get("expireAt") as? String ?: ""
+                } catch (e: Exception) {
+                }
+                try {
+                    newid = assignment.get("_id") as? String ?: ""
+                } catch (e: Exception) {
+                }
 
-            if (newsurvey != null){
-                theListWithSurveys.add(
-                    Assignment(
-                        survey = newsurvey,
-                        updatedAt = newupdatedAt,
-                        createdAt = newcreatedAt,
-                        userId = newuserId,
-                        dataset = newdataset,
-                        publishAt = newpublishAt,
-                        expireAt = newexpireAt,
-                        id = newid
+                if (newsurvey != null) {
+                    theListWithSurveys.add(
+                        Assignment(
+                            survey = newsurvey,
+                            updatedAt = newupdatedAt,
+                            createdAt = newcreatedAt,
+                            userId = newuserId,
+                            dataset = newdataset,
+                            publishAt = newpublishAt,
+                            expireAt = newexpireAt,
+                            id = newid
+                        )
                     )
-                )
+                }
             }
         }
         return theListWithSurveys
@@ -323,7 +435,8 @@ class Repository(val context: Context) {
                                         fillBlankAnswer = null,
                                         multipleChoiceAnswer = null,
                                         singleMultipleAnswer = intValue,
-                                        openEndedAnswer = null
+                                        openEndedAnswer = null,
+                                        sliderScaleAnswer = null
                                     )
                                 )
                             }
@@ -336,7 +449,8 @@ class Repository(val context: Context) {
                                         fillBlankAnswer = null,
                                         multipleChoiceAnswer = multiValue,
                                         singleMultipleAnswer = null,
-                                        openEndedAnswer = null
+                                        openEndedAnswer = null,
+                                        sliderScaleAnswer = null
                                     )
                                 )
                             }
@@ -349,7 +463,8 @@ class Repository(val context: Context) {
                                         fillBlankAnswer = null,
                                         multipleChoiceAnswer = null,
                                         singleMultipleAnswer = null,
-                                        openEndedAnswer = null
+                                        openEndedAnswer = null,
+                                        sliderScaleAnswer = null
                                     )
                                 )
                             }
@@ -362,7 +477,8 @@ class Repository(val context: Context) {
                                         fillBlankAnswer = intValue,
                                         multipleChoiceAnswer = null,
                                         singleMultipleAnswer = null,
-                                        openEndedAnswer = null
+                                        openEndedAnswer = null,
+                                        sliderScaleAnswer = null
                                     )
                                 )
                             }
@@ -375,7 +491,8 @@ class Repository(val context: Context) {
                                         fillBlankAnswer = null,
                                         multipleChoiceAnswer = null,
                                         singleMultipleAnswer = null,
-                                        openEndedAnswer = stringValue
+                                        openEndedAnswer = stringValue,
+                                        sliderScaleAnswer = null
                                     )
                                 )
                             }
@@ -389,7 +506,23 @@ class Repository(val context: Context) {
                                         multipleChoiceAnswer = null,
                                         singleMultipleAnswer = null,
                                         openEndedAnswer = null,
-                                        timeDurationAnswer = intValue
+                                        timeDurationAnswer = intValue,
+                                        sliderScaleAnswer = null
+                                    )
+                                )
+                            }
+                            SurveyContainerActivity.SLIDER_SCALE -> {
+                                answers.add(
+                                    Answer(
+                                        type = type,
+                                        index = index,
+                                        likertAnswer = null,
+                                        fillBlankAnswer = null,
+                                        multipleChoiceAnswer = null,
+                                        singleMultipleAnswer = null,
+                                        openEndedAnswer = null,
+                                        timeDurationAnswer = null,
+                                        sliderScaleAnswer = intValue
                                     )
                                 )
                             }

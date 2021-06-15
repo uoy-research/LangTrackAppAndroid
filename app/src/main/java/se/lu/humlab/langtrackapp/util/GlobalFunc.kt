@@ -15,7 +15,7 @@ fun getVersionNumber(context: Context): String{
     } catch (e: PackageManager.NameNotFoundException) {
         e.printStackTrace()
     }
-    return "Version: $version"
+    return version
 }
 
 fun showApiFailInfo(context: Context){

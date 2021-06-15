@@ -22,6 +22,7 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.MULTIPLE_CHOICE
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.OPEN_ENDED_TEXT_RESPONSES
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.SINGLE_MULTIPLE_ANSWERS
+import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.SLIDER_SCALE
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity.Companion.TIME_DURATION
 import se.lu.humlab.langtrackapp.util.formatToReadable
 import se.lu.humlab.langtrackapp.util.toDate
@@ -86,7 +87,7 @@ class OverviewActivity : AppCompatActivity() {
             //MARK: add footer too?
         }
         questionsWithAnswers.sortedBy { it.question.index }
-        binding.overviewTopNumberOfQuestionTextView.text = getString(R.string.numberEnding,questionsWithAnswers.size - 1)
+        binding.overviewTopNumberOfQuestionTextView.text = (questionsWithAnswers.size - 1).toString()//getString(R.string.numberEnding,questionsWithAnswers.size - 1)
 
 
     }
@@ -114,7 +115,7 @@ class OverviewActivity : AppCompatActivity() {
                         val likert = OverviewLikertView(this)
                         if (selectedAnswer?.likertAnswer ?: -1 != -1 &&
                                 selectedAnswer?.likertAnswer ?: -1 >= 0 &&
-                                selectedAnswer?.likertAnswer ?: -1 < 5){
+                                selectedAnswer?.likertAnswer ?: -1 < 6){
                             likert.setText(listItem.question, selectedAnswer?.likertAnswer!!)
                         }
                         binding.overviewQuestionContainer.addView(likert)
@@ -181,11 +182,21 @@ class OverviewActivity : AppCompatActivity() {
                         duration.setText(listItem.question, selectedAnswer)
                         binding.overviewQuestionContainer.addView(duration)
                     }
+                    SLIDER_SCALE -> {
+                        var value = -1
+                        val sliderScale = OverviewSliderScaleView(this)
+                        if (selectedAnswer?.sliderScaleAnswer != null){
+                            try {
+                                value = selectedAnswer.sliderScaleAnswer ?: -99
+                            }catch (e: Exception){println("presentQuestionsInScrollview, e: ${e.localizedMessage}")}
+                        }
+                        sliderScale.setText(listItem.question, value)
+                        binding.overviewQuestionContainer.addView(sliderScale)
+                    }
                 }
             }
         }
     }
-
 
     companion object {
         const val ASSIGNMENT = "overviewsurvey"
