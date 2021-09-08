@@ -88,4 +88,5 @@
     <string name="days">dagar</string>
     <string name="timeLeft">Tid kvar:</string>
     <string name="and">och</string>
+    <string name="survey_expired">Enkät utgången</string>
 </resources>

@@ -88,4 +88,5 @@
     <string name="day">يوم</string>
     <string name="and">و</string>
     <string name="timeLeft">الوقت المتبقي:</string>
+    <string name="survey_expired">انتهت صلاحية الاستطلاع</string>
 </resources>
