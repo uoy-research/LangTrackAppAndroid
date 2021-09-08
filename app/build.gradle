@@ -13,8 +13,8 @@ android {
         applicationId "se.lu.humlab.langtrackapp"
         minSdkVersion 23
         targetSdkVersion 29
-        versionCode 16
-        versionName "1.2.0"
+        versionCode 17
+        versionName "1.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

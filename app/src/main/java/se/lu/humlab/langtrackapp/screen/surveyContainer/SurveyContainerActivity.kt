@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.databinding.DataBindingUtil
 import androidx.lifecycle.ViewModelProviders
+import kotlinx.android.synthetic.main.login_activity.*
 import kotlinx.android.synthetic.main.survey_container_activity.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.data.model.Answer
@@ -31,7 +32,10 @@ import se.lu.humlab.langtrackapp.screen.surveyContainer.openEndedTextResponsesFr
 import se.lu.humlab.langtrackapp.screen.surveyContainer.singleMultipleAnswersFragment.SingleMultipleAnswersFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.sliderScale.SliderScaleFragment
 import se.lu.humlab.langtrackapp.screen.surveyContainer.timeDuration.TimeDurationFragment
+import se.lu.humlab.langtrackapp.util.formatToReadable
 import se.lu.humlab.langtrackapp.util.loadFragment
+import se.lu.humlab.langtrackapp.util.toDate
+import java.util.*
 
 class SurveyContainerActivity : AppCompatActivity(),
     OnQuestionInteractionListener{
@@ -52,11 +56,13 @@ class SurveyContainerActivity : AppCompatActivity(),
     private var currentPage = Question()
     private var answer = mutableMapOf<Int,Answer>()
     private var theAssignment: Assignment? = null
+    private var inTestMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         theAssignment = intent.getParcelableExtra<Assignment>(ASSIGNMENT)
+        inTestMode = intent.getBooleanExtra(IN_TEST_MODE, false)
 
         mBind = DataBindingUtil.setContentView(this, R.layout.survey_container_activity)
         mBind.lifecycleOwner = this
@@ -368,33 +374,57 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     override fun sendInSurvey() {
         if (answer.isNotEmpty()){
-            val tempList = theAssignment?.survey?.questions?.sortedBy {it.index }
-            val answersToInclude = mutableListOf<Int>()
+            if (theAssignment?.expireAt?.toDate()?.after(Date()) == false && !inTestMode){
 
-            var counter = tempList?.last()?.index ?: -99
-            if (counter != -99){
-                while (counter > 0) {
-                    val currentQuestion = tempList?.first { it.index == counter }
-                    if (currentQuestion?.type ?: "header" != "header" &&
-                    currentQuestion?.type ?: "footer" != "footer"){
-                    answersToInclude.add(counter)
-                }
-                    counter = currentQuestion?.previous ?: 0
-                }
-            }
-            val tempAnswers = mutableMapOf<Int,Answer>()
-            for (a in answersToInclude){
-                val theAnswer = answer.filter { it.value.index == a }
-                if (theAnswer.size == 1){
-                    theAnswer.forEach {
-                        tempAnswers[it.value.index] = it.value
+                // expired - show popup
+                val alertFm = supportFragmentManager.beginTransaction()
+                val width = (surveyContainer_layout.measuredWidth * 0.75).toInt()
+                val alertPopup = PopupAlert.show(
+                    width = width,
+                    title = getString(R.string.survey_expired),
+                    textViewText = theAssignment?.expireAt?.toDate()?.formatToReadable(getString(R.string.dateFormat)) ?: getString(R.string.noDate),
+                    placecenter = true,
+                    cancelable = false
+                )
+                alertPopup.setCompleteListener(object : OnBoolPopupReturnListener{
+                    override fun popupReturn(value: Boolean) {
+                        finish()
+                    }
+                })
+                alertPopup.show(alertFm, "alertPopup")
+            }else{
+
+                //not expired (or in test mode) - send in answers
+                val tempList = theAssignment?.survey?.questions?.sortedBy {it.index }
+                val answersToInclude = mutableListOf<Int>()
+
+                var counter = tempList?.last()?.index ?: -99
+                if (counter != -99){
+                    while (counter > 0) {
+                        val currentQuestion = tempList?.first { it.index == counter }
+                        if (currentQuestion?.type ?: "header" != "header" &&
+                            currentQuestion?.type ?: "footer" != "footer"){
+                            answersToInclude.add(counter)
+                        }
+                        counter = currentQuestion?.previous ?: 0
                     }
                 }
+                val tempAnswers = mutableMapOf<Int,Answer>()
+                for (a in answersToInclude){
+                    val theAnswer = answer.filter { it.value.index == a }
+                    if (theAnswer.size == 1){
+                        theAnswer.forEach {
+                            tempAnswers[it.value.index] = it.value
+                        }
+                    }
+                }
+                println("tempAnswers: $tempAnswers")
+                viewModel.postAnswer(tempAnswers)
+                finish()
             }
-            println("tempAnswers: $tempAnswers")
-            viewModel.postAnswer(tempAnswers)
+        }else {
+            finish()
         }
-        finish()
     }
 
     override fun setSingleMultipleAnswer(selected: Int) {
@@ -500,6 +530,7 @@ class SurveyContainerActivity : AppCompatActivity(),
     }
 
     companion object {
+        const val IN_TEST_MODE = "InTestMode"
         const val ASSIGNMENT = "assignment"
         const val HEADER_VIEW = "header"
         const val LIKERT_SCALES = "likert"
@@ -511,9 +542,10 @@ class SurveyContainerActivity : AppCompatActivity(),
         const val SLIDER_SCALE = "slider"
         const val FOOTER_VIEW = "footer"
 
-        fun start(context: Context, assignment: Assignment){
+        fun start(context: Context, assignment: Assignment, isInTestMode: Boolean){
             context.startActivity(Intent(context, SurveyContainerActivity::class.java).apply {
                 this.putExtra(ASSIGNMENT,assignment)
+                this.putExtra(IN_TEST_MODE, isInTestMode)
             })
         }
     }

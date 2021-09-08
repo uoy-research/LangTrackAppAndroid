@@ -110,14 +110,14 @@ class MainActivity : AppCompatActivity() {
                 viewModel.setSelectedAssignment(item)
                 if (inTestMode) {
                     // in testMode, always show survey
-                    SurveyContainerActivity.start(this@MainActivity, item)
+                    SurveyContainerActivity.start(this@MainActivity, item, inTestMode)
                     viewModel.surveyOpened()
                 } else {
                     if (item.isActive()) {
                         // show survey - if api is responding
                         viewModel.apiIsAlive { alive, _ ->
                             if (alive){
-                                SurveyContainerActivity.start(this@MainActivity, item)
+                                SurveyContainerActivity.start(this@MainActivity, item, inTestMode)
                                 viewModel.surveyOpened()
                             }else{
                                 showApiFailInfo(this@MainActivity)
@@ -224,6 +224,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setTestModeIfTeam(userName: String){
+        /*
+        Adding userName for team members
+         will let them
+         * switch between staging server and production server
+         * using app in testMode -> open all surveys as active
+         */
         testView.visibility = if (
             userName == "stephan" ||
             userName == "josef" ||
