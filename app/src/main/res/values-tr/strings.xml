@@ -1,10 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name">Lang Track App</string>
-
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
-    <string name="loading" translatable="false">Laddar värde</string>
-    <string name="Open" translatable="false">Open</string>
     <string name="Close">Close</string>
     <string name="empty_list_info">There\'s nothing here... \nWhen Humlab assigns you a survey, you will see it here.</string>
     <string name="server_fail_info">No contact with server</string>
@@ -16,7 +12,6 @@
     <string name="log_out">Log out</string>
     <string name="doYouWantToLogOut">Do you want to log out \n%1$s?</string>
     <string name="cancel">Cancel</string>
-    <string name="langTrackApp" translatable="false">Lang-Track-App</string>
     <string name="humanityLab">Humanities Lab</string>
     <string name="menu">Menu</string>
     <string name="loggedInAs">Logged in as</string>
@@ -62,7 +57,6 @@
     <string name="doYouWantToCloseTheSurvey">Do you want to close the survey and return to the start page?\nThe answers will not be saved.</string>
     <string name="closeTheSurvey">Close survey</string>
     <string name="langTrackAppInfo1">The Lang Track App is an app developed by Lund University Humanities Lab for research purposes.\n\nLog in with the username and password assigned to you by Lund University Humanities Lab</string>
-    <string name="info">Info</string>
     <string name="enterCredentials">Please enter your username and password</string>
     <string name="authenticationFailed">Authentication failed.</string>
     <string name="enterPassword">Enter password</string>
@@ -96,4 +90,5 @@
     <string name="timeLeft">Time left:</string>
     <string name="and">and</string>
     <string name="survey_expired">Survey expired</string>
+    <string name="info">Info</string>
 </resources>
