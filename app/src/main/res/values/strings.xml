@@ -96,4 +96,5 @@
     <string name="timeLeft">Time left:</string>
     <string name="and">and</string>
     <string name="survey_expired">Survey expired</string>
+    <string name="youHaveAnsweredWithFormate">You have answered %s of your %s assigned surveys.</string>
 </resources>

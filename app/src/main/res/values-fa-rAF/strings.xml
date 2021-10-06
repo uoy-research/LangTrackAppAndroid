@@ -12,7 +12,7 @@
     <string name="log_out">از سیستم خارج شوید</string>
     <string name="doYouWantToLogOut">آیا می خواهید از سیستم خارج شوید؟ \n%1$s?</string>
     <string name="cancel">قطع نمایید</string>
-    <string name="humanityLab">آزمایشگاۀ علوم انسانی</string>
+    <string name="humanityLab">Humanities Lab</string>
     <string name="menu">فهرست</string>
     <string name="loggedInAs">وارد (سیستم) شده به عنوان</string>
     <string name="logOut">از سیستم خارج شوید</string>
@@ -91,4 +91,5 @@
     <string name="survey_expired">نظرسنجی منقضی شد</string>
     <string name="published">نشر شده:</string>
     <string name="info">اطلاعات</string>
+    <string name="youHaveAnsweredWithFormate">شما به %s پرسشنامه از %s پرسشنامه اختصاصی خود پاسخ داده اید.</string>
 </resources>

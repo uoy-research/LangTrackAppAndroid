@@ -30,8 +30,9 @@ class StatisticsViewHolder(theItemView: View) : RecyclerView.ViewHolder(theItemV
     fun bind(answered: Int, unanswered: Int){
         setChartAndEmoji(answered,unanswered)
         //statisticsText.text = "Du har besvarat " +answered + " av dina " + (answered + unanswered) + "enkäter"
-        statisticsText.text = statisticsText.context.getString(R.string.youHaveAnswered) +answered + statisticsText.context.getString(
-                    R.string.ofYour) + (answered + unanswered) + statisticsText.context.getString(R.string.surveys)
+        /*statisticsText.text = statisticsText.context.getString(R.string.youHaveAnswered) +answered + statisticsText.context.getString(
+                    R.string.ofYour) + (answered + unanswered) + statisticsText.context.getString(R.string.surveys)*/
+        statisticsText.text = statisticsText.context.getString(R.string.youHaveAnsweredWithFormate, answered.toString(), (answered + unanswered).toString())
     }
 
     private fun setChartAndEmoji(answered: Int, unanswered: Int){
