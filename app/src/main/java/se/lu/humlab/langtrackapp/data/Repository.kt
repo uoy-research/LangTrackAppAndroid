@@ -11,10 +11,6 @@ import android.content.Context
 import android.os.Build
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.extensions.authentication
-import com.github.kittinunf.fuel.core.response
-import com.github.kittinunf.fuel.gson.jsonBody
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.*
 import com.google.gson.Gson
 import okhttp3.HttpUrl.Companion.toHttpUrl
@@ -30,10 +26,6 @@ import se.lu.humlab.langtrackapp.util.IO
 import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
 import se.lu.humlab.langtrackapp.util.getVersionNumber
 import se.lu.humlab.langtrackapp.util.showApiFailInfo
-import java.io.BufferedReader
-import java.io.InputStreamReader
-import java.net.HttpURLConnection
-import java.net.URL
 import java.util.*
 
 

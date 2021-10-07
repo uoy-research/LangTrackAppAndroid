@@ -12,6 +12,7 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import kotlinx.android.synthetic.main.about_activity.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.databinding.AboutActivityBinding
 import se.lu.humlab.langtrackapp.util.asUri
@@ -46,6 +47,7 @@ class AboutActivity : AppCompatActivity() {
                 .asUri().openInBrowser(this)
         }
         setTeamText()
+        mBind.textView18.text = getString(R.string.about)
     }
 
     fun setTeamText(){

@@ -89,4 +89,6 @@
     <string name="timeLeft">Tid kvar:</string>
     <string name="and">och</string>
     <string name="survey_expired">Enkät utgången</string>
+    <string name="info">Info</string>
+    <string name="youHaveAnsweredWithFormate">Du har besvarat %s av dina %s tilldelade enkäter</string>
 </resources>
