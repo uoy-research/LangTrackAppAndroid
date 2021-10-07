@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.util.dpToPx
+import java.util.*
 import kotlin.math.round
 
 
@@ -32,7 +33,17 @@ class StatisticsViewHolder(theItemView: View) : RecyclerView.ViewHolder(theItemV
         //statisticsText.text = "Du har besvarat " +answered + " av dina " + (answered + unanswered) + "enkäter"
         /*statisticsText.text = statisticsText.context.getString(R.string.youHaveAnswered) +answered + statisticsText.context.getString(
                     R.string.ofYour) + (answered + unanswered) + statisticsText.context.getString(R.string.surveys)*/
-        statisticsText.text = statisticsText.context.getString(R.string.youHaveAnsweredWithFormate, answered.toString(), (answered + unanswered).toString())
+
+        //Turkish is LTR but the variables are mixed... :-)
+        if ( Locale.getDefault().language.equals("tr")){
+            statisticsText.text = statisticsText.context.getString(R.string.youHaveAnsweredWithFormate, (answered + unanswered).toString(), answered.toString())
+        }else {
+            //All other languages are handled by localization changes
+            statisticsText.text =
+                statisticsText.context.getString(R.string.youHaveAnsweredWithFormate,
+                    answered.toString(),
+                    (answered + unanswered).toString())
+        }
     }
 
     private fun setChartAndEmoji(answered: Int, unanswered: Int){
