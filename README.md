@@ -1,1 +1,1 @@
-[Link](https://github.com/HumlabLu/HumlabLu) to LTA's joint readme
+Click [here](https://github.com/HumlabLu/HumlabLu) to go to LTA's joint readme
