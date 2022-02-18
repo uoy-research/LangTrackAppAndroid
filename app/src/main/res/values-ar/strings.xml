@@ -11,7 +11,7 @@
     <string name="log_out">خروج</string>
     <string name="doYouWantToLogOut">هل تريد الخروج</string>
     <string name="cancel">إلغاء</string>
-    <string name="humanityLab">مختبر الإنسانيات</string>
+    <string name="humanityLab">Humanities Lab</string>
     <string name="menu">القائمة الرئيسية</string>
     <string name="loggedInAs">دخول باسم</string>
     <string name="logOut">خروج</string>
@@ -88,4 +88,7 @@
     <string name="day">يوم</string>
     <string name="and">و</string>
     <string name="timeLeft">الوقت المتبقي:</string>
+    <string name="survey_expired">انتهت صلاحية الاستطلاع</string>
+    <string name="info">معلومة</string>
+    <string name="youHaveAnsweredWithFormate">لقد أجبت على %s من %s استطلاعاتك المخصصة.</string>
 </resources>

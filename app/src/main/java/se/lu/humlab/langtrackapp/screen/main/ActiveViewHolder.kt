@@ -74,26 +74,26 @@ class ActiveViewHolder(theItemView: View,
                 }
 
                 if (days > 0){
-                    date.text = "%s %2d %s %2d %s %s %2d %s".format(
+                    date.text = "%s %s %s %s %s %s %s %s".format(
                         date.context.getString(R.string.timeLeft),
-                        days,
+                        days.toString(),
                         dayString,
-                        hours,
+                        hours.toString(),
                         hourString,
                         date.context.getString(R.string.and),
-                        minutes,
+                        minutes.toString(),
                         minuteString)
                 }else if (hours > 0){
-                    date.text = "%s %2d %s %s %2d %s".format(
+                    date.text = "%s %s %s %s %s %s".format(
                         date.context.getString(R.string.timeLeft),
-                        hours,
+                        hours.toString(),
                         hourString,
                         date.context.getString(R.string.and),
-                        minutes,
+                        minutes.toString(),
                         minuteString)
-                }else{date.text = "%s %2d %s".format(
+                }else{date.text = "%s %s %s".format(
                     date.context.getString(R.string.timeLeft),
-                    minutes,
+                    minutes.toString(),
                     minuteString)
                 }
             }else{
