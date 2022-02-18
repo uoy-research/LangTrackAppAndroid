@@ -1,3 +1,4 @@
+[Link to readme](https://github.com/HumlabLu/HumlabLu)
 # LTA apps 
 This readme is about the iOS and Android apps and a little about firebase
 ## Firebase
