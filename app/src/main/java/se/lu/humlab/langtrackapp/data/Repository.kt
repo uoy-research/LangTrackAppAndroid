@@ -9,6 +9,7 @@ package se.lu.humlab.langtrackapp.data
 
 import android.content.Context
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
 import com.google.firebase.database.*
@@ -22,10 +23,11 @@ import org.json.JSONArray
 import org.json.JSONObject
 import se.lu.humlab.langtrackapp.data.model.*
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
-import se.lu.humlab.langtrackapp.util.IO
-import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
-import se.lu.humlab.langtrackapp.util.getVersionNumber
-import se.lu.humlab.langtrackapp.util.showApiFailInfo
+import se.lu.humlab.langtrackapp.util.*
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import java.util.*
 
 
@@ -301,6 +303,7 @@ class Repository(val context: Context) {
         return returnlist
     }
 
+
     private fun getAssignmentsFromJson(json: String): List<Assignment>{
         val theListWithSurveys = mutableListOf<Assignment>()
         if (json.contains('[') && json.contains(']')) {
@@ -355,6 +358,16 @@ class Repository(val context: Context) {
                 }
 
                 if (newsurvey != null) {
+
+                    //if expireAt is empty -> set expireAt to one hour from publishAt
+                    @RequiresApi(Build.VERSION_CODES.O)
+                    if (newexpireAt.isEmpty()){
+                        val publishDate = newpublishAt.toDate()
+                        if (publishDate != null){
+                            val newDateString = publishDate.toInstant().plusMillis(1000 * 60 * 60)
+                            newexpireAt = newDateString.toString()
+                        }
+                    }
                     theListWithSurveys.add(
                         Assignment(
                             survey = newsurvey,
@@ -372,6 +385,8 @@ class Repository(val context: Context) {
         }
         return theListWithSurveys
     }
+
+
 
     private fun getDatasetFromJsonObj(jsonObj: JSONObject): Dataset?{
         var id = ""
