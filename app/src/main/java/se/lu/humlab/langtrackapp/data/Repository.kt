@@ -24,12 +24,18 @@ import org.json.JSONObject
 import se.lu.humlab.langtrackapp.data.model.*
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
 import se.lu.humlab.langtrackapp.util.*
-import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
 import java.util.*
+import kotlin.collections.ArrayList
 
+data class TeamMember(
+    var name: Map<String,String>,
+    var description: Map<String,String>
+)
+
+data class ContactInfo(
+    var email:String,
+    var text:  Map<String,String>?
+)
 
 class Repository(val context: Context) {
 
@@ -45,6 +51,8 @@ class Repository(val context: Context) {
     //private val ltaUrl = "http://ht-lang-track.ht.lu.se:443/"
     var client = OkHttpClient()
     private var useStagingServer = false
+    val database = FirebaseDatabase.getInstance()
+    val dbRef = database.reference
 
 
     fun setCurrentUser(user: User){
@@ -67,7 +75,7 @@ class Repository(val context: Context) {
         /*
          Getting the correct url from firebase realtime - prodUrl or stagingUrl
          */
-        val database = FirebaseDatabase.getInstance()
+
         var myRef :DatabaseReference?
         if (useStagingServer){
             myRef = database.getReference("stagingUrl")
@@ -147,6 +155,50 @@ class Repository(val context: Context) {
                 println("api is dead")
             }
         }
+    }
+
+    //MARK: -   Team and dynamic texts
+
+
+
+    fun getContactInfo(callback: (result: List<ContactInfo>) -> Unit) {
+
+        var test = mutableListOf<ContactInfo>()
+
+        dbRef.child("contactInfo").keepSynced(true)
+        dbRef.child("contactInfo").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                //println("getUrl snapshot: ${snapshot.value}")
+                try {
+                    val theContactInfoArrayList = snapshot.value as? ArrayList<*>
+                    if (theContactInfoArrayList != null) {
+                        for (contact in theContactInfoArrayList){
+                            if (contact != null) {
+                                val theContact = contact as? Map<String, Any>
+                                if (theContact != null) {
+                                    val tempContact = ContactInfo(
+                                        email = theContact["email"] as? String ?: "",
+                                        text = theContact["text"] as? Map<String, String>
+                                    )
+                                    test.add(tempContact)
+                                }
+                            }
+                        }
+                        callback(test)
+                    }
+
+                } catch (e: Exception) {
+                    println("getContactInfo Exception: ${e.localizedMessage}")
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                println("getContactInfo ERROR: ${error.message}")
+            }
+
+        })
+
+
     }
 
     fun postAnswer(answerDict: Map<Int, Answer>){

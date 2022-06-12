@@ -12,6 +12,7 @@ import android.text.style.RelativeSizeSpan
 import android.text.style.StyleSpan
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import kotlinx.android.synthetic.main.about_activity.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.databinding.AboutActivityBinding
@@ -22,6 +23,7 @@ import se.lu.humlab.langtrackapp.util.openInBrowser
 class AboutActivity : AppCompatActivity() {
 
     private lateinit var mBind :AboutActivityBinding
+    private lateinit var viewModel :TeamViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -29,6 +31,9 @@ class AboutActivity : AppCompatActivity() {
         mBind = DataBindingUtil.setContentView(this, R.layout.about_activity)
         mBind.lifecycleOwner = this
         mBind.executePendingBindings()
+
+        viewModel = ViewModelProvider(this, TeamViewModelFactory(this))
+            .get(TeamViewModel::class.java)
 
         mBind.aboutScroll.setOnScrollChangeListener { _, _, _, _, _ ->
             mBind.aboutTopView.isSelected = mBind.aboutScroll.canScrollVertically(-1)
@@ -47,6 +52,7 @@ class AboutActivity : AppCompatActivity() {
                 .asUri().openInBrowser(this)
         }
         setTeamText()
+
         mBind.textView18.text = getString(R.string.about)
     }
 
