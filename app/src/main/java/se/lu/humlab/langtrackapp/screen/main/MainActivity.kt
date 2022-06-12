@@ -225,18 +225,11 @@ class MainActivity : AppCompatActivity() {
 
     private fun setTestModeIfTeam(userName: String){
         /*
-        Adding userName for team members
-         will let them
-         * switch between staging server and production server
-         * using app in testMode -> open all surveys as active
+        Set testview if user is admin (part of team)
          */
-        testView.visibility = if (
-            userName == "stephan" ||
-            userName == "josef" ||
-            userName == "marianne" ||
-            userName == "jonas" ||
-            userName == "henriette" ||
-            userName == "stephandroid") View.VISIBLE else View.GONE
+        viewModel.getTeamUserNames { result ->
+            testView.visibility = if (result.containsKey(userName)) View.VISIBLE else View.GONE
+        }
     }
 
     fun unsubscribeToTopic(){

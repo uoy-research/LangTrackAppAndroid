@@ -186,19 +186,40 @@ class Repository(val context: Context) {
                         }
                         callback(test)
                     }
-
                 } catch (e: Exception) {
                     println("getContactInfo Exception: ${e.localizedMessage}")
                 }
             }
-
             override fun onCancelled(error: DatabaseError) {
                 println("getContactInfo ERROR: ${error.message}")
             }
-
         })
+    }
 
+    fun getTeamUsernames(callback: (result: Map<String,String>) -> Unit){
 
+        var tempMap = mutableMapOf<String,String>()
+
+        dbRef.child("admins").keepSynced(true)
+        dbRef.child("admins").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                //println("getUrl snapshot: ${snapshot.value}")
+                try {
+                    val teamArrayList = snapshot.value as? Map<*, *>
+                    if (teamArrayList != null) {
+                        for (member in teamArrayList){
+                            tempMap[member.key as String] = member.value as String
+                        }
+                        callback(tempMap)
+                    }
+                } catch (e: Exception) {
+                    println("getTeamUsernames Exception: ${e.localizedMessage}")
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                println("getTeamUsernames ERROR: ${error.message}")
+            }
+        })
     }
 
     fun postAnswer(answerDict: Map<Int, Answer>){

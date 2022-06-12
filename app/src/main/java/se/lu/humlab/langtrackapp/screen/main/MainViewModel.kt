@@ -9,6 +9,7 @@ package se.lu.humlab.langtrackapp.screen.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import se.lu.humlab.langtrackapp.data.ContactInfo
 import se.lu.humlab.langtrackapp.data.Repository
 import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Survey
@@ -91,5 +92,9 @@ class MainViewModel(repo: Repository): ViewModel() {
 
     fun isInStagingUrl(): Boolean{
         return mRepository.isInStaging()
+    }
+
+    fun getTeamUserNames(callback: (result: Map<String,String>) -> Unit){
+        mRepository.getTeamUsernames(callback)
     }
 }
