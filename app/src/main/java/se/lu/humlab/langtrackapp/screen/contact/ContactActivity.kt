@@ -13,21 +13,29 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
 import androidx.databinding.DataBindingUtil
+import androidx.lifecycle.ViewModelProvider
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.databinding.ContactActivityBinding
+import se.lu.humlab.langtrackapp.screen.about.TeamViewModel
+import se.lu.humlab.langtrackapp.screen.about.TeamViewModelFactory
 import se.lu.humlab.langtrackapp.util.asUri
+import se.lu.humlab.langtrackapp.util.getLanguageCode
 import se.lu.humlab.langtrackapp.util.openInBrowser
 
 class ContactActivity : AppCompatActivity() {
 
 
     private lateinit var mBind :ContactActivityBinding
+    private lateinit var viewModel : TeamViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         mBind = DataBindingUtil.setContentView(this, R.layout.contact_activity)
         mBind.lifecycleOwner = this
         mBind.executePendingBindings()
+
+        viewModel = ViewModelProvider(this, TeamViewModelFactory(this))
+            .get(TeamViewModel::class.java)
 
         mBind.contactScroll.setOnScrollChangeListener { _, _, _, _, _ ->
             mBind.contactTopView.isSelected = mBind.contactScroll.canScrollVertically(-1)
@@ -55,50 +63,45 @@ class ContactActivity : AppCompatActivity() {
         setContactInfo()
     }
 
-    fun setContactInfo() {
+    private fun setContactInfo() {
 
-        val reserchText1 = getString(R.string.reserchText1)
-
-        val clickableSpanResearch = object: ClickableSpan() {
-            override fun onClick(textView: View) {
-                val to = "henriette.arndt@humlab.lu.se"
-                val subject = getString(R.string.mail_subject)
-                val mailTo = "mailto:" + to +
-                        "?&subject=" + Uri.encode(subject)
-                val emailIntent = Intent(Intent.ACTION_VIEW)
-                //emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_reserch_body))
-                emailIntent.data = Uri.parse(mailTo)
-                startActivity(emailIntent)
+        var tempText = ""
+        viewModel.getContactInfo { result ->
+            for (i in result.indices) {
+                val contact = result[i]
+                tempText += "${contact.text?.get(getLanguageCode())}\n${contact.email}"
+                if (i != result.count() - 1){
+                    tempText += "\n\n"
+                }
             }
-        }
-        val clickableSpanTech = object: ClickableSpan() {
-            override fun onClick(textView: View) {
-                val to = "stephan.bjorck@humlab.lu.se"
-                val subject = getString(R.string.mail_subject)
-                val mailTo = "mailto:" + to +
-                        "?&subject=" + Uri.encode(subject)
-                val emailIntent = Intent(Intent.ACTION_VIEW)
-                //emailIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.mail_tech_body))
-                emailIntent.data = Uri.parse(mailTo)
-                startActivity(emailIntent)
+            val spannableString1 = SpannableString(tempText)
+
+            for (contact in result) {
+                val mail = contact.email
+                val clickableSpanResearch = object : ClickableSpan() {
+                    override fun onClick(textView: View) {
+                        val to = mail
+                        val subject = getString(R.string.mail_subject)
+                        val mailTo = "mailto:" + to +
+                                "?&subject=" + Uri.encode(subject)
+                        val emailIntent = Intent(Intent.ACTION_VIEW)
+                        emailIntent.data = Uri.parse(mailTo)
+                        startActivity(emailIntent)
+                    }
+                }
+                val mailIndex = tempText.indexOf(mail)
+                val mailEndIndex = mailIndex + mail.count()
+
+                spannableString1.setSpan(clickableSpanResearch,
+                    mailIndex,
+                    mailEndIndex,
+                    Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             }
+
+            mBind.contactInfoTextView.text = spannableString1
+            mBind.contactInfoTextView.movementMethod = LinkMovementMethod.getInstance()
+            mBind.contactInfoTextView.highlightColor = Color.CYAN
         }
-
-        val stephan = "stephan.bjorck@humlab.lu.se"
-        val techStartIndex = reserchText1.indexOf(stephan)
-        val techEndIndex = techStartIndex + stephan.count()
-
-        val henriette = "henriette.arndt@humlab.lu.se"
-        val researchStartIndex = reserchText1.indexOf(henriette)
-        val researchEndIndex = researchStartIndex + henriette.count()
-
-        val spannableString = SpannableString(reserchText1)
-        spannableString.setSpan(clickableSpanTech, techStartIndex, techEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        spannableString.setSpan(clickableSpanResearch, researchStartIndex, researchEndIndex, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-
-        mBind.contactInfoTextView.text = spannableString
-        mBind.contactInfoTextView.movementMethod = LinkMovementMethod.getInstance()
-        mBind.contactInfoTextView.highlightColor = Color.CYAN
     }
 
 

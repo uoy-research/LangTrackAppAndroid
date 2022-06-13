@@ -9,6 +9,7 @@ package se.lu.humlab.langtrackapp.data
 
 import android.content.Context
 import android.os.Build
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.MutableLiveData
 import com.github.kittinunf.fuel.Fuel
 import com.google.firebase.database.*
@@ -22,12 +23,9 @@ import org.json.JSONArray
 import org.json.JSONObject
 import se.lu.humlab.langtrackapp.data.model.*
 import se.lu.humlab.langtrackapp.screen.surveyContainer.SurveyContainerActivity
-import se.lu.humlab.langtrackapp.util.IO
-import se.lu.humlab.langtrackapp.util.MyFirebaseInstanceIDService
-import se.lu.humlab.langtrackapp.util.getVersionNumber
-import se.lu.humlab.langtrackapp.util.showApiFailInfo
+import se.lu.humlab.langtrackapp.util.*
 import java.util.*
-
+import kotlin.collections.ArrayList
 
 class Repository(val context: Context) {
 
@@ -43,6 +41,8 @@ class Repository(val context: Context) {
     //private val ltaUrl = "http://ht-lang-track.ht.lu.se:443/"
     var client = OkHttpClient()
     private var useStagingServer = false
+    val database = FirebaseDatabase.getInstance()
+    val dbRef = database.reference
 
 
     fun setCurrentUser(user: User){
@@ -65,7 +65,7 @@ class Repository(val context: Context) {
         /*
          Getting the correct url from firebase realtime - prodUrl or stagingUrl
          */
-        val database = FirebaseDatabase.getInstance()
+
         var myRef :DatabaseReference?
         if (useStagingServer){
             myRef = database.getReference("stagingUrl")
@@ -145,6 +145,127 @@ class Repository(val context: Context) {
                 println("api is dead")
             }
         }
+    }
+
+    //MARK: -   Team and dynamic texts
+
+
+
+    fun getContactInfo(callback: (result: List<ContactInfo>) -> Unit) {
+
+        var test = mutableListOf<ContactInfo>()
+
+        dbRef.child("contactInfo").keepSynced(true)
+        dbRef.child("contactInfo").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                //println("getUrl snapshot: ${snapshot.value}")
+                try {
+                    val theContactInfoArrayList = snapshot.value as? ArrayList<*>
+                    if (theContactInfoArrayList != null) {
+                        for (contact in theContactInfoArrayList){
+                            if (contact != null) {
+                                val theContact = contact as? Map<String, Any>
+                                if (theContact != null) {
+                                    val tempContact = ContactInfo(
+                                        email = theContact["email"] as? String ?: "",
+                                        text = theContact["text"] as? Map<String, String>
+                                    )
+                                    test.add(tempContact)
+                                }
+                            }
+                        }
+                        callback(test)
+                    }
+                } catch (e: Exception) {
+                    println("getContactInfo Exception: ${e.localizedMessage}")
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                println("getContactInfo ERROR: ${error.message}")
+            }
+        })
+    }
+
+    fun getTeamUsernames(callback: (result: Map<String,String>) -> Unit){
+
+        var tempMap = mutableMapOf<String,String>()
+
+        dbRef.child("admins").keepSynced(true)
+        dbRef.child("admins").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                //println("getUrl snapshot: ${snapshot.value}")
+                try {
+                    val teamArrayList = snapshot.value as? Map<*, *>
+                    if (teamArrayList != null) {
+                        for (member in teamArrayList){
+                            tempMap[member.key as String] = member.value as String
+                        }
+                        callback(tempMap)
+                    }
+                } catch (e: Exception) {
+                    println("getTeamUsernames Exception: ${e.localizedMessage}")
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                println("getTeamUsernames ERROR: ${error.message}")
+            }
+        })
+    }
+
+    fun getTeamsText(callback: (result: List<TeamMember>) -> Unit){
+        var tempList = mutableListOf<TeamMember>()
+        dbRef.child("team").keepSynced(true)
+        dbRef.child("team").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                try {
+                    val teamArrayList = snapshot.value as? List<*>
+                    if (teamArrayList != null) {
+                        for (person in teamArrayList){
+                            var listWithNames = mutableMapOf<String, String>()
+                            var listWithDescr = mutableMapOf<String, String>()
+                            val personDict = person as? Map<*, *>
+                            if (personDict != null) {
+                                for (language in personDict) {
+                                    val languageKey = language.key as? String
+                                    if (languageKey != null){
+                                        val thelanguage = language.value as? Map<*, *>
+                                        println("thelanguage: $thelanguage")
+                                        if (thelanguage != null) {
+                                            var name = ""
+                                            var description = ""
+                                            for (item in thelanguage) {
+                                                if (item.key == "name") {
+                                                    name = item.value as String
+                                                }
+                                                if (item.key == "description") {
+                                                    description = item.value as String
+                                                }
+                                            }
+                                            if (name.isNotBlank()) {
+                                                listWithNames[languageKey] = name
+                                                listWithDescr[languageKey] = description
+                                            }
+                                        }
+                                    }
+                                }
+                                if (listWithNames.isNotEmpty()){
+                                    tempList.add(TeamMember(
+                                        name = listWithNames,
+                                        description = listWithDescr
+                                    ))
+                                }
+                            }
+                        }
+                        callback(tempList)
+                    }
+                } catch (e: Exception) {
+                    println("getTeamUsernames Exception: ${e.localizedMessage}")
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                println("getTeamsText ERROR: ${error.message}")
+            }
+        })
     }
 
     fun postAnswer(answerDict: Map<Int, Answer>){
@@ -301,6 +422,7 @@ class Repository(val context: Context) {
         return returnlist
     }
 
+
     private fun getAssignmentsFromJson(json: String): List<Assignment>{
         val theListWithSurveys = mutableListOf<Assignment>()
         if (json.contains('[') && json.contains(']')) {
@@ -355,6 +477,16 @@ class Repository(val context: Context) {
                 }
 
                 if (newsurvey != null) {
+
+                    //if expireAt is empty -> set expireAt to one hour from publishAt
+                    @RequiresApi(Build.VERSION_CODES.O)
+                    if (newexpireAt.isEmpty()){
+                        val publishDate = newpublishAt.toDate()
+                        if (publishDate != null){
+                            val newDateString = publishDate.toInstant().plusMillis(1000 * 60 * 60)
+                            newexpireAt = newDateString.toString()
+                        }
+                    }
                     theListWithSurveys.add(
                         Assignment(
                             survey = newsurvey,
@@ -372,6 +504,8 @@ class Repository(val context: Context) {
         }
         return theListWithSurveys
     }
+
+
 
     private fun getDatasetFromJsonObj(jsonObj: JSONObject): Dataset?{
         var id = ""

@@ -23,6 +23,28 @@ fun AppCompatActivity.loadFragment(fragment: Fragment){
         .commit()
 }
 
+fun getLanguageCode() : String{
+    val langStr = Locale.getDefault().language
+    var languageCode = "eng"
+    when(langStr){
+        "ar" -> languageCode =  "ar"
+        "tr" -> languageCode =  "tu"
+        "fa" -> languageCode =  "fa"
+        "fa-AF" -> languageCode =  "da"
+        "sv" -> languageCode =  "swe"
+    }
+    return languageCode
+    /*switch langStr{
+        case "ar": languageCode = "ar" //arabic
+        case "tr": languageCode = "tu" //turkish
+        case "fa": languageCode = "fa" //farsi (persiska, iran)
+        case "fa-AF": languageCode = "da" //dari (afganistan)
+        case "sv": languageCode = "swe"
+        default: languageCode = "eng"
+    }*/
+    return languageCode
+}
+
 fun getDate(milli: Long): String{
     val formatter = SimpleDateFormat("dd MMMM yyyy    HH:mm",
         Locale("sv", "SE")
