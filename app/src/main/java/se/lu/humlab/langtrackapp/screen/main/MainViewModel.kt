@@ -92,4 +92,8 @@ class MainViewModel(repo: Repository): ViewModel() {
     fun isInStagingUrl(): Boolean{
         return mRepository.isInStaging()
     }
+
+    fun getTeamUserNames(callback: (result: Map<String,String>) -> Unit){
+        mRepository.getTeamUsernames(callback)
+    }
 }
