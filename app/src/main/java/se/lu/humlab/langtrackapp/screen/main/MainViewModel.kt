@@ -9,7 +9,6 @@ package se.lu.humlab.langtrackapp.screen.main
 
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import se.lu.humlab.langtrackapp.data.ContactInfo
 import se.lu.humlab.langtrackapp.data.Repository
 import se.lu.humlab.langtrackapp.data.model.Assignment
 import se.lu.humlab.langtrackapp.data.model.Survey

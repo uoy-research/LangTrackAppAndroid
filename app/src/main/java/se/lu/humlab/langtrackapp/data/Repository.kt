@@ -27,16 +27,6 @@ import se.lu.humlab.langtrackapp.util.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-data class TeamMember(
-    var name: Map<String,String>,
-    var description: Map<String,String>
-)
-
-data class ContactInfo(
-    var email:String,
-    var text:  Map<String,String>?
-)
-
 class Repository(val context: Context) {
 
 
@@ -218,6 +208,62 @@ class Repository(val context: Context) {
             }
             override fun onCancelled(error: DatabaseError) {
                 println("getTeamUsernames ERROR: ${error.message}")
+            }
+        })
+    }
+
+    fun getTeamsText(callback: (result: List<TeamMember>) -> Unit){
+        var tempList = mutableListOf<TeamMember>()
+        dbRef.child("team").keepSynced(true)
+        dbRef.child("team").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                try {
+                    val teamArrayList = snapshot.value as? List<*>
+                    if (teamArrayList != null) {
+                        for (person in teamArrayList){
+                            var listWithNames = mutableMapOf<String, String>()
+                            var listWithDescr = mutableMapOf<String, String>()
+                            val personDict = person as? Map<*, *>
+                            if (personDict != null) {
+                                for (language in personDict) {
+                                    val languageKey = language.key as? String
+                                    if (languageKey != null){
+                                        val thelanguage = language.value as? Map<*, *>
+                                        println("thelanguage: $thelanguage")
+                                        if (thelanguage != null) {
+                                            var name = ""
+                                            var description = ""
+                                            for (item in thelanguage) {
+                                                if (item.key == "name") {
+                                                    name = item.value as String
+                                                }
+                                                if (item.key == "description") {
+                                                    description = item.value as String
+                                                }
+                                            }
+                                            if (name.isNotBlank()) {
+                                                listWithNames[languageKey] = name
+                                                listWithDescr[languageKey] = description
+                                            }
+                                        }
+                                    }
+                                }
+                                if (listWithNames.isNotEmpty()){
+                                    tempList.add(TeamMember(
+                                        name = listWithNames,
+                                        description = listWithDescr
+                                    ))
+                                }
+                            }
+                        }
+                        callback(tempList)
+                    }
+                } catch (e: Exception) {
+                    println("getTeamUsernames Exception: ${e.localizedMessage}")
+                }
+            }
+            override fun onCancelled(error: DatabaseError) {
+                println("getTeamsText ERROR: ${error.message}")
             }
         })
     }

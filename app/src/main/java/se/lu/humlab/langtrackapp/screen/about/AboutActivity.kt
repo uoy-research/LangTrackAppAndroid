@@ -17,6 +17,7 @@ import kotlinx.android.synthetic.main.about_activity.*
 import se.lu.humlab.langtrackapp.R
 import se.lu.humlab.langtrackapp.databinding.AboutActivityBinding
 import se.lu.humlab.langtrackapp.util.asUri
+import se.lu.humlab.langtrackapp.util.getLanguageCode
 import se.lu.humlab.langtrackapp.util.openInBrowser
 
 
@@ -56,65 +57,46 @@ class AboutActivity : AppCompatActivity() {
         mBind.textView18.text = getString(R.string.about)
     }
 
-    fun setTeamText(){
+    private fun setTeamText(){
 
-        val builder = SpannableStringBuilder()
+        viewModel.getTeamsText(){ memberList ->
 
-        val spannableHeader = SpannableString(getString(R.string.team))
-        val boldSpan = StyleSpan(Typeface.BOLD)
-        val sizeSpan = RelativeSizeSpan(1.3f)
-        val colourSpan = ForegroundColorSpan(getColor(R.color.lta_blue))
-        spannableHeader.setSpan(boldSpan,0,getString(R.string.team).count(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-        spannableHeader.setSpan(sizeSpan,0,getString(R.string.team).count(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-        spannableHeader.setSpan(colourSpan,0,getString(R.string.team).count(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+            val builder = SpannableStringBuilder()
 
-        builder.append(spannableHeader)
-        builder.append("\n\n")
+            val spannableHeader = SpannableString(getString(R.string.team))
+            val boldSpan = StyleSpan(Typeface.BOLD)
+            val sizeSpan = RelativeSizeSpan(1.3f)
+            val colourSpan = ForegroundColorSpan(getColor(R.color.lta_blue))
+            spannableHeader.setSpan(boldSpan,0,getString(R.string.team).count(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+            spannableHeader.setSpan(sizeSpan,0,getString(R.string.team).count(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+            spannableHeader.setSpan(colourSpan,0,getString(R.string.team).count(), Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
 
-        val nameMarianne = "Marianne Gullberg"
-        val techStartIndex = getString(R.string.marianneInfo).indexOf(nameMarianne)
-        val techEndIndex = techStartIndex + nameMarianne.count()
-        val spannableStringM = SpannableString(getString(R.string.marianneInfo))
-        spannableStringM.setSpan(ForegroundColorSpan(getColor(R.color.lta_red)), techStartIndex, techEndIndex, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-        builder.append(spannableStringM)
-        builder.append("\n\n")
+            builder.append(spannableHeader)
+            builder.append("\n\n")
 
-        val nameJonas = "Jonas Granfeldt"
-        val jonasStartIndex = getString(R.string.jonasInfo).indexOf(nameJonas)
-        val jonasEndIndex = jonasStartIndex + nameJonas.count()
-        val spannableStringJ = SpannableString(getString(R.string.jonasInfo))
-        spannableStringJ.setSpan(ForegroundColorSpan(getColor(R.color.lta_red)), jonasStartIndex, jonasEndIndex, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-        builder.append(spannableStringJ)
-        builder.append("\n\n")
+            val languageCode = getLanguageCode()
+            for (i in memberList.indices){
+                val member = memberList[i]
+                println("member.name: ${member.name[getLanguageCode()]}, description: ${member.description[getLanguageCode()]}")
 
-        val nameHenriette = "Henriette Arndt"
-        val henrietteStartIndex = getString(R.string.henrietteInfo).indexOf(nameHenriette)
-        val henrietteEndIndex = henrietteStartIndex + nameHenriette.count()
-        val spannableStringH = SpannableString(getString(R.string.henrietteInfo))
-        spannableStringH.setSpan(ForegroundColorSpan(getColor(R.color.lta_red)), henrietteStartIndex, henrietteEndIndex, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-        builder.append(spannableStringH)
-        builder.append("\n\n")
-
-        val nameJosef = "Josef Granqvist"
-        val josefStartIndex = getString(R.string.josefInfo).indexOf(nameJosef)
-        val josefEndIndex = josefStartIndex + nameJosef.count()
-        val spannableStringJosef = SpannableString(getString(R.string.josefInfo))
-        spannableStringJosef.setSpan(ForegroundColorSpan(getColor(R.color.lta_red)), josefStartIndex, josefEndIndex, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-        builder.append(spannableStringJosef)
-        builder.append("\n\n")
-
-        var nameStephan = "Stephan Björck"
-        var stephanStartIndex = getString(R.string.stephanInfo).indexOf(nameStephan)
-        if (stephanStartIndex < 0) {
-            nameStephan = "Stephan Bjorck"
-            stephanStartIndex = getString(R.string.stephanInfo).indexOf(nameStephan)
+                val memberName = member.name[languageCode] ?: ""
+                val memberDescription = member.description[languageCode] ?: ""
+                if (memberName.isNotBlank()) {
+                    val memberInfo = "$memberName, $memberDescription"
+                    val techStartIndex = memberInfo.indexOf(memberName)
+                    val techEndIndex = techStartIndex + memberName.count()
+                    val spannableStringM = SpannableString(memberInfo)
+                    spannableStringM.setSpan(ForegroundColorSpan(getColor(R.color.lta_red)),
+                        techStartIndex,
+                        techEndIndex,
+                        Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
+                    builder.append(spannableStringM)
+                    if (i < memberList.size - 1)
+                        builder.append("\n\n")
+                }
+            }
+            mBind.aboutTeamTextView.text = builder
         }
-        val stephanEndIndex = stephanStartIndex + nameStephan.count()
-        val spannableStringStephan = SpannableString(getString(R.string.stephanInfo))
-        spannableStringStephan.setSpan(ForegroundColorSpan(getColor(R.color.lta_red)), stephanStartIndex, stephanEndIndex, Spannable.SPAN_INCLUSIVE_EXCLUSIVE)
-        builder.append(spannableStringStephan)
-
-        mBind.aboutTeamTextView.text = builder
     }
 
 
