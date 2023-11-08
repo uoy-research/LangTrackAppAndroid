@@ -8,6 +8,6 @@ import uk.ac.york.langtrackapp.data.RepositoryFactory
 class OverviewViewModelFactory(var context: Context): ViewModelProvider.Factory {
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>):
+    override fun <T : ViewModel> create(modelClass: Class<T>):
             T = OverviewViewModel(RepositoryFactory.getRepository(context)) as T
 }

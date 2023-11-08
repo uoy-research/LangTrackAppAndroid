@@ -10,5 +10,5 @@ class LoginViewModelFactory(var context: Context): ViewModelProvider.Factory {
     val mMainViewModel =  LoginViewModel(RepositoryFactory.getRepository(context))
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = LoginViewModel(RepositoryFactory.getRepository(context)) as T
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = LoginViewModel(RepositoryFactory.getRepository(context)) as T
 }

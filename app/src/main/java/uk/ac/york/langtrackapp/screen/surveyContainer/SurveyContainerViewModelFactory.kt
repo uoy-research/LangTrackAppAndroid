@@ -17,5 +17,5 @@ class SurveyContainerViewModelFactory(var context: Context): ViewModelProvider.F
     private val mMainViewModel =  SurveyContainerViewModel(RepositoryFactory.getRepository(context))
 
     @Suppress("UNCHECKED_CAST")
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T = mMainViewModel as T
+    override fun <T : ViewModel> create(modelClass: Class<T>): T = mMainViewModel as T
 }
