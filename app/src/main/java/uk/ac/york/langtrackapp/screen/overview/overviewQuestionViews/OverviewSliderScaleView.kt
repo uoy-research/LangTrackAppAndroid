@@ -9,19 +9,24 @@ import android.widget.LinearLayout
 //import kotlinx.android.synthetic.main.overview_slider_scale_view_layout.view.*
 import uk.ac.york.langtrackapp.R
 import uk.ac.york.langtrackapp.data.model.Question
+import uk.ac.york.langtrackapp.databinding.OverviewSliderScaleViewLayoutBinding
 
 class OverviewSliderScaleView@JvmOverloads constructor(
 
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr)  {
+
+    lateinit var binding: OverviewSliderScaleViewLayoutBinding
+
     init {
-        LayoutInflater.from(context).inflate(R.layout.overview_slider_scale_view_layout, this, true)
+        val inflater = LayoutInflater.from(context)
+        binding = OverviewSliderScaleViewLayoutBinding.inflate(inflater, this, true)
 
         //disable checkbox
-        overviewSliderScaleCheckboxNA.isActivated = false
+        binding.overviewSliderScaleCheckboxNA.isActivated = false
 
         //disable seekbar touch
-        overviewSliderSeekBar.setOnTouchListener(object : OnTouchListener {
+        binding.overviewSliderSeekBar.setOnTouchListener(object : OnTouchListener {
             override fun onTouch(v: View?, event: MotionEvent?): Boolean {
                 return true
             }
@@ -30,21 +35,21 @@ class OverviewSliderScaleView@JvmOverloads constructor(
 
     fun setText(question: Question, answer: Int){
         println("answer: $answer")
-        overviewSliderScaleViewTextTextView.text = question.text
-        overviewSliderScaleMax.text = question.likertMax
-        overviewSliderScaleMin.text = question.likertMin
-        overviewSliderScaleValueTextView.text = ""
+        binding.overviewSliderScaleViewTextTextView.text = question.text
+        binding.overviewSliderScaleMax.text = question.likertMax
+        binding.overviewSliderScaleMin.text = question.likertMin
+        binding.overviewSliderScaleValueTextView.text = ""
         if (answer == -1){
-            overviewSliderScaleCheckboxNA.isChecked = true
-            overviewSliderSeekBar.isEnabled = false
+            binding.overviewSliderScaleCheckboxNA.isChecked = true
+            binding.overviewSliderSeekBar.isEnabled = false
         }else if ((0..100).contains(answer)){
-            overviewSliderScaleValueTextView.text = answer.toString()
-            overviewSliderScaleCheckboxNA.isChecked = false
-            overviewSliderSeekBar.isEnabled = true
-            overviewSliderSeekBar.progress = answer
+            binding.overviewSliderScaleValueTextView.text = answer.toString()
+            binding.overviewSliderScaleCheckboxNA.isChecked = false
+            binding.overviewSliderSeekBar.isEnabled = true
+            binding.overviewSliderSeekBar.progress = answer
         }else{
-            overviewSliderScaleCheckboxNA.isChecked = false
-            overviewSliderSeekBar.isEnabled = false
+            binding.overviewSliderScaleCheckboxNA.isChecked = false
+            binding.overviewSliderSeekBar.isEnabled = false
         }
     }
 

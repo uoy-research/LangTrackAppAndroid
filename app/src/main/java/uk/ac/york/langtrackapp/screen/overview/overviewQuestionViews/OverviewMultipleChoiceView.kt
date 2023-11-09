@@ -8,21 +8,25 @@ import android.widget.LinearLayout
 //import kotlinx.android.synthetic.main.overview_multiple_choice_view_layout.view.*
 import uk.ac.york.langtrackapp.R
 import uk.ac.york.langtrackapp.data.model.Question
+import uk.ac.york.langtrackapp.databinding.OverviewMultipleChoiceViewLayoutBinding
 
 class OverviewMultipleChoiceView @JvmOverloads constructor(
 
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr)  {
 
+    lateinit var binding: OverviewMultipleChoiceViewLayoutBinding
+
     init {
-        LayoutInflater.from(context).inflate(R.layout.overview_multiple_choice_view_layout, this, true)
+        var inflater = LayoutInflater.from(context)
+        binding = OverviewMultipleChoiceViewLayoutBinding.inflate(inflater, this, true)
     }
 
     fun setText(question: Question, choices: List<String>){
-        overviewMultipleViewTextTextView.text = question.text
+        binding.overviewMultipleViewTextTextView.text = question.text
         if (question.multipleChoisesAnswers != null) {
             for (answer in question.multipleChoisesAnswers!!) {
-                val checkbox = CheckBox(overviewMultipleViewChoices.context)
+                val checkbox = CheckBox(binding.overviewMultipleViewChoices.context)
                 checkbox.text = answer
                 checkbox.isClickable = false
                 if (choices.contains(answer)){
@@ -34,7 +38,7 @@ class OverviewMultipleChoiceView @JvmOverloads constructor(
                     checkbox.setTextColor(resources.getColor(R.color.lta_text,null))
                     checkbox.isChecked = false
                 }
-                overviewMultipleViewChoices.addView(checkbox)
+                binding.overviewMultipleViewChoices.addView(checkbox)
             }
         }
     }

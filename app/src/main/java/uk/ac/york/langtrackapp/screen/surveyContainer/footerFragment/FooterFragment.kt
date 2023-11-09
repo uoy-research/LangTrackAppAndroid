@@ -36,10 +36,10 @@ class FooterFragment : Fragment(){
         binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
-        v.footerNextButton.setOnClickListener {
+        binding.footerNextButton.setOnClickListener {
             listener?.sendInSurvey()
         }
-        v.footerBackButton.setOnClickListener {
+        binding.footerBackButton.setOnClickListener {
             listener?.prevoiusQuestion(current = question)
         }
         return v

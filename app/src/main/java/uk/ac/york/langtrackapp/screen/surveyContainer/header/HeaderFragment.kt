@@ -50,10 +50,10 @@ class HeaderFragment : Fragment(){
             SurveyContainerViewModelFactory(binding.root.context)
         ).get(SurveyContainerViewModel::class.java)
         val v = binding.root
-        v.headerCancelButton.setOnClickListener {
+        binding.headerCancelButton.setOnClickListener {
             listener?.closeSurvey()
         }
-        v.headerStartButton.setOnClickListener {
+        binding.headerStartButton.setOnClickListener {
             listener?.nextQuestion(current = question)
         }
         return v

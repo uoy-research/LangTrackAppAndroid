@@ -41,15 +41,15 @@ class LikertScaleFragment : Fragment(){
         binding.setLifecycleOwner(this)
         binding.executePendingBindings()
         val v = binding.root
-        v.likertScaleNextButton.setOnClickListener {
+        binding.likertScaleNextButton.setOnClickListener {
             theAnswer = null
             listener?.nextQuestion(question)
         }
-        v.likertScaleBackButton.setOnClickListener {
+        binding.likertScaleBackButton.setOnClickListener {
             theAnswer = null
             listener?.prevoiusQuestion(current = question)
         }
-        v.likertScaleRadioGroup.setOnCheckedChangeListener { group, checkedId ->
+        binding.likertScaleRadioGroup.setOnCheckedChangeListener { group, checkedId ->
             if (checkedId != -1) {
                 val radio: RadioButton = v.findViewById(checkedId)
                 selectedRadioButton = (radio.tag as String).toInt()

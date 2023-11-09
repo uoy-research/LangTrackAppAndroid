@@ -10,21 +10,25 @@ import android.widget.TextView
 //import kotlinx.android.synthetic.main.overview_single_multiple_view_layout.view.*
 import uk.ac.york.langtrackapp.R
 import uk.ac.york.langtrackapp.data.model.Question
+import uk.ac.york.langtrackapp.databinding.OverviewSingleMultipleViewLayoutBinding
 
 class OverviewSingleMultipleView @JvmOverloads constructor(
 
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr)  {
 
+    lateinit var binding: OverviewSingleMultipleViewLayoutBinding
+
     init {
-        LayoutInflater.from(context).inflate(R.layout.overview_single_multiple_view_layout, this, true)
+        var inflater = LayoutInflater.from(context)
+        binding = OverviewSingleMultipleViewLayoutBinding.inflate(inflater, this, true)
     }
 
     fun setText(question: Question, answer: String?){
-        overviewSingleViewTextTextView.text = question.text
+        binding.overviewSingleViewTextTextView.text = question.text
         if (question.singleMultipleAnswers != null) {
             for (choice in question.singleMultipleAnswers!!) {
-                val  textView = RadioButton(overviewSingleViewChoices.context)
+                val  textView = RadioButton(binding.overviewSingleViewChoices.context)
                 textView.text = choice
                 if (choice == answer){
                     textView.textSize = 17F
@@ -36,7 +40,7 @@ class OverviewSingleMultipleView @JvmOverloads constructor(
                     textView.isChecked = false
                 }
                 textView.isClickable = false
-                overviewSingleViewChoices.addView(textView)
+                binding.overviewSingleViewChoices.addView(textView)
             }
         }
     }

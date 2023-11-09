@@ -8,24 +8,27 @@ import android.widget.LinearLayout
 import uk.ac.york.langtrackapp.R
 import uk.ac.york.langtrackapp.data.model.Assignment
 import uk.ac.york.langtrackapp.data.model.Survey
+import uk.ac.york.langtrackapp.databinding.OverviewTopViewLayoutBinding
 
 class TopViewItem @JvmOverloads constructor(
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr)  {
 
+    lateinit var binding: OverviewTopViewLayoutBinding
 
     init {
-        LayoutInflater.from(context).inflate(R.layout.overview_top_view_layout, this, true)
+        var inflater = LayoutInflater.from(context)
+        binding = OverviewTopViewLayoutBinding.inflate(inflater, this, true)
     }
 
     fun setText(assignment: Assignment){
-        topViewStatusText.text = "Status"
+        binding.topViewStatusText.text = "Status"
         //topViewAnsweredDateText.text = if (survey.answer != null) "Besvarad ${getDate(survey.respondeddate)}" else "Obesvarad"
         //topViewSentDateText.text = getDate(survey.date)//TODO: check date
         if (assignment.survey.answer != null){
-            overviewStatusImage.setImageResource(R.drawable.lta_icon_ground_light)
+            binding.overviewStatusImage.setImageResource(R.drawable.lta_icon_ground_light)
         }else {
-            overviewStatusImage.setImageResource(R.drawable.lta_icon_unanswered_light)
+            binding.overviewStatusImage.setImageResource(R.drawable.lta_icon_unanswered_light)
         }
     }
 }

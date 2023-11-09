@@ -72,13 +72,13 @@ class FillInTheBlankFragment : Fragment(){
                 }
             }
         }
-        v.fillInTheBlankNextButton.setOnClickListener {
+        binding.fillInTheBlankNextButton.setOnClickListener {
             theAnswer = null
             theChosenWordIndex = null
             theSentence = null
             listener?.nextQuestion(theQuestion)
         }
-        v.fillInTheBlankBackButton.setOnClickListener {
+        binding.fillInTheBlankBackButton.setOnClickListener {
             theAnswer = null
             theChosenWordIndex = null
             theSentence = null

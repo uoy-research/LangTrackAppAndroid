@@ -44,7 +44,7 @@ class LoginActivity : AppCompatActivity() {
         }
         mBind.loginHelpButton.setOnClickListener {
             val alertFm = supportFragmentManager.beginTransaction()
-            val width = (loginLayout.measuredWidth * 0.75).toInt()
+            val width = (mBind.loginLayout.measuredWidth * 0.75).toInt()
             val alertPopup = PopupAlert.show(
                 width = width,
                 title = getString(R.string.info),

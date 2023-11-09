@@ -16,8 +16,8 @@ import android.widget.RadioButton
 import androidx.core.view.get
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-import kotlinx.android.synthetic.main.single_multiple_answer_item.view.singleMultipleAnswerNextButton
-import kotlinx.android.synthetic.main.single_multiple_answers_fragment.view.*
+//import kotlinx.android.synthetic.main.single_multiple_answer_item.view.singleMultipleAnswerNextButton
+//import kotlinx.android.synthetic.main.single_multiple_answers_fragment.view.*
 import uk.ac.york.langtrackapp.R
 import uk.ac.york.langtrackapp.data.model.Answer
 import uk.ac.york.langtrackapp.data.model.Question

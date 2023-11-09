@@ -41,18 +41,18 @@ class OpenEndedTextResponsesFragment : Fragment(){
         binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
-        v.openEndedTextNextButton.setOnClickListener {
+        binding.openEndedTextNextButton.setOnClickListener {
             saveAnswer()
             listener?.nextQuestion(current = question)
         }
-        v.openEndedTextBackButton.setOnClickListener {
+        binding.openEndedTextBackButton.setOnClickListener {
             saveAnswer()
             listener?.prevoiusQuestion(current = question)
         }
-        v.openLayout.setOnClickListener {
+        binding.openLayout.setOnClickListener {
             hideKeyboard()
         }
-        v.openEditText.setOnKeyListener { _, _, event ->
+        binding.openEditText.setOnKeyListener { _, _, event ->
             if((event.action == KeyEvent.ACTION_DOWN)
                 && (event.keyCode == KeyEvent.KEYCODE_ENTER)){
                 hideKeyboard()

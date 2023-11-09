@@ -24,6 +24,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -41,6 +42,7 @@ import uk.ac.york.langtrackapp.R
 import uk.ac.york.langtrackapp.data.model.Assignment
 import uk.ac.york.langtrackapp.data.model.User
 import uk.ac.york.langtrackapp.databinding.ActivityMainBinding
+import uk.ac.york.langtrackapp.databinding.LeftDrawerMenuBinding
 import uk.ac.york.langtrackapp.interfaces.OnBoolPopupReturnListener
 import uk.ac.york.langtrackapp.interfaces.OnSurveyRowClickedListener
 import uk.ac.york.langtrackapp.popup.ExpiredSurveyPopup
@@ -59,6 +61,7 @@ import uk.ac.york.langtrackapp.util.showApiFailInfo
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mBind : ActivityMainBinding
+    private lateinit var dBind : LeftDrawerMenuBinding
     private lateinit var viewModel : MainViewModel
     lateinit var mAuth: FirebaseAuth
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -74,6 +77,9 @@ class MainActivity : AppCompatActivity() {
         mBind.lifecycleOwner = this
         mBind.executePendingBindings()
         mAuth = FirebaseAuth.getInstance()
+
+        val inflater = LayoutInflater.from(this)
+        dBind = LeftDrawerMenuBinding.inflate(inflater)
 
         viewModel = ViewModelProviders.of(this,
             MainViewModelFactory(this)
@@ -154,7 +160,7 @@ class MainActivity : AppCompatActivity() {
         setSupportActionBar(mBind.toolbar)
         drawerToggle = ActionBarDrawerToggle(
             this,
-            drawerLayout,
+            mBind.drawerLayout,
             mBind.toolbar,
             R.string.Open,
             R.string.Close
@@ -164,27 +170,27 @@ class MainActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        menuLogOutTextView.setOnClickListener {
+        dBind.menuLogOutTextView.setOnClickListener {
             showLogOutPopup()
         }
 
-        menuInstructionsContactButton.setOnClickListener {
+        dBind.menuInstructionsContactButton.setOnClickListener {
             InstructionsActivity.start(this)
         }
 
-        menuAboutButton.setOnClickListener {
+        dBind.menuAboutButton.setOnClickListener {
             AboutActivity.start(this)
         }
-        menuContactButton.setOnClickListener {
+        dBind.menuContactButton.setOnClickListener {
             ContactActivity.start(this)
             //drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        menuTestSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        dBind.menuTestSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             inTestMode = isChecked
         }
 
-        menuServerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        dBind.menuServerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             viewModel.setStagingUrl(isChecked)
             viewModel.postDeviceToken()
             viewModel.clearAssignmentsList()
@@ -204,8 +210,8 @@ class MainActivity : AppCompatActivity() {
             val userEmail = mAuth.currentUser!!.email
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User(userName ?: "",userName ?: "", userEmail ?: ""))
-            menuUserNameTextView.text = userName ?: "noName"
-            menuVersionTextView.text = "Version: $verNum"
+            dBind.menuUserNameTextView.text = userName ?: "noName"
+            dBind.menuVersionTextView.text = "Version: $verNum"
             viewModel.getAssignments()
 
             mAuth.currentUser!!.getIdToken(false).addOnSuccessListener{
@@ -217,7 +223,7 @@ class MainActivity : AppCompatActivity() {
             }
             setTestModeIfTeam(userName ?: "")
 
-            menuServerSwitch.isChecked = viewModel.isInStagingUrl()
+            dBind.menuServerSwitch.isChecked = viewModel.isInStagingUrl()
             //push deviceToken to backend every time app starts
             viewModel.postDeviceToken()
         }
@@ -228,7 +234,7 @@ class MainActivity : AppCompatActivity() {
         Set testview if user is admin (part of team)
          */
         viewModel.getTeamUserNames { result ->
-            testView.visibility = if (result.containsKey(userName)) View.VISIBLE else View.GONE
+            dBind.testView.visibility = if (result.containsKey(userName)) View.VISIBLE else View.GONE
         }
     }
 
@@ -248,7 +254,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLogOutPopup(){
         val alertFm = supportFragmentManager.beginTransaction()
-        val width = (main_layout.measuredWidth * 0.75).toInt()
+        val width = (mBind.main_layout.measuredWidth * 0.75).toInt()
         val oneChoicePopup = OneChoicePopup.show(
             width = width,
             title = getString(R.string.log_out),
@@ -273,7 +279,7 @@ class MainActivity : AppCompatActivity() {
 
     fun showPopupSurveyInfo(item: Assignment){
         val alertFm = supportFragmentManager.beginTransaction()
-        val width = (main_layout.measuredWidth * 0.85).toInt()
+        val width = (mBind.main_layout.measuredWidth * 0.85).toInt()
 
         val alertPopup = ExpiredSurveyPopup.show(
             width = width,
@@ -293,8 +299,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onBackPressed() {
         //close menu if open
-        if (drawerLayout.isDrawerOpen(GravityCompat.START)){
-            drawerLayout.closeDrawer(GravityCompat.START)
+        if (mBind.drawerLayout.isDrawerOpen(GravityCompat.START)){
+            mBind.drawerLayout.closeDrawer(GravityCompat.START)
         }else {
             super.onBackPressed()
         }

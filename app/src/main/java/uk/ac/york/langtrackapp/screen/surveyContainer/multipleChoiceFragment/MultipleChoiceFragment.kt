@@ -39,12 +39,12 @@ class MultipleChoiceFragment : Fragment(){
         binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
-        v.multipleChoiseFragmentNextButton.setOnClickListener {
+        binding.multipleChoiseFragmentNextButton.setOnClickListener {
             theAnswer = null
             binding.multipleIndicatorBottom.elevation = 0f
             listener?.nextQuestion(theQuestion)
         }
-        v.multipleChoiseFragmentBackButton.setOnClickListener {
+        binding.multipleChoiseFragmentBackButton.setOnClickListener {
             theAnswer = null
             binding.multipleIndicatorBottom.elevation = 0f
             listener?.prevoiusQuestion(current = theQuestion)

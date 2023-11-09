@@ -96,7 +96,7 @@ class SurveyContainerActivity : AppCompatActivity(),
             closeTheSurvey()
         }else {
             val alertFm = supportFragmentManager.beginTransaction()
-            val width = (surveyContainer_layout.measuredWidth * 0.75).toInt()
+            val width = (mBind.surveyContainer_layout.measuredWidth * 0.75).toInt()
             val oneChoicePopup = OneChoicePopup.show(
                 width = width,
                 title = getString(R.string.closeTheSurvey),

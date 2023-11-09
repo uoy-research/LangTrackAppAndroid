@@ -8,35 +8,40 @@ import android.widget.LinearLayout
 import uk.ac.york.langtrackapp.R
 import uk.ac.york.langtrackapp.data.model.Question
 import uk.ac.york.langtrackapp.data.model.Survey
+import uk.ac.york.langtrackapp.databinding.OverviewLikertViewLayoutBinding
 
 class OverviewLikertView @JvmOverloads constructor(
 
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr)  {
+
+    lateinit var binding: OverviewLikertViewLayoutBinding
+
     init {
-        LayoutInflater.from(context).inflate(R.layout.overview_likert_view_layout, this, true)
+        var inflater = LayoutInflater.from(context)
+        binding = OverviewLikertViewLayoutBinding.inflate(inflater, this, true)
     }
 
     fun setText(question: Question, answer: Int){
-        overviewLikertViewDescriptionTextView.text = "${question.likertMin}\n${question.likertMax}"
-        overviewLikertViewTextTextView.text = question.text
+        binding.overviewLikertViewDescriptionTextView.text = "${question.likertMin}\n${question.likertMax}"
+        binding.overviewLikertViewTextTextView.text = question.text
         setRadiobutton(answer)
     }
 
     fun setRadiobutton(selected: Int){
-        overviewLikertViewRadioButton1.isChecked = false
-        overviewLikertViewRadioButton2.isChecked = false
-        overviewLikertViewRadioButton3.isChecked = false
-        overviewLikertViewRadioButton4.isChecked = false
-        overviewLikertViewRadioButton5.isChecked = false
-        overviewLikertViewRadioButtonNA.isChecked = false
+        binding.overviewLikertViewRadioButton1.isChecked = false
+        binding.overviewLikertViewRadioButton2.isChecked = false
+        binding.overviewLikertViewRadioButton3.isChecked = false
+        binding.overviewLikertViewRadioButton4.isChecked = false
+        binding.overviewLikertViewRadioButton5.isChecked = false
+        binding.overviewLikertViewRadioButtonNA.isChecked = false
         when(selected){
-            0 -> overviewLikertViewRadioButton1.isChecked = true
-            1 -> overviewLikertViewRadioButton2.isChecked = true
-            2 -> overviewLikertViewRadioButton3.isChecked = true
-            3 -> overviewLikertViewRadioButton4.isChecked = true
-            4 -> overviewLikertViewRadioButton5.isChecked = true
-            5 -> overviewLikertViewRadioButtonNA.isChecked = true
+            0 -> binding.overviewLikertViewRadioButton1.isChecked = true
+            1 -> binding.overviewLikertViewRadioButton2.isChecked = true
+            2 -> binding.overviewLikertViewRadioButton3.isChecked = true
+            3 -> binding.overviewLikertViewRadioButton4.isChecked = true
+            4 -> binding.overviewLikertViewRadioButton5.isChecked = true
+            5 -> binding.overviewLikertViewRadioButtonNA.isChecked = true
         }
     }
 }

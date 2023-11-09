@@ -7,16 +7,22 @@ import android.widget.LinearLayout
 //import kotlinx.android.synthetic.main.overview_header.view.*
 import uk.ac.york.langtrackapp.R
 import uk.ac.york.langtrackapp.data.model.Question
+import uk.ac.york.langtrackapp.databinding.OverviewFillInBlankViewLayoutBinding
+import uk.ac.york.langtrackapp.databinding.OverviewHeaderBinding
 
 class OverviewHeaderView @JvmOverloads constructor(
 
     context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = 0
 ) : LinearLayout(context, attrs, defStyleAttr)  {
+
+    lateinit var binding: OverviewHeaderBinding
+
     init {
-        LayoutInflater.from(context).inflate(R.layout.overview_header, this, true)
+        var inflater = LayoutInflater.from(context)
+        binding = OverviewHeaderBinding.inflate(inflater, this, true)
     }
 
     fun setText(question: Question){
-        overviewHeaderTextView.text = question.text
+        binding.overviewHeaderTextView.text = question.text
     }
 }
