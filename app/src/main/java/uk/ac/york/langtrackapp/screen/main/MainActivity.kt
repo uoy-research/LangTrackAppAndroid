@@ -254,7 +254,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun showLogOutPopup(){
         val alertFm = supportFragmentManager.beginTransaction()
-        val width = (mBind.main_layout.measuredWidth * 0.75).toInt()
+        val width = (mBind.mainLayout.measuredWidth * 0.75).toInt()
         val oneChoicePopup = OneChoicePopup.show(
             width = width,
             title = getString(R.string.log_out),
@@ -279,7 +279,7 @@ class MainActivity : AppCompatActivity() {
 
     fun showPopupSurveyInfo(item: Assignment){
         val alertFm = supportFragmentManager.beginTransaction()
-        val width = (mBind.main_layout.measuredWidth * 0.85).toInt()
+        val width = (mBind.mainLayout.measuredWidth * 0.85).toInt()
 
         val alertPopup = ExpiredSurveyPopup.show(
             width = width,

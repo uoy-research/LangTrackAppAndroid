@@ -37,30 +37,30 @@ class TimeDurationFragment : Fragment(){
         binding.lifecycleOwner = this
         binding.executePendingBindings()
         val v = binding.root
-        v.number_picker_hour.minValue = 0
-        v.number_picker_hour.maxValue = listOfHours.size - 1
-        v.number_picker_hour.displayedValues = listOfHours
-        v.number_picker_hour.setOnScrollListener { view, scrollState ->
+        binding.numberPickerHour.minValue = 0
+        binding.numberPickerHour.maxValue = listOfHours.size - 1
+        binding.numberPickerHour.displayedValues = listOfHours
+        binding.numberPickerHour.setOnScrollListener { view, scrollState ->
             if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE){
                 selectedHours = view.value
                 listener?.setTimeDurationAnswer(getSelectedDurationInSeconds())
             }
         }
-        v.number_picker_minutes.minValue = 0
-        v.number_picker_minutes.maxValue = listOfMinutes.size - 1
-        v.number_picker_minutes.displayedValues = listOfMinutes
-        v.number_picker_minutes.setOnScrollListener { view, scrollState ->
+        binding.numberPickerMinutes.minValue = 0
+        binding.numberPickerMinutes.maxValue = listOfMinutes.size - 1
+        binding.numberPickerMinutes.displayedValues = listOfMinutes
+        binding.numberPickerMinutes.setOnScrollListener { view, scrollState ->
             if (scrollState == NumberPicker.OnScrollListener.SCROLL_STATE_IDLE){
                 selectedMinutes = listOfMinutes[view.value].toInt()
                 listener?.setTimeDurationAnswer(getSelectedDurationInSeconds())
             }
         }
 
-        v.timeDurationBackButton.setOnClickListener {
+        binding.timeDurationBackButton.setOnClickListener {
             theAnswer = null
             listener?.prevoiusQuestion(theQuestion)
         }
-        v.timeDurationNextButton.setOnClickListener {
+        binding.timeDurationNextButton.setOnClickListener {
             theAnswer = null
             listener?.nextQuestion(theQuestion)
         }

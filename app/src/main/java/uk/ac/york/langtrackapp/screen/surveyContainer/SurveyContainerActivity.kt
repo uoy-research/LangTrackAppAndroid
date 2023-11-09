@@ -96,7 +96,7 @@ class SurveyContainerActivity : AppCompatActivity(),
             closeTheSurvey()
         }else {
             val alertFm = supportFragmentManager.beginTransaction()
-            val width = (mBind.surveyContainer_layout.measuredWidth * 0.75).toInt()
+            val width = (mBind.surveyContainerLayout.measuredWidth * 0.75).toInt()
             val oneChoicePopup = OneChoicePopup.show(
                 width = width,
                 title = getString(R.string.closeTheSurvey),
@@ -134,7 +134,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
     private fun showErrorPopup(){
         val alertFm = supportFragmentManager.beginTransaction()
-        val width = (surveyContainer_layout.measuredWidth * 0.75).toInt()
+        val width = (mBind.surveyContainerLayout.measuredWidth * 0.75).toInt()
         val alertPopup = PopupAlert.show(
             width = width,
             title = "Något gick fel!",
@@ -378,7 +378,7 @@ class SurveyContainerActivity : AppCompatActivity(),
 
                 // expired - show popup
                 val alertFm = supportFragmentManager.beginTransaction()
-                val width = (surveyContainer_layout.measuredWidth * 0.75).toInt()
+                val width = (mBind.surveyContainerLayout.measuredWidth * 0.75).toInt()
                 val alertPopup = PopupAlert.show(
                     width = width,
                     title = getString(R.string.survey_expired),
