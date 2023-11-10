@@ -6,10 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.NumberPicker
-import android.widget.TimePicker
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
-//import kotlinx.android.synthetic.main.time_duration_fragment.view.*
 import uk.ac.york.langtrackapp.R
 import uk.ac.york.langtrackapp.data.model.Answer
 import uk.ac.york.langtrackapp.data.model.Question
@@ -32,7 +30,7 @@ class TimeDurationFragment : Fragment(){
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
-    ): View? {
+    ): View {
         binding = DataBindingUtil.inflate(inflater, R.layout.time_duration_fragment, container,false)
         binding.lifecycleOwner = this
         binding.executePendingBindings()

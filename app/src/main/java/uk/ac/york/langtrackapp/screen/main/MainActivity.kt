@@ -1,3 +1,5 @@
+@file:Suppress("OverrideDeprecatedMigration")
+
 package uk.ac.york.langtrackapp.screen.main
 /*
 
@@ -58,6 +60,7 @@ import uk.ac.york.langtrackapp.util.getVersionNumber
 import uk.ac.york.langtrackapp.util.showApiFailInfo
 
 
+@Suppress("OverrideDeprecatedMigration")
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mBind : ActivityMainBinding
