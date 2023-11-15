@@ -74,7 +74,7 @@ class LoginActivity : AppCompatActivity() {
         }
         mBind.loginProgressbar.visibility = View.VISIBLE
 
-        val userEmail = "${username}@humlablu.com"
+        val userEmail = "${username}@york.ac.uk"
         if (!isValidEmail(userEmail)){
             return
         }

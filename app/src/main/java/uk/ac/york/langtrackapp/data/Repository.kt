@@ -63,7 +63,7 @@ class Repository(val context: Context) {
 
     private fun getUrl(listener: (result: String?) -> Unit) {
         /*
-         Getting the correct url from firebase realtime - prodUrl or stagingUrl
+         Getting the correct url frlom firebase realtime - prodUrl or stagingUrl
          */
 
         var myRef :DatabaseReference?
