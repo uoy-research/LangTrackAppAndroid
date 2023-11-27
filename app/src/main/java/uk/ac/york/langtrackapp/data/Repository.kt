@@ -93,7 +93,8 @@ class Repository(val context: Context) {
     fun putDeviceToken(){
 
         apiIsAlive { alive, theUrl ->
-            if (alive) {
+            //if (alive) {
+            if (true) {
 
                 if (currentUser.id != "") {
                     val verNr = getVersionNumber(context)
@@ -384,24 +385,25 @@ class Repository(val context: Context) {
     fun getAssignments(){
         getUrl { theUrl ->
             val assigmnentUrl = "${theUrl}users/${currentUser.userName}/assignments"
-            Fuel.get(assigmnentUrl)
-                .header(mapOf("token" to idToken))
-                .response { _, _, result ->
 
-                    val (bytes, error) = result
-                    if (error == null) {
-                        if (bytes != null) {
-                            val templist = sortList(getAssignmentsFromJson(String(bytes))).toMutableList()
-                            if (!templist.isNullOrEmpty()) {
-                                assignmentList = templist
-                                assignmentListLiveData.value = assignmentList
-                            }
-                        }
-                    }else{
-                        println("Repository getAssignmens ERROR: ${error.localizedMessage}")
-                        showApiFailInfo(context)
+            val request = Request.Builder()
+                .url(assigmnentUrl)
+                .addHeader("token", idToken)
+                .build()
+
+            client.newCall(request).execute().use {
+                if (it.isSuccessful) {
+                    val body = it.body.toString()
+                    val templist = sortList(getAssignmentsFromJson(body)).toMutableList()
+                    if (!templist.isNullOrEmpty()) {
+                        assignmentList = templist
+                        assignmentListLiveData.value = assignmentList
                     }
+                } else {
+                    println("Repository getAssignmens ERROR: ${it.message}")
+                    showApiFailInfo(context)
                 }
+            }
         }
     }
 

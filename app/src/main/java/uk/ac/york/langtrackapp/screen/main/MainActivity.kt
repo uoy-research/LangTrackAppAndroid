@@ -125,7 +125,8 @@ class MainActivity : AppCompatActivity() {
                     if (item.isActive()) {
                         // show survey - if api is responding
                         viewModel.apiIsAlive { alive, _ ->
-                            if (alive){
+                            //if (alive){
+                            if (true){
                                 SurveyContainerActivity.start(this@MainActivity, item, inTestMode)
                                 viewModel.surveyOpened()
                             }else{
