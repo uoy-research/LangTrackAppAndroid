@@ -75,6 +75,12 @@ class MainActivity : AppCompatActivity() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        StrictMode.setThreadPolicy(
+            StrictMode.ThreadPolicy.Builder()
+                .permitAll()
+                .build()
+        )
+
         super.onCreate(savedInstanceState)
         mBind = DataBindingUtil.setContentView(this, R.layout.activity_main)
         mBind.lifecycleOwner = this
