@@ -26,6 +26,7 @@ import android.content.Intent
 import android.graphics.Color
 import android.graphics.Rect
 import android.os.Bundle
+import android.os.StrictMode
 import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -64,7 +65,6 @@ import uk.ac.york.langtrackapp.util.showApiFailInfo
 class MainActivity : AppCompatActivity() {
 
     private lateinit var mBind : ActivityMainBinding
-    private lateinit var dBind : LeftDrawerMenuBinding
     private lateinit var viewModel : MainViewModel
     lateinit var mAuth: FirebaseAuth
     private lateinit var linearLayoutManager: LinearLayoutManager
@@ -80,9 +80,6 @@ class MainActivity : AppCompatActivity() {
         mBind.lifecycleOwner = this
         mBind.executePendingBindings()
         mAuth = FirebaseAuth.getInstance()
-
-        val inflater = LayoutInflater.from(this)
-        dBind = LeftDrawerMenuBinding.inflate(inflater)
 
         viewModel = ViewModelProviders.of(this,
             MainViewModelFactory(this)
@@ -174,27 +171,33 @@ class MainActivity : AppCompatActivity() {
             setDisplayHomeAsUpEnabled(true)
         }
 
-        dBind.menuLogOutTextView.setOnClickListener {
+        mBind.leftDrawerMenu.menuLogOutTextView.setOnClickListener {
+            print("logout");
             showLogOutPopup()
         }
 
-        dBind.menuInstructionsContactButton.setOnClickListener {
+        mBind.leftDrawerMenu.menuInstructionsContactButton.setOnClickListener {
+            print("logout");
             InstructionsActivity.start(this)
         }
 
-        dBind.menuAboutButton.setOnClickListener {
+        mBind.leftDrawerMenu.menuAboutButton.setOnClickListener {
+            print("logout");
             AboutActivity.start(this)
         }
-        dBind.menuContactButton.setOnClickListener {
+        mBind.leftDrawerMenu.menuContactButton.setOnClickListener {
+            print("logout");
             ContactActivity.start(this)
             //drawerLayout.closeDrawer(GravityCompat.START)
         }
 
-        dBind.menuTestSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        mBind.leftDrawerMenu.menuTestSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            print("logout");
             inTestMode = isChecked
         }
 
-        dBind.menuServerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+        mBind.leftDrawerMenu.menuServerSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
+            print("logout");
             viewModel.setStagingUrl(isChecked)
             viewModel.postDeviceToken()
             viewModel.clearAssignmentsList()
@@ -205,6 +208,7 @@ class MainActivity : AppCompatActivity() {
 
     override fun onStart() {
         super.onStart()
+        print("start");
 
         val verNum = getVersionNumber(this)
         // save userId to repository
@@ -214,8 +218,8 @@ class MainActivity : AppCompatActivity() {
             val userEmail = mAuth.currentUser!!.email
             val userName = userEmail?.substringBefore('@')
             viewModel.setCurrentUser(User(userName ?: "",userName ?: "", userEmail ?: ""))
-            dBind.menuUserNameTextView.text = userName ?: "noName"
-            dBind.menuVersionTextView.text = "Version: $verNum"
+            mBind.leftDrawerMenu.menuUserNameTextView.text = userName ?: "noName"
+            mBind.leftDrawerMenu.menuVersionTextView.text = "Version: $verNum"
             viewModel.getAssignments()
 
             mAuth.currentUser!!.getIdToken(false).addOnSuccessListener{
@@ -227,7 +231,7 @@ class MainActivity : AppCompatActivity() {
             }
             setTestModeIfTeam(userName ?: "")
 
-            dBind.menuServerSwitch.isChecked = viewModel.isInStagingUrl()
+            mBind.leftDrawerMenu.menuServerSwitch.isChecked = viewModel.isInStagingUrl()
             //push deviceToken to backend every time app starts
             viewModel.postDeviceToken()
         }
@@ -238,7 +242,7 @@ class MainActivity : AppCompatActivity() {
         Set testview if user is admin (part of team)
          */
         viewModel.getTeamUserNames { result ->
-            dBind.testView.visibility = if (result.containsKey(userName)) View.VISIBLE else View.GONE
+            mBind.leftDrawerMenu.testView.visibility = if (result.containsKey(userName)) View.VISIBLE else View.GONE
         }
     }
 
