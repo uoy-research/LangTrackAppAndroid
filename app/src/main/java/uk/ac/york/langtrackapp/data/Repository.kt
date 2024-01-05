@@ -393,7 +393,7 @@ class Repository(val context: Context) {
 
             client.newCall(request).execute().use {
                 if (it.isSuccessful) {
-                    val body = it.body.toString()
+                    val body = it.body!!.string()
                     val templist = sortList(getAssignmentsFromJson(body)).toMutableList()
                     if (!templist.isNullOrEmpty()) {
                         assignmentList = templist
