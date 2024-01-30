@@ -48,13 +48,13 @@ class ContactActivity : AppCompatActivity() {
 
         mBind.contactHumLinkTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         mBind.contactHumLinkTextView.setOnClickListener {
-            "https://www.humlab.lu.se/en/"
+            "https://www.york.ac.uk/education/research/casle"
                 .asUri().openInBrowser(this)
         }
 
         mBind.contactLuLinkTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         mBind.contactLuLinkTextView.setOnClickListener {
-            "https://www.lu.se/"
+            "https://www.york.ac.uk/"
                 .asUri().openInBrowser(this)
         }
         mBind.contactTopCloseButton.setOnClickListener {

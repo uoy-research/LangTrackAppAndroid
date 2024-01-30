@@ -46,12 +46,6 @@ class AboutActivity : AppCompatActivity() {
 
         mBind.aboutFoundingTextView.text = getString(R.string.founding)
 
-        val resourceId = resources.getIdentifier(getString(R.string.founder_image_name), "drawable", packageName)
-        mBind.aboutFoundingImageView.setImageDrawable(getDrawable(resourceId))
-        mBind.aboutFoundingImageView.setOnClickListener {
-            getString(R.string.founding_link_address)
-                .asUri().openInBrowser(this)
-        }
         setTeamText()
 
         mBind.textView18.text = getString(R.string.about)
