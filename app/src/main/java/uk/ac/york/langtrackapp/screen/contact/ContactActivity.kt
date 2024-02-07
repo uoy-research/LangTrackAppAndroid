@@ -40,6 +40,9 @@ class ContactActivity : AppCompatActivity() {
         mBind.contactScroll.setOnScrollChangeListener { _, _, _, _, _ ->
             mBind.contactTopView.isSelected = mBind.contactScroll.canScrollVertically(-1)
         }
+
+        //mBind.researchTextView.text = getString(R.string.reserchText1)
+
         mBind.contactLtaLinkTextView.paintFlags = Paint.UNDERLINE_TEXT_FLAG
         mBind.contactLtaLinkTextView.setOnClickListener {
             "https://portal.research.lu.se/portal/en/projects/the-langtrackapp-studying-exposure-to-and-use-of-a-new-language-using-smartphone-technology(4e734940-981f-4dd0-841a-eb6ac760af0c).html"
