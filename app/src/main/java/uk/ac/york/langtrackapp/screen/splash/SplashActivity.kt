@@ -5,6 +5,10 @@ package uk.ac.york.langtrackapp.screen.splash
 * Humanistlaboratoriet
 * Lunds Universitet
 * stephan.bjorck@humlab.lu.se
+
+* Viktor Czyżewski
+* RSE Team
+* University of York
 * */
 
 import androidx.appcompat.app.AppCompatActivity

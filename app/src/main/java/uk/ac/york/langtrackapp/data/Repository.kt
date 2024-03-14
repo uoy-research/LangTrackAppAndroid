@@ -5,6 +5,10 @@ package uk.ac.york.langtrackapp.data
 * Humanistlaboratoriet
 * Lunds Universitet
 * stephan.bjorck@humlab.lu.se
+
+* Viktor Czyżewski
+* RSE Team
+* University of York
 * */
 
 import android.content.Context
