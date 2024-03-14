@@ -89,7 +89,7 @@ class AboutActivity : AppCompatActivity() {
                         builder.append("\n\n")
                 }
             }
-            mBind.aboutTeamTextView.text = builder
+            //mBind.aboutTeamTextView.text = builder
         }
     }
 
