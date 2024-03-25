@@ -88,7 +88,7 @@ class MainActivity : AppCompatActivity() {
         )
 
         if (ContextCompat.checkSelfPermission(this, POST_NOTIFICATIONS) == PackageManager.PERMISSION_DENIED) {
-            ActivityCompat.requestPermissions(this, arrayOf("POST_NOTIFICATIONS"), 1);
+            ActivityCompat.requestPermissions(this, arrayOf(POST_NOTIFICATIONS), 112);
         }
 
         super.onCreate(savedInstanceState)
